@@ -1,4 +1,4 @@
-serviceSupport = {
+this.ServiceSupport = {
     list: [],
     updateAONinjaData: function () {
         return m.request({
@@ -7,8 +7,8 @@ serviceSupport = {
             deserialize: function (value) { return value },
         }).then(function (res) {
             console.log($(res).find(".navbar-header").find(".logo").find("img").attr('src'));
-            serviceSupport.list.push({ id: "aoninja", name: "A-O.NINJA", description: "", image: $(res).find(".navbar-header").find(".logo").find("img").attr('src') })
-            m.redraw();
+            ServiceSupport.list.push({ id: "aoninja", name: "A-O.NINJA", description: "", image: $(res).find(".navbar-header").find(".logo").find("img").attr('src') })
+            console.log("A-O.ninja data loaded")
         })
     }
 };
