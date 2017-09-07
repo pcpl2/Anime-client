@@ -12,16 +12,12 @@ var selectServiceHeader = {
 
 var selectServiceList = {
     view: function () {
-        return m(".serliveList",
+        return m(".serviceList",
             ServiceSupport.list.map(function (service) {
-                return m("div", { "class": "card", "style": "width: 20rem;" }, [
-                    m("img", { "class": "card-img-top", "src": service.image, "alt": service.name + " logo", "style": "background: black;" }),
-                    m("div", { "class": "card-body" }, [
-                        m("h4", { "class": "card-title" }, service.name),
-                        m("p", { "class": "card-text" }, service.description),
-                        m("a", { "class": "btn btn-primary", "href": "/service/" + service.id + "/list", oncreate: m.route.link }, "Select")
-                    ])
-                ]);
+                return m("div", [PageCard.serviceCard(service.image,
+                    service.name,
+                    service.description,
+                    service.id)]);
             }));
     }
 };
