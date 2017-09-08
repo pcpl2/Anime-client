@@ -8,5 +8,13 @@ this.PageCard = {
                 m("a", { "class": "btn btn-primary", "href": "/service/" + url + "/list", oncreate: m.route.link }, "Select")
             ])
         ]);
+    },
+
+    animeCard: function (id, name) {
+        return m("div", { "class": "card text-white bg-info mb-3", "style": "max-width: 20rem;", "onclick": function() {m.route.set("/" + id);} }, [
+            m("div", { "class": "card-body" }, [
+                m("h4", { "class": "cart-title" }, name)
+            ])
+        ]);
     }
 }

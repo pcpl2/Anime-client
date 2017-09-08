@@ -23,7 +23,11 @@ var selectServiceList = {
 };
 
 this.SelectService = {
-    oninit: ServiceSupport.updateAONinjaData(),
+    oninit: function (vnode) {
+        ServiceSupport.clearCurrentService();
+        ServiceSupport.updateServiceList();
+    },
+
     view: function () {
         return layout(m(selectServiceBreadcrumb), m(selectServiceHeader), m(selectServiceList));
     }
