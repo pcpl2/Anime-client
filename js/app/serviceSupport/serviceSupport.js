@@ -1,44 +1,30 @@
 this.ServiceSupport = {
     list: [],
-    currentService: "",
+    currentService: null,
+    currentServiceId: "",
     currentServiceName: "",
-    updateAONinjaData: function () {
-        return m.request({
-            method: "GET",
-            url: "https://a-o.ninja/",
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            console.log($(res).find(".navbar-header").find(".logo").find("img").attr('src'));
-            ServiceSupport.list.push({ id: "aoninja", name: "A-O.NINJA", description: "", image: $(res).find(".navbar-header").find(".logo").find("img").attr('src') })
-            console.log("A-O.ninja data loaded")
-        })
-    },
 
     updateServiceList: function () {
-        ServiceSupport.clearServicesList();
-        ServiceSupport.updateAONinjaData();
+        this.clearServicesList();
+        AONinja.register();
     },
 
     getServiceFunction: function () {
-        switch (ServiceSupport.currentService) {
-            case "aoninja":
-                return AONinja;
-                break;
-        }
+        return this.currentService.api;
     },
 
     setCurrentService: function (id) {
-        if (ServiceSupport.currentService == id) {
+        if (this.currentServiceId == id) {
             return true;
         }
-        var service = _.find(ServiceSupport.list, function (service) { return service.id = id; });
+
+        var service = _.find(this.list, function (service) { return service.id = id; });
         if (service) {
-            ServiceSupport.currentService = service.id;
-            ServiceSupport.currentServiceName = service.name;
-            ServiceSupport.getServiceFunction().updateAnimeList();
+            this.currentService = service;
+            this.currentServiceId = service.id;
+            this.currentServiceName = service.name;
+            console.log("Żopa: " + service.api);
+            service.api.updateAnimeList();
             return true;
         } else {
             return false;
@@ -46,11 +32,12 @@ this.ServiceSupport = {
     },
 
     clearCurrentService: function () {
-        ServiceSupport.currentService = "";
-        ServiceSupport.currentServiceName = "";
+        this.currentService = null;
+        this.currentServiceId = "";
+        this.currentServiceName = "";
     },
 
     clearServicesList: function () {
-        ServiceSupport.list = [];
+        this.list = [];
     }
 };

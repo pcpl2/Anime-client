@@ -15,6 +15,23 @@ this.AONinja = {
     nextEpisodeEnable: false,
     previousEpisodeEnable: false,
 
+    register: function () {
+        return m.request({
+            method: "GET",
+            url: "https://a-o.ninja/",
+            headers: {
+                "Accept": "text/html"
+            },
+            deserialize: function (value) { return value },
+        }).then(function (res) {
+            console.log($(res).find(".navbar-header").find(".logo").find("img").attr('src'));
+            // todo: move id, name and other metadata to the service object itself (AONinja)
+            ServiceSupport.list.push({ api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: $(res).find(".navbar-header").find(".logo").find("img").attr('src') })
+            console.log("A-O.ninja data loaded")
+        })
+    },
+
+
     updateAnimeList: function () {
         return m.request({
             method: "GET",
