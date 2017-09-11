@@ -6,6 +6,9 @@ this.ServiceSupport = {
         return m.request({
             method: "GET",
             url: "https://a-o.ninja/",
+            headers: {
+                "Accept": "text/html"
+            },
             deserialize: function (value) { return value },
         }).then(function (res) {
             console.log($(res).find(".navbar-header").find(".logo").find("img").attr('src'));
@@ -14,55 +17,40 @@ this.ServiceSupport = {
         })
     },
 
-    updateServiceList: function() {
+    updateServiceList: function () {
         ServiceSupport.clearServicesList();
         ServiceSupport.updateAONinjaData();
     },
 
-    getServiceFunction: function() {
-        switch(ServiceSupport.currentService) {
+    getServiceFunction: function () {
+        switch (ServiceSupport.currentService) {
             case "aoninja":
-                console.log("AO ninja");
                 return AONinja;
                 break;
         }
     },
 
-    setCurrentService: function(id) {
-        var service = _.find(ServiceSupport.list, function(service){ return service.id = id; });
-        if(service) {
+    setCurrentService: function (id) {
+        if (ServiceSupport.currentService == id) {
+            return true;
+        }
+        var service = _.find(ServiceSupport.list, function (service) { return service.id = id; });
+        if (service) {
             ServiceSupport.currentService = service.id;
             ServiceSupport.currentServiceName = service.name;
+            ServiceSupport.getServiceFunction().updateAnimeList();
             return true;
         } else {
             return false;
         }
     },
 
-    clearCurrentService: function() {
+    clearCurrentService: function () {
         ServiceSupport.currentService = "";
         ServiceSupport.currentServiceName = "";
     },
 
-    clearServicesList: function() {
+    clearServicesList: function () {
         ServiceSupport.list = [];
     }
-
-    /*updateAnimeListServiceData: function(sid) {
-        switch(sid) {
-            case "aoninja":
-                console.log("AO ninja");
-                AONinja.updateAnimeList(sid);
-                break;
-        }
-    },
-
-    getAnimeList: function(sid) {
-        switch(sid) {
-            case "aoninja":
-                console.log("AO ninja");
-                return AONinja.animeList;
-                break;
-        }
-    }*/
 };
