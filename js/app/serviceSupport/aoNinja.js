@@ -1,4 +1,5 @@
 this.AONinja = {
+    ///Anime List
     animeList: [],
     currentAnimeId: "",
     currentAnimeTitle: "",
@@ -6,8 +7,13 @@ this.AONinja = {
     currentAnimeImage: "",
     currentAnimeExistDes: false,
     currentAnimeDescryption: "",
+    ///Episode List
     episodeList: [],
     currentEpisodeId: "",
+    currentEpisodeTitle: "",
+    currentEpisodePlaysers: [],
+    nextEpisodeEnable: false,
+    previousEpisodeEnable: false,
 
     updateAnimeList: function () {
         return m.request({
@@ -18,26 +24,34 @@ this.AONinja = {
             },
             deserialize: function (value) { return value },
         }).then(function (res) {
-            var animeListHtml = $(res).find(".list-item").find("td").find("a");
+            let animeListHtml = $(res).find(".list-item").find("td").find("a");
 
-            var animeList = animeListHtml.map(function () {
-                var title = this.innerHTML;
-                var emailProtect = this.querySelector('.__cf_email__');
+            AONinja.animeList = animeListHtml.map(function () {
+                let title = this.innerHTML;
+                let emailProtect = this.querySelector('.__cf_email__');
+
                 if (emailProtect) {
                     emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
                     title = this.innerHTML;
                 }
-                console.log(this.getAttribute("href") + " -> " + title);
-                return { id: this.getAttribute("href").split("/").pop(), url: this.getAttribute("href"), title: title };
+
+                let obj = {
+                    id: this.getAttribute("href").split("/").pop(),
+                    url: this.getAttribute("href"),
+                    title: title
+                };
+
+                console.log(obj);
+
+                return obj;
             }).get();
 
-            AONinja.animeList = animeList;
-            console.log(animeList);
             console.log("A-O.ninja anime list data loaded")
         })
     },
 
     setCurrentAnime: function (id) {
+        AONinja.clearCurrentEpisode();
         if (AONinja.currentService == id) {
             return true;
         }
@@ -70,22 +84,98 @@ this.AONinja = {
             },
             deserialize: function (value) { return value },
         }).then(function (res) {
-            var episodeListHtml = $(res).find(".lista_odc_tytul_pozycja").find("a");
+            let episodeListHtml = $(res).find(".lista_odc_tytul_pozycja").find("a");
 
             AONinja.episodeList = episodeListHtml.map(function () {
-                var title = this.innerHTML;
-                var emailProtect = this.querySelector('.__cf_email__');
+                let title = this.innerHTML;
+                let emailProtect = this.querySelector('.__cf_email__');
+
                 if (emailProtect) {
                     emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
                     title = this.innerHTML;
                 }
-                console.log({ id: this.getAttribute("href").split("/").pop(), url: this.getAttribute("href"), title: title })
-                return { id: this.getAttribute("href").split("/").pop(), url: this.getAttribute("href"), title: title };
+
+                let obj = {
+                    id: this.getAttribute("href").split("/").pop(),
+                    url: this.getAttribute("href"),
+                    title: title
+                };
+
+                console.log(obj)
+                return obj;
             }).get();
 
             AONinja.episodeList = AONinja.episodeList.reverse();
 
+            console.log("A-O.ninja episode list data loaded")
+        })
+    },
+
+    setCurrentEpisode: function (id) {
+        if (AONinja.currentEpisodeId == id) {
+            return true;
+        }
+
+        let episode = _.find(AONinja.episodeList, function (episode) { return episode.id == id; });
+
+        if (episode) {
+            AONinja.nextPreviousButtonsStatus(episode);
+            AONinja.currentEpisodeId = episode.id;
+            AONinja.currentEpisodeTitle = episode.title;
+            AONinja.updateCurrentEpisodeData();
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    clearCurrentEpisode: function () {
+        AONinja.currentEpisodeId = "";
+        AONinja.currentEpisodeTitle = "";
+    },
+
+    nextPreviousButtonsStatus: function (episode) {
+        let index = AONinja.episodeList.indexOf(episode);
+
+        if (index > 0) {
+            AONinja.previousEpisodeEnable = true;
+        } else {
+            AONinja.previousEpisodeEnable = false;
+        }
+
+        if (index < (AONinja.episodeList.length - 1)) {
+            AONinja.nextEpisodeEnable = true;
+        } else {
+            AONinja.nextEpisodeEnable = false;
+        }
+    },
+
+    updateCurrentEpisodeData: function () {
+        return m.request({
+            method: "GET",
+            url: "https://a-o.ninja/anime/" + AONinja.currentAnimeId + "/" + AONinja.currentEpisodeId,
+            headers: {
+                "Accept": "text/html"
+            },
+            deserialize: function (value) { return value },
+        }).then(function (res) {
+            let playersListHtml = $(res).find("#video-player-control").find("div");
+
+            var i = 0;
+            AONinja.currentEpisodePlaysers = playersListHtml.map(function () {
+                let obj = {
+                    id: this.innerHTML.replace(/\s/g, '').toLowerCase() + i,
+                    url: JSON.parse(CryptoJS.DES.decrypt(this.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
+                    name: this.innerHTML.trim()
+                }
+
+                console.log(obj)
+                i++;
+
+                return obj;
+            }).get();
+
             console.log("A-O.ninja anime list data loaded")
         })
-    }
+    },
 };

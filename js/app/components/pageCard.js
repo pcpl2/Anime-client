@@ -19,6 +19,10 @@ this.PageCard = {
     },
 
     episodeCard: function (id, name, anime, service) {
-        return m("button", { "class": "btn btn-dark btn-lg btn-block", "style": "min-height: 180px; margin-top:1%; margin-bootom:1%; white-space: normal;", "onclick": function () { m.route.set("/" + id); } }, name);
+        return m("button", {
+            "class": "btn btn-dark btn-lg btn-block",
+            "style": "min-height: 180px; margin-top:1%; margin-bootom:1%; white-space: normal;",
+            "onclick": function () { m.route.set("/service/" + service + "/anime/" + anime + "/episode/" + id); }
+        }, name);
     }
 }
