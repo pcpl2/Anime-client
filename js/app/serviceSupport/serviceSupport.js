@@ -23,7 +23,6 @@ this.ServiceSupport = {
             this.currentService = service;
             this.currentServiceId = service.id;
             this.currentServiceName = service.name;
-            console.log("Żopa: " + service.api);
             service.api.updateAnimeList();
             return true;
         } else {

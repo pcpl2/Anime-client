@@ -211,10 +211,16 @@ this.AONinja = {
         let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
 
         if (player) {
-            AONinja.currentEpisodePlayer = player.id;
-            AONinja.currentEpisodePlayerUrl = player.url;
-            player.selected = true;
-            return true;
+            return getVideoUrl(player.url, function(url, status) {
+                if(status === VideoDecoderErrorCodes.Sucess) {
+                    AONinja.currentEpisodePlayer = player.id;
+                    AONinja.currentEpisodePlayerUrl = url;
+                    player.selected = true;
+                    return true;
+                } else {
+                    return false;
+                }
+            });
         } else {
             return false;
         }
