@@ -14,6 +14,8 @@ this.AONinja = {
     currentEpisodePlaysers: [],
     nextEpisodeEnable: false,
     previousEpisodeEnable: false,
+    currentEpisodePlayer: "",
+    currentEpisodePlayerUrl: "",
 
     register: function () {
         return m.request({
@@ -88,8 +90,10 @@ this.AONinja = {
         AONinja.currentAnimeTitle = "";
         AONinja.currentAnimeImage = "";
         AONinja.currentAniemDescryption = "";
-        AONinja.episodeList = "";
+        AONinja.episodeList = [];
         AONinja.currentEpisodeId = "";
+        AONinja.currentEpisodePlayer = "";
+        AONinja.currentEpisodePlayerUrl = "";
     },
 
     updateCurrentAnimeData: function () {
@@ -149,6 +153,9 @@ this.AONinja = {
     clearCurrentEpisode: function () {
         AONinja.currentEpisodeId = "";
         AONinja.currentEpisodeTitle = "";
+        AONinja.currentEpisodePlayer = "";
+        AONinja.currentEpisodePlayerUrl = "";
+        AONinja.currentEpisodePlaysers = [];
     },
 
     nextPreviousButtonsStatus: function (episode) {
@@ -183,7 +190,8 @@ this.AONinja = {
                 let obj = {
                     id: this.innerHTML.replace(/\s/g, '').toLowerCase() + i,
                     url: JSON.parse(CryptoJS.DES.decrypt(this.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
-                    name: this.innerHTML.trim()
+                    name: this.innerHTML.trim(),
+                    selected: false
                 }
 
                 console.log(obj)
@@ -194,5 +202,22 @@ this.AONinja = {
 
             console.log("A-O.ninja anime list data loaded")
         })
+    },
+
+    setCurrentEpisodePlayer: function (id) {
+        if (AONinja.currentEpisodePlayer == id) {
+            return true;
+        }
+
+        let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
+
+        if (player) {
+            AONinja.currentEpisodePlayer = player.id;
+            AONinja.currentEpisodePlayerUrl = player.url;
+            player.selected = true;
+            return true;
+        } else {
+            return false;
+        }
     },
 };

@@ -21,26 +21,47 @@ var episodePlayBody = {
             [
 
                 //Next previous episodes
-                m("div", {"class": "row"}, [
-                    m("div", {"class": "col align-self-start"}, [
+                m("div", { "class": "row" }, [
+                    m("div", { "class": "col align-self-start" }, [
                         m("button", { "class": "btn btn-primary pull-left" }, "Previous episode")
                     ]),
 
-                    m("div", {"class": "col align-self-center"}, [
-                        m("span", "dupa")
+                    m("div", { "class": "col align-self-center" }, [
+                        m("select", { "id": "js-select-episode" }, [
+                            ServiceSupport.getServiceFunction().episodeList.map(function (episode) {
+                                return m("option", { "value": episode.id }, episode.title);
+                            })
+                        ])
                     ]),
 
-                     m("div", {"class": "col align-self-end"}, [
+                    m("div", { "class": "col align-self-end" }, [
                         m("button", { "class": "btn btn-primary pull-right" }, "Next episode")
                     ]),
                 ]),
 
                 //Players button
-
+                m("div", { "class": "row", "style": "margin-top: 2%" }, [
+                    m("div", { "class": "col wrapper text-center" }, [
+                        m("div", { "class": "btn-group", "role": "group" }, [
+                            ServiceSupport.getServiceFunction().currentEpisodePlaysers.map(function (player) {
+                                return m("button", {
+                                    "class": ["btn btn-secondary", player.selected === true ? "active" : ""].join(" "), "id": player.id,
+                                    "onclick": function () {
+                                        ServiceSupport.getServiceFunction().setCurrentEpisodePlayer(player.id);
+                                    }
+                                }, player.name);
+                            })
+                        ])
+                    ])
+                ]),
 
 
                 //Player
-
+                m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [
+                    m("div", { "id": "video-player", "class": "col wrapper", "width": "100%", "height": "65%", "style": ["", ServiceSupport.getServiceFunction().currentEpisodePlayer === "" ? "display: none;" : ""].join(" ") }, [
+                        m("iframe", { "id": "iframe-player", "width": "100%", "height": "65%", "style":"margin-bootom: 2%", "allowfullscreen": "true", "src": [ServiceSupport.getServiceFunction().currentEpisodePlayerUrl].join(" ") })
+                    ])
+                ]),
 
             ]
         );
@@ -73,7 +94,11 @@ this.EpisodePlay = {
         if (!ServiceSupport.getServiceFunction().setCurrentEpisode(vnode.attrs.eid)) {
             m.route.set("/");
         }
+    },
+    oncreate: function () {
+        $('#js-select-episode').select2();
 
+        $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
     },
     view: function () {
         return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody));

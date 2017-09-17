@@ -16,13 +16,13 @@ var episodeListHeader = {
 
 var episodeListBody = {
     view: function () {
-        return m(".episodeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%;" },
+        return m(".episodeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%; margin-bootom:1%" },
             //TODO add anime image and description
             ServiceSupport.getServiceFunction().episodeList.map(function (episode) {
                 return m("div", { "class": "col-md-4" }, [PageCard.episodeCard(episode.id,
                     episode.title,
                     ServiceSupport.getServiceFunction().currentAnimeId,
-                    ServiceSupport.currentService)]);
+                    ServiceSupport.currentServiceId)]);
             })
         );
     }

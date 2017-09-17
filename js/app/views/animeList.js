@@ -20,7 +20,7 @@ var animeListBody = {
                 return m("div", { "class": "col-md-4" }, [
                     PageCard.animeCard(anime.id,
                         anime.title,
-                        ServiceSupport.currentService)
+                        ServiceSupport.currentServiceId)
                 ]);
             }));
     }
