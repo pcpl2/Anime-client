@@ -19,6 +19,9 @@ function getVideoUrl(url, returnFunction) {
         case "raptu.com":
             DecodeRaptuCom(url, returnFunction);
             break;
+
+        case "vidlox.tv":
+            DecodeVidLoxTv(url, returnFunction);
+            break;
     }
-    //DecodeVidFileNet('https://vidfile.net/v/59ons7sro9265', function(url, code) {console.log(url + " code: " + code)})
 }
