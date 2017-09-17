@@ -10,8 +10,15 @@ function getVideoUrl(url, returnFunction) {
     var domain = regex.exec(url)[1].toLowerCase();
     switch (domain) {
         case "vidfile.net":
-            DecodeVidFileNet(url, returnFunction)
-        break;
+            DecodeVidFileNet(url, returnFunction);
+            break;
+        case "drive.google.com":
+            //default google player is safe
+            returnFunction(url, VideoDecoderErrorCodes.Sucess);
+            break;
+        case "raptu.com":
+            DecodeRaptuCom(url, returnFunction);
+            break;
     }
     //DecodeVidFileNet('https://vidfile.net/v/59ons7sro9265', function(url, code) {console.log(url + " code: " + code)})
 }

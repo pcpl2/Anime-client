@@ -208,6 +208,13 @@ this.AONinja = {
             return true;
         }
 
+        if(AONinja.currentEpisodePlayer != "") {
+            let oldPlayer = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == AONinja.currentEpisodePlayer; });
+            oldPlayer.selected = false;
+            AONinja.currentEpisodePlayer = "";
+            AONinja.currentEpisodePlayerUrl = "";
+        }
+
         let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
 
         if (player) {
