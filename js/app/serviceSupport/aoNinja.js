@@ -33,7 +33,6 @@ this.AONinja = {
         })
     },
 
-
     updateAnimeList: function () {
         return m.request({
             method: "GET",

@@ -2,7 +2,7 @@ var episodeListBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService + "/list", oncreate: m.route.link }, m("span", ServiceSupport.currentServiceName)),
+            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentServiceId + "/list", oncreate: m.route.link }, m("span", ServiceSupport.currentServiceName)),
             m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.getServiceFunction().currentAnimeTitle))
         ]
     }
