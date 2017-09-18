@@ -47,6 +47,7 @@ var episodePlayBody = {
                                     "class": ["btn btn-secondary", player.selected === true ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
                                         ServiceSupport.getServiceFunction().setCurrentEpisodePlayer(player.id);
+                                        m.redraw();
                                     }
                                 }, player.name);
                             })
@@ -59,11 +60,9 @@ var episodePlayBody = {
                 m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [
                     m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", ServiceSupport.getServiceFunction().currentEpisodePlayer === "" ? "display: none;" : ""].join(" ") }, [
                         ServiceSupport.getServiceFunction().currentEpisodeCustomPlayer == true ?
-                            m("video", { "id": "custom-player", "class": "video-js vjs-default-skin vjs-big-play-centered", "style": "width: 100%;height: 100%;", "data-setup": '', "controls": "" }, [
-                                m("source", { "src": ServiceSupport.getServiceFunction().currentEpisodePlayerUrl, "type": "video/mp4" })
-                            ])
+                            m(VideoPlayer)
                             :
-                            m("iframe", { "id": "iframe-player", "width": "100%", "height": "65%", "style": "margin-bootom: 2%", "allowfullscreen": "true", "src": [ServiceSupport.getServiceFunction().currentEpisodePlayerUrl].join(" ") })
+                            m("iframe", { "id": "iframe-player", "width": "100%", "height": "100%", "style": "margin-bootom: 2%;width: 100%;height: 65%;", "allowfullscreen": "true", "src": [ServiceSupport.getServiceFunction().currentEpisodePlayerUrl].join(" ") })
                     ])
                 ]),
 
@@ -103,12 +102,6 @@ this.EpisodePlay = {
         $('#js-select-episode').select2();
 
         $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
-
-        if (ServiceSupport.getServiceFunction().currentEpisodePlayer != "") {
-            if(ServiceSupport.getServiceFunction().currentEpisodeCustomPlayer == true) {
-                var video = videojs('custom-player');
-            }
-        }
     },
     view: function () {
         return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody));
