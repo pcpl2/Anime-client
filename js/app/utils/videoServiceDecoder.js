@@ -28,7 +28,7 @@ function DecodeVidFileNet(url, returnFunction) {
     }).then(function (res) {
         let source = $(res).find('#player > source')[0];
         let videoUrl = source.getAttribute('src');
-        returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess);
+        returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
     }).catch(function (e) {
         returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
     })
@@ -76,7 +76,7 @@ function DecodeRaptuCom(url, returnFunction) {
         }).get()[0];
 
         if(new RegExp(regexValidateUrl).test(videoUrl)) {
-            returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess);
+            returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
         } else {
             returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
         }
@@ -132,7 +132,7 @@ function DecodeVidLoxTv(url, returnFunction) {
         }).get()[0];
 
         if(new RegExp(regexValidateUrl).test(videoUrl)) {
-            returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess);
+            returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
         } else {
             returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
         }

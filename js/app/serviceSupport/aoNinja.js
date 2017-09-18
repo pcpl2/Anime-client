@@ -16,6 +16,7 @@ this.AONinja = {
     previousEpisodeEnable: false,
     currentEpisodePlayer: "",
     currentEpisodePlayerUrl: "",
+    currentEpisodeCustomPlayer: false,
 
     register: function () {
         return m.request({
@@ -190,7 +191,7 @@ this.AONinja = {
                     id: this.innerHTML.replace(/\s/g, '').toLowerCase() + i,
                     url: JSON.parse(CryptoJS.DES.decrypt(this.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
                     name: this.innerHTML.trim(),
-                    selected: false
+                    selected: false,
                 }
 
                 console.log(obj)
@@ -218,11 +219,12 @@ this.AONinja = {
         let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
 
         if (player) {
-            return getVideoUrl(player.url, function(url, status) {
+            return getVideoUrl(player.url, function(url, status, customPlayer) {
                 if(status === VideoDecoderErrorCodes.Sucess) {
                     AONinja.currentEpisodePlayer = player.id;
                     AONinja.currentEpisodePlayerUrl = url;
                     player.selected = true;
+                    AONinja.currentEpisodeCustomPlayer = customPlayer;
                     return true;
                 } else {
                     return false;

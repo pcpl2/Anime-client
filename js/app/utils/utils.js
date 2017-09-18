@@ -14,7 +14,7 @@ function getVideoUrl(url, returnFunction) {
             break;
         case "drive.google.com":
             //default google player is safe
-            returnFunction(url, VideoDecoderErrorCodes.Sucess);
+            returnFunction(url, VideoDecoderErrorCodes.Sucess, false);
             break;
         case "raptu.com":
             DecodeRaptuCom(url, returnFunction);
