@@ -1,0 +1,20 @@
+{
+  "name"    : "anime client",
+  "version" : "0.1.0",
+  "main"    : "index.html",
+  "window": {
+    "toolbar": true,
+    "width": 1024,
+    "height": 768
+  },
+  "author": "pcpl2",
+  "webkit": {
+      "plugin": false,
+      "java" : false,
+      "page-cache" : false
+  },
+  "dependencies": {
+    "mithril": "^1.1.4",
+    "diskdb": "^0.1.12"
+  }
+}

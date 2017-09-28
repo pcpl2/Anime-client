@@ -8,6 +8,7 @@ function DecodeCloudflareEmailProtect(e, t, r, n) {
 function getVideoUrl(url, returnFunction) {
     const regex = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/igm;
     var domain = regex.exec(url)[1].toLowerCase();
+    console.log(domain);
     switch (domain) {
         case "vidfile.net":
             DecodeVidFileNet(url, returnFunction);
@@ -19,9 +20,15 @@ function getVideoUrl(url, returnFunction) {
         case "raptu.com":
             DecodeRaptuCom(url, returnFunction);
             break;
-
         case "vidlox.tv":
             DecodeVidLoxTv(url, returnFunction);
             break;
+        case "mp4upload.com":
+            DecodeMp4UploadCom(url, returnFunction);
+            break;
     }
+}
+
+function parseHtml(res) {
+    return new DOMParser().parseFromString(res, "text/html");
 }

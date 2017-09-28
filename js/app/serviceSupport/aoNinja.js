@@ -27,9 +27,10 @@ this.AONinja = {
             },
             deserialize: function (value) { return value },
         }).then(function (res) {
-            console.log($(res).find(".navbar-header").find(".logo").find("img").attr('src'));
+            let logo = $(parseHtml(res)).find(".navbar-header").find(".logo").find("img").attr('src')
+
             // todo: move id, name and other metadata to the service object itself (AONinja)
-            ServiceSupport.list.push({ api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: $(res).find(".navbar-header").find(".logo").find("img").attr('src') })
+            ServiceSupport.list.push({ api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo })
             console.log("A-O.ninja data loaded")
         })
     },
@@ -43,7 +44,7 @@ this.AONinja = {
             },
             deserialize: function (value) { return value },
         }).then(function (res) {
-            let animeListHtml = $(res).find(".list-item").find("td").find("a");
+            let animeListHtml = $(parseHtml(res)).find(".list-item").find("td").find("a");
 
             AONinja.animeList = animeListHtml.map(function () {
                 let title = this.innerHTML;
@@ -105,7 +106,7 @@ this.AONinja = {
             },
             deserialize: function (value) { return value },
         }).then(function (res) {
-            let episodeListHtml = $(res).find(".lista_odc_tytul_pozycja").find("a");
+            let episodeListHtml = $(parseHtml(res)).find(".lista_odc_tytul_pozycja").find("a");
 
             AONinja.episodeList = episodeListHtml.map(function () {
                 let title = this.innerHTML;
@@ -183,7 +184,7 @@ this.AONinja = {
             },
             deserialize: function (value) { return value },
         }).then(function (res) {
-            let playersListHtml = $(res).find("#video-player-control").find("div");
+            let playersListHtml = $(parseHtml(res)).find("#video-player-control").find("div");
 
             var i = 0;
             AONinja.currentEpisodePlaysers = playersListHtml.map(function () {
