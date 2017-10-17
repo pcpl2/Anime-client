@@ -26,6 +26,9 @@ function getVideoUrl(url, returnFunction) {
         case "mp4upload.com":
             DecodeMp4UploadCom(url, returnFunction);
             break;
+        case "tune.pk":
+            DecodeTunePk(url, returnFunction);
+            break;
     }
 }
 

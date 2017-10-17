@@ -15,7 +15,6 @@ this.AONinja = {
     nextEpisodeEnable: false,
     previousEpisodeEnable: false,
     currentEpisodePlayer: "",
-    currentEpisodePlayerUrl: "",
     currentEpisodeCustomPlayer: false,
 
     register: function () {
@@ -94,7 +93,6 @@ this.AONinja = {
         AONinja.episodeList = [];
         AONinja.currentEpisodeId = "";
         AONinja.currentEpisodePlayer = "";
-        AONinja.currentEpisodePlayerUrl = "";
     },
 
     updateCurrentAnimeData: function () {
@@ -155,7 +153,6 @@ this.AONinja = {
         AONinja.currentEpisodeId = "";
         AONinja.currentEpisodeTitle = "";
         AONinja.currentEpisodePlayer = "";
-        AONinja.currentEpisodePlayerUrl = "";
         AONinja.currentEpisodePlaysers = [];
     },
 
@@ -210,29 +207,29 @@ this.AONinja = {
             return true;
         }
 
-        if(AONinja.currentEpisodePlayer != "") {
+        if (AONinja.currentEpisodePlayer != "") {
             let oldPlayer = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == AONinja.currentEpisodePlayer; });
             oldPlayer.selected = false;
             AONinja.currentEpisodePlayer = "";
-            AONinja.currentEpisodePlayerUrl = "";
         }
 
         let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
 
         if (player) {
-            return getVideoUrl(player.url, function(url, status, customPlayer) {
-                if(status === VideoDecoderErrorCodes.Sucess) {
-                    AONinja.currentEpisodePlayer = player.id;
-                    AONinja.currentEpisodePlayerUrl = url;
-                    player.selected = true;
-                    AONinja.currentEpisodeCustomPlayer = customPlayer;
-                    return true;
-                } else {
-                    return false;
-                }
-            });
+            AONinja.currentEpisodePlayer = player.id;
+            player.selected = true;
+            return true;
         } else {
             return false;
         }
     },
+
+    getPlayerUrlById: function (id) {
+        let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
+        if (player) {
+            return player.url;
+        } else {
+            return false;
+        }
+    }
 };

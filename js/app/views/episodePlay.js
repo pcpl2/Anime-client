@@ -59,10 +59,13 @@ var episodePlayBody = {
                 //Player
                 m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [
                     m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", ServiceSupport.getServiceFunction().currentEpisodePlayer === "" ? "display: none;" : ""].join(" ") }, [
-                        ServiceSupport.getServiceFunction().currentEpisodeCustomPlayer == true ?
-                            m(VideoPlayer)
+                        ServiceSupport.getServiceFunction().currentEpisodePlayer != "" ?
+                            !ServiceSupport.getServiceFunction().currentEpisodePlayer.includes("google") ?
+                                m(VideoPlayer)
+                                :
+                                m("iframe", { "id": "iframe-player", "width": "100%", "height": "100%", "style": "margin-bootom: 2%;width: 100%;height: 100%;", "allowfullscreen": "true", "src": ServiceSupport.getServiceFunction().getPlayerUrlById(ServiceSupport.getServiceFunction().currentEpisodePlayer) })
                             :
-                            m("iframe", { "id": "iframe-player", "width": "100%", "height": "100%", "style": "margin-bootom: 2%;width: 100%;height: 65%;", "allowfullscreen": "true", "src": [ServiceSupport.getServiceFunction().currentEpisodePlayerUrl].join(" ") })
+                            m("")
                     ])
                 ]),
 
