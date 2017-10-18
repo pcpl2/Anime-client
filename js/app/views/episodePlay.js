@@ -97,12 +97,17 @@ var episodePlayBody = {
                                         episodePlayBody.currentPlayerId = player.id;
                                         episodePlayBody.initPlayer();
                                     }
-                                }, player.name);
+                                }, [
+                                        player.name,
+                                        checkSupportPlayerById(player.id) ?
+                                            m("span", { "class": "badge badge-success" }, "Supported")
+                                            :
+                                            m("span", { "class": "badge badge-danger" }, "Not supported")
+                                    ]);
                             })
                         ])
                     ])
                 ]),
-
 
                 //Player
                 m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [

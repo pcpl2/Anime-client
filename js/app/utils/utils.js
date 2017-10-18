@@ -32,6 +32,18 @@ function getVideoUrl(url, returnFunction) {
     }
 }
 
+function checkSupportPlayerById(id) {
+    let supportedSites = ["vidfile", "google", "raptu", "vidlox", "mp4upload", "tune"];
+
+    let supported = _.find(supportedSites, function(site){ return id.includes(site); });
+
+    if(supported == undefined) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function parseHtml(res) {
     return new DOMParser().parseFromString(res, "text/html");
 }
