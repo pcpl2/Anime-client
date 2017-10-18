@@ -53,7 +53,14 @@ var episodePlayBody = {
                 //Next previous episodes
                 m("div", { "class": "row" }, [
                     m("div", { "class": "col align-self-start" }, [
-                        m("button", { "class": "btn btn-primary pull-left" }, "Previous episode")
+                        m("button", {
+                            "class": ["btn btn-primary pull-left", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
+                                let epId = parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) - 1;
+                                episodePlayBody.clearPlayer();
+                                ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
+                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
+                            }
+                        }, "Previous episode")
                     ]),
 
                     m("div", { "class": "col align-self-center" }, [
@@ -65,7 +72,14 @@ var episodePlayBody = {
                     ]),
 
                     m("div", { "class": "col align-self-end" }, [
-                        m("button", { "class": "btn btn-primary pull-right" }, "Next episode")
+                        m("button", {
+                            "class": ["btn btn-primary pull-right", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
+                                let epId = parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) + 1;
+                                episodePlayBody.clearPlayer();
+                                ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
+                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
+                            }
+                        }, "Next episode")
                     ]),
                 ]),
 
@@ -75,16 +89,13 @@ var episodePlayBody = {
                         m("div", { "class": "btn-group", "role": "group" }, [
                             ServiceSupport.getServiceFunction().currentEpisodePlaysers.map(function (player) {
                                 return m("button", {
-                                    "class": ["btn btn-secondary", player.selected === true ? "active" : ""].join(" "), "id": player.id,
+                                    "class": ["btn btn-secondary", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
                                         if (episodePlayBody.currentPlayerId != "") {
                                             episodePlayBody.clearPlayer();
                                         }
                                         episodePlayBody.currentPlayerId = player.id;
                                         episodePlayBody.initPlayer();
-                                        /*                                        ServiceSupport.getServiceFunction().clearCurrentEpisodePlayer();
-                                                                                ServiceSupport.getServiceFunction().setCurrentEpisodePlayer(player.id);
-                                                                                console.log(ServiceSupport.getServiceFunction().currentEpisodePlayer);*/
                                     }
                                 }, player.name);
                             })
@@ -95,7 +106,7 @@ var episodePlayBody = {
 
                 //Player
                 m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [
-                    m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", this.currentPlayerId === "" ? "display: none;" : ""].join(" ") })
+                    m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", episodePlayBody.currentPlayerId === "" ? "display: none;" : ""].join(" ") })
                 ]),
 
             ]
@@ -134,6 +145,15 @@ this.EpisodePlay = {
         $('#js-select-episode').select2();
 
         $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
+
+        $('#js-select-episode').on("select2:select", function (event) {
+            let value = $(event.currentTarget).find("option:selected").val();
+            let epId = parseInt(value, 10);
+            console.log(epId);
+            episodePlayBody.clearPlayer();
+            ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
+        });
+
     },
     view: function () {
         return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody));
