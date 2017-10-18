@@ -14,7 +14,6 @@ this.AONinja = {
     currentEpisodePlaysers: [],
     nextEpisodeEnable: false,
     previousEpisodeEnable: false,
-    currentEpisodePlayer: "",
     currentEpisodeCustomPlayer: false,
 
     register: function () {
@@ -92,7 +91,6 @@ this.AONinja = {
         AONinja.currentAniemDescryption = "";
         AONinja.episodeList = [];
         AONinja.currentEpisodeId = "";
-        AONinja.currentEpisodePlayer = "";
     },
 
     updateCurrentAnimeData: function () {
@@ -152,7 +150,6 @@ this.AONinja = {
     clearCurrentEpisode: function () {
         AONinja.currentEpisodeId = "";
         AONinja.currentEpisodeTitle = "";
-        AONinja.currentEpisodePlayer = "";
         AONinja.currentEpisodePlaysers = [];
     },
 
@@ -189,7 +186,6 @@ this.AONinja = {
                     id: this.innerHTML.replace(/\s/g, '').toLowerCase() + i,
                     url: JSON.parse(CryptoJS.DES.decrypt(this.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
                     name: this.innerHTML.trim(),
-                    selected: false,
                 }
 
                 console.log(obj)
@@ -200,28 +196,6 @@ this.AONinja = {
 
             console.log("A-O.ninja anime list data loaded")
         })
-    },
-
-    setCurrentEpisodePlayer: function (id) {
-        if (AONinja.currentEpisodePlayer == id) {
-            return true;
-        }
-
-        if (AONinja.currentEpisodePlayer != "") {
-            let oldPlayer = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == AONinja.currentEpisodePlayer; });
-            oldPlayer.selected = false;
-            AONinja.currentEpisodePlayer = "";
-        }
-
-        let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
-
-        if (player) {
-            AONinja.currentEpisodePlayer = player.id;
-            player.selected = true;
-            return true;
-        } else {
-            return false;
-        }
     },
 
     getPlayerUrlById: function (id) {

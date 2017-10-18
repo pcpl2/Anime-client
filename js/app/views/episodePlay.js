@@ -16,6 +16,37 @@ var episodePlayHeader = {
 };
 
 var episodePlayBody = {
+    video: null,
+    currentPlayerId: "",
+    clearPlayer: function () {
+        episodePlayBody.currentPlayerId = "";
+        if (episodePlayBody.video != null) {
+            episodePlayBody.video.dispose();
+            episodePlayBody.video = null;
+        }
+
+        $("#custom-player").remove();
+        $("#iframe-player").remove();
+    },
+    initPlayer: function () {
+        if (!episodePlayBody.currentPlayerId.includes("google")) {
+            $("#video-player").append("<video id='custom-player' class='video-js' style='width: 100%;height: 100%;'></video>");
+
+            episodePlayBody.video = videojs('custom-player', {
+                controls: true,
+                autoplay: false
+            }, function () {
+                getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+                    if (status === VideoDecoderErrorCodes.Sucess) {
+                        episodePlayBody.video.src(url);
+                    }
+                });
+            });
+        } else {
+            let playerUrl = ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId);
+            $("#video-player").append("<iframe id='iframe-player' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + playerUrl + "' ></iframe>");
+        }
+    },
     view: function () {
         return m(".episodePlay", { "class": "col-md-12", "style": "margin-top: 1%; margin-bootom: 1%" },
             [
@@ -46,8 +77,14 @@ var episodePlayBody = {
                                 return m("button", {
                                     "class": ["btn btn-secondary", player.selected === true ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
-                                        ServiceSupport.getServiceFunction().setCurrentEpisodePlayer(player.id);
-                                        m.redraw();
+                                        if (episodePlayBody.currentPlayerId != "") {
+                                            episodePlayBody.clearPlayer();
+                                        }
+                                        episodePlayBody.currentPlayerId = player.id;
+                                        episodePlayBody.initPlayer();
+                                        /*                                        ServiceSupport.getServiceFunction().clearCurrentEpisodePlayer();
+                                                                                ServiceSupport.getServiceFunction().setCurrentEpisodePlayer(player.id);
+                                                                                console.log(ServiceSupport.getServiceFunction().currentEpisodePlayer);*/
                                     }
                                 }, player.name);
                             })
@@ -58,15 +95,7 @@ var episodePlayBody = {
 
                 //Player
                 m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [
-                    m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", ServiceSupport.getServiceFunction().currentEpisodePlayer === "" ? "display: none;" : ""].join(" ") }, [
-                        ServiceSupport.getServiceFunction().currentEpisodePlayer != "" ?
-                            !ServiceSupport.getServiceFunction().currentEpisodePlayer.includes("google") ?
-                                m(VideoPlayer)
-                                :
-                                m("iframe", { "id": "iframe-player", "width": "100%", "height": "100%", "style": "margin-bootom: 2%;width: 100%;height: 100%;", "allowfullscreen": "true", "src": ServiceSupport.getServiceFunction().getPlayerUrlById(ServiceSupport.getServiceFunction().currentEpisodePlayer) })
-                            :
-                            m("")
-                    ])
+                    m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", this.currentPlayerId === "" ? "display: none;" : ""].join(" ") })
                 ]),
 
             ]
