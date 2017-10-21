@@ -2,16 +2,24 @@
     "version": "0.0.1",
     "packages": {
       "linux64": {
-        "url": "http://localhost:8080/releases/nw-autoupdater-demo-linux-x64.zip",
-        "size": 102680557
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.1/anime-client-0.0.1-linux-x64.zip",
+        "size": 69729895
+      },
+      "linux32": {
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.1/anime-client-0.0.1-linux-x86.zip",
+        "size": 73747215
       },
       "win64": {
-        "url": "http://localhost:8080/releases/nw-autoupdater-demo-win-x64.zip",
-        "size": 102680557
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.1/anime-client-0.0.1-win-x64.zip",
+        "size": 65669147
+      },
+      "win32": {
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.1/anime-client-0.0.1-win-x86.zip",
+        "size": 55094035
       },
       "mac64": {
-        "url": "http://localhost:8080/releases/nw-autoupdater-demo-mac-x64.tar.gz",
-        "size": 102680557
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.1/anime-client-0.0.1-mac-x64.zip",
+        "size": 71634634
       }
     }
   }

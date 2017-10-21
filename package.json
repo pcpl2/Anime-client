@@ -1,6 +1,6 @@
 {
   "name": "anime-client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "index.html",
   "window": {
     "toolbar": true,
@@ -23,7 +23,11 @@
   },
   "build": {
     "nwVersion": "0.25.4",
-    "ffmpegIntegration": true
+    "ffmpegIntegration": true,
+    "targets": [
+      "zip"
+    ],
+    "outputPattern": "${NAME}-${VERSION}-${PLATFORM}-${ARCH}"
   },
   "scripts": {
     "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
