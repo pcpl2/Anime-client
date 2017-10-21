@@ -13,7 +13,7 @@
     "java": false,
     "page-cache": false
   },
-  "manifestUrl": "http://127.0.0.1:8080/package.json",
+  "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
     "mithril": "^1.1.4",
     "nw-autoupdater": "^1.1.4"
