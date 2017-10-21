@@ -1,0 +1,17 @@
+{
+  version: "0.0.1",
+  packages: {
+    "linux64": {
+      "url": "http://localhost:8080/releases/nw-autoupdater-demo-linux-x64.zip",
+      "size": 102680557
+    },
+    "win64": {
+      "url": "http://localhost:8080/releases/nw-autoupdater-demo-win-x64.zip",
+      "size": 102680557
+    },
+    "mac64": {
+      "url": "http://localhost:8080/releases/nw-autoupdater-demo-mac-x64.tar.gz",
+      "size": 102680557
+    }
+  }
+}
