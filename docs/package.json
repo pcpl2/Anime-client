@@ -1,6 +1,6 @@
 {
-    "version": "0.0.1", // nw-autoupdater compares this version with the local app manifest
-    "packages": { // map of available releases
+    "version": "0.0.1",
+    "packages": {
       "linux64": {
         "url": "http://localhost:8080/releases/nw-autoupdater-demo-linux-x64.zip",
         "size": 102680557
