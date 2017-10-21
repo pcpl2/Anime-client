@@ -1,7 +1,7 @@
 {
-  "name"    : "anime client",
-  "version" : "0.1.0",
-  "main"    : "index.html",
+  "name": "anime-client",
+  "version": "0.0.0",
+  "main": "index.html",
   "window": {
     "toolbar": true,
     "width": 1024,
@@ -9,12 +9,24 @@
   },
   "author": "pcpl2",
   "webkit": {
-      "plugin": false,
-      "java" : false,
-      "page-cache" : false
+    "plugin": false,
+    "java": false,
+    "page-cache": false
   },
+  "manifestUrl": "http://127.0.0.1:8080/package.json",
   "dependencies": {
     "mithril": "^1.1.4",
-    "diskdb": "^0.1.12"
+    "nw-autoupdater": "^1.1.4"
+  },
+  "devDependencies": {
+    "nwjs-builder-phoenix": "^1.14.6"
+  },
+  "build": {
+    "nwVersion": "0.25.4",
+    "ffmpegIntegration": true
+  },
+  "scripts": {
+    "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
+    "start": "run --x86 --mirror https://dl.nwjs.io/ ."
   }
 }
