@@ -6,7 +6,7 @@ var selectServiceBreadcrumb = {
 
 var selectServiceHeader = {
     view: function () {
-        return m("span", "Select service");
+        return m("label", { "class": "col-form-label col-md-2" }, "Select service");
     }
 };
 

@@ -1,6 +1,8 @@
 this.AONinja = {
     ///Anime List
     animeList: [],
+    animeListFiltered: [],
+    searchAnimeValue: "",
     currentAnimeId: "",
     currentAnimeTitle: "",
     currentAnimeExistImg: false,
@@ -14,7 +16,6 @@ this.AONinja = {
     currentEpisodePlaysers: [],
     nextEpisodeEnable: false,
     previousEpisodeEnable: false,
-    currentEpisodeCustomPlayer: false,
 
     register: function () {
         return m.request({
@@ -63,6 +64,8 @@ this.AONinja = {
 
                 return obj;
             }).get();
+
+            AONinja.animeListFiltered = AONinja.animeList;
 
             console.log("A-O.ninja anime list data loaded")
         })
@@ -205,5 +208,9 @@ this.AONinja = {
         } else {
             return false;
         }
+    },
+
+    searchAnime: function (text) {
+        AONinja.animeListFiltered = _.filter(AONinja.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
     }
 };

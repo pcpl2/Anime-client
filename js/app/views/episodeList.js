@@ -10,7 +10,7 @@ var episodeListBreadcrumb = {
 
 var episodeListHeader = {
     view: function () {
-        return m("span", ServiceSupport.getServiceFunction().currentAnimeTitle + " -> select episode");
+        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().currentAnimeTitle + " -> select episode");
     }
 };
 

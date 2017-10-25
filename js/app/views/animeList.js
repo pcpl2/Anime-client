@@ -9,14 +9,17 @@ var animeListBreadcrumb = {
 
 var animeListHeader = {
     view: function () {
-        return m("span", "Select anime");
+        return m("div", {}, [
+            m("label", { "class": "col-form-label col-md-2" }, "Select anime"),
+            m("input", { "class": "form-control col-md-4 pull-right", "oninput": m.withAttr("value", ServiceSupport.getServiceFunction().searchAnime), "placeholder": "Search" })
+        ]);
     }
 };
 
 var animeListBody = {
     view: function () {
         return m(".animeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%;" },
-            ServiceSupport.getServiceFunction().animeList.map(function (anime) {
+            ServiceSupport.getServiceFunction().animeListFiltered.map(function (anime) {
                 return m("div", { "class": "col-md-4" }, [
                     PageCard.animeCard(anime.id,
                         anime.title,

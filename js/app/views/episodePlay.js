@@ -11,7 +11,7 @@ var episodePlayBreadcrumb = {
 
 var episodePlayHeader = {
     view: function () {
-        return m("span", ServiceSupport.getServiceFunction().currentEpisodeTitle);
+        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().currentEpisodeTitle);
     }
 };
 
