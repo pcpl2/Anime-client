@@ -1,6 +1,6 @@
 # Anime-client
 
-Anime client is application created to wath anime from remote services with no ads. Application writed in nw.js and mithril.js.
+Anime client is an application created to watch anime from remote services with no ads. Application writed in nw.js and mithril.js.
 
 # Development
 
