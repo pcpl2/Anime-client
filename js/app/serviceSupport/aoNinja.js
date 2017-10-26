@@ -2,7 +2,6 @@ this.AONinja = {
     ///Anime List
     animeList: [],
     animeListFiltered: [],
-    searchAnimeValue: "",
     currentAnimeId: "",
     currentAnimeTitle: "",
     currentAnimeExistImg: false,
@@ -212,5 +211,9 @@ this.AONinja = {
 
     searchAnime: function (text) {
         AONinja.animeListFiltered = _.filter(AONinja.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+    },
+
+    clearSearchAnime: function() {
+        AONinja.animeListFiltered = AONinja.animeList;
     }
 };

@@ -39,6 +39,8 @@ this.AnimeList = {
         if (!ServiceSupport.setCurrentService(vnode.attrs.sid)) {
             m.route.set("/");
         }
+
+        ServiceSupport.getServiceFunction().clearSearchAnime();
     },
     view: function () {
         return layout(m(animeListBreadcrumb), m(animeListHeader), m(animeListBody));
