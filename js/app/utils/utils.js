@@ -5,43 +5,10 @@ function DecodeCloudflareEmailProtect(e, t, r, n) {
     return r
 }
 
-function getVideoUrl(url, returnFunction) {
+function getDomainName(url) {
     const regex = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/igm;
     var domain = regex.exec(url)[1].toLowerCase();
-    console.log(domain);
-    switch (domain) {
-        case "vidfile.net":
-            DecodeVidFileNet(url, returnFunction);
-            break;
-        case "drive.google.com":
-            //default google player is safe
-            returnFunction(url, VideoDecoderErrorCodes.Sucess, false);
-            break;
-        case "raptu.com":
-            DecodeRaptuCom(url, returnFunction);
-            break;
-        case "vidlox.tv":
-            DecodeVidLoxTv(url, returnFunction);
-            break;
-        case "mp4upload.com":
-            DecodeMp4UploadCom(url, returnFunction);
-            break;
-        case "tune.pk":
-            DecodeTunePk(url, returnFunction);
-            break;
-    }
-}
-
-function checkSupportPlayerById(id) {
-    let supportedSites = ["vidfile", "google", "raptu", "vidlox", "mp4upload", "tune"];
-
-    let supported = _.find(supportedSites, function(site){ return id.includes(site); });
-
-    if(supported == undefined) {
-        return false;
-    } else {
-        return true;
-    }
+    return domain;
 }
 
 function parseHtml(res) {

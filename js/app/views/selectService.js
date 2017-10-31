@@ -26,6 +26,8 @@ this.SelectService = {
     oninit: function (vnode) {
         ServiceSupport.clearCurrentService();
         ServiceSupport.updateServiceList();
+
+        VideoServiceSupport.updateVideoServiceList();
     },
 
     view: function () {

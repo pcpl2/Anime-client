@@ -36,7 +36,7 @@ var episodePlayBody = {
                 controls: true,
                 autoplay: false
             }, function () {
-                getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+                VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
                     if (status === VideoDecoderErrorCodes.Sucess) {
                         episodePlayBody.video.src(url);
                     }
@@ -99,7 +99,7 @@ var episodePlayBody = {
                                     }
                                 }, [
                                         player.name,
-                                        checkSupportPlayerById(player.id) ?
+                                        VideoServiceSupport.checkSupportPlayerById(player.id) ?
                                             m("span", { "class": "badge badge-success" }, "Supported")
                                             :
                                             m("span", { "class": "badge badge-danger" }, "Not supported")
