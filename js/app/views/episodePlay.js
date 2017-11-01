@@ -2,8 +2,8 @@ var episodePlayBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentServiceId + "/list", oncreate: m.route.link }, ServiceSupport.currentServiceName),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentServiceId + "/anime/" + ServiceSupport.getServiceFunction().currentAnimeId + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().currentAnimeTitle),
+            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, ServiceSupport.currentService.name),
+            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/anime/" + ServiceSupport.getServiceFunction().currentAnime.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().currentAnime.title),
             m("span", { "class": "breadcrumb-item active" }, ServiceSupport.getServiceFunction().currentEpisodeTitle)
         ]
     }

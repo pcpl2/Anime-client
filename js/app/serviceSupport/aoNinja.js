@@ -2,12 +2,7 @@ this.AONinja = {
     ///Anime List
     animeList: [],
     animeListFiltered: [],
-    currentAnimeId: "",
-    currentAnimeTitle: "",
-    currentAnimeExistImg: false,
-    currentAnimeImage: "",
-    currentAnimeExistDes: false,
-    currentAnimeDescryption: "",
+    currentAnime: null,
     ///Episode List
     episodeList: [],
     currentEpisodeId: "",
@@ -59,8 +54,6 @@ this.AONinja = {
                     title: title
                 };
 
-                console.log(obj);
-
                 return obj;
             }).get();
 
@@ -71,15 +64,16 @@ this.AONinja = {
     },
 
     setCurrentAnime: function (id) {
-        AONinja.clearCurrentEpisode();
-        if (AONinja.currentService == id) {
+        this.clearCurrentEpisode();
+        if (this.currentAnime != null && this.currentAnime.id == id) {
             return true;
         }
-        var anime = _.find(AONinja.animeList, function (anime) { return anime.id == id; });
+
+        var anime = _.find(this.animeList, function (anime) { return anime.id == id; });
         if (anime) {
-            AONinja.currentAnimeId = anime.id;
-            AONinja.currentAnimeTitle = anime.title;
-            AONinja.updateCurrentAnimeData();
+            this.currentAnime = { id: anime.id, title: anime.title, url: anime.url, img: null, desc: null }
+
+            this.updateCurrentAnimeData();
             return true;
         } else {
             return false;
@@ -87,18 +81,16 @@ this.AONinja = {
     },
 
     clearCurrentAnime: function () {
-        AONinja.currentAnimeId = "";
-        AONinja.currentAnimeTitle = "";
-        AONinja.currentAnimeImage = "";
-        AONinja.currentAniemDescryption = "";
-        AONinja.episodeList = [];
-        AONinja.currentEpisodeId = "";
+        this.currentAnime = null;
+
+        this.episodeList = [];
+        this.currentEpisodeId = "";
     },
 
     updateCurrentAnimeData: function () {
         return m.request({
             method: "GET",
-            url: "https://a-o.ninja/anime/" + AONinja.currentAnimeId,
+            url: AONinja.currentAnime.url,
             headers: {
                 "Accept": "text/html"
             },
@@ -155,26 +147,10 @@ this.AONinja = {
         AONinja.currentEpisodePlaysers = [];
     },
 
-    nextPreviousButtonsStatus: function (episode) {
-        let index = AONinja.episodeList.indexOf(episode);
-
-        if (index > 0) {
-            AONinja.previousEpisodeEnable = true;
-        } else {
-            AONinja.previousEpisodeEnable = false;
-        }
-
-        if (index < (AONinja.episodeList.length - 1)) {
-            AONinja.nextEpisodeEnable = true;
-        } else {
-            AONinja.nextEpisodeEnable = false;
-        }
-    },
-
     updateCurrentEpisodeData: function () {
         return m.request({
             method: "GET",
-            url: "https://a-o.ninja/anime/" + AONinja.currentAnimeId + "/" + AONinja.currentEpisodeId,
+            url: AONinja.currentAnime.url + "/" + AONinja.currentEpisodeId,
             headers: {
                 "Accept": "text/html"
             },
@@ -195,13 +171,11 @@ this.AONinja = {
 
                 return obj;
             }).get();
-
-            console.log("A-O.ninja anime list data loaded")
         })
     },
 
     getPlayerUrlById: function (id) {
-        let player = _.find(AONinja.currentEpisodePlaysers, function (player) { return player.id == id; });
+        let player = _.find(this.currentEpisodePlaysers, function (player) { return player.id == id; });
         if (player) {
             return player.url;
         } else {
@@ -210,10 +184,10 @@ this.AONinja = {
     },
 
     searchAnime: function (text) {
-        AONinja.animeListFiltered = _.filter(AONinja.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+        this.animeListFiltered = _.filter(this.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
     },
 
-    clearSearchAnime: function() {
-        AONinja.animeListFiltered = AONinja.animeList;
+    clearSearchAnime: function () {
+        this.animeListFiltered = this.animeList;
     }
 };

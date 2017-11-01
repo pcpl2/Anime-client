@@ -2,7 +2,7 @@ var animeListBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.currentServiceName))
+            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.currentService.name))
         ]
     }
 };
@@ -23,7 +23,7 @@ var animeListBody = {
                 return m("div", { "class": "col-md-4" }, [
                     PageCard.animeCard(anime.id,
                         anime.title,
-                        ServiceSupport.currentServiceId)
+                        ServiceSupport.currentService.id)
                 ]);
             }));
     }
