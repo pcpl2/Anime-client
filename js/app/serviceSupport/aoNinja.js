@@ -184,10 +184,10 @@ this.AONinja = {
     },
 
     searchAnime: function (text) {
-        this.animeListFiltered = _.filter(this.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+        AONinja.animeListFiltered = _.filter(AONinja.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
     },
 
     clearSearchAnime: function () {
-        this.animeListFiltered = this.animeList;
+        AONinja.animeListFiltered = AONinja.animeList;
     }
 };
