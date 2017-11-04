@@ -8,8 +8,6 @@ this.AONinja = {
     currentEpisodeId: "",
     currentEpisodeTitle: "",
     currentEpisodePlaysers: [],
-    nextEpisodeEnable: false,
-    previousEpisodeEnable: false,
 
     register: function () {
         return m.request({
@@ -131,7 +129,6 @@ this.AONinja = {
         let episode = _.find(AONinja.episodeList, function (episode) { return episode.id == id; });
 
         if (episode) {
-            AONinja.nextPreviousButtonsStatus(episode);
             AONinja.currentEpisodeId = episode.id;
             AONinja.currentEpisodeTitle = episode.title;
             AONinja.updateCurrentEpisodeData();
