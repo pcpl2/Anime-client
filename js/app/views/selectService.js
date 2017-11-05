@@ -14,10 +14,7 @@ var selectServiceList = {
     view: function () {
         return m(".serviceList",
             ServiceSupport.list.map(function (service) {
-                return m("div", [PageCard.serviceCard(service.image,
-                    service.name,
-                    service.description,
-                    service.id)]);
+                return m("div", m(PageCard.serviceCard, { service: service }));
             }));
     }
 };

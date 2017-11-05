@@ -1,13 +1,34 @@
 this.PageCard = {
-    serviceCard: function (logo, name, description, url) {
-        return m("div", { "class": "card", "style": "width: 20rem;" }, [
-            m("img", { "class": "card-img-top", "src": logo, "alt": name + " logo", "style": "background: black;" }),
-            m("div", { "class": "card-body" }, [
-                m("h4", { "class": "card-title" }, name),
-                m("p", { "class": "card-text" }, description),
-                m("a", { "class": "btn btn-primary", "href": "/service/" + url + "/list", oncreate: m.route.link }, "Select")
-            ])
-        ]);
+    serviceCard: {
+        id: "",
+        name: "",
+        description: "",
+        image: "",
+
+        oninit: function(vnode) {
+            var self = this;
+
+            self.name = vnode.attrs.service.name;
+            self.description = vnode.attrs.service.description;
+            self.id = vnode.attrs.service.id;
+
+            vnode.attrs.service.api.getImageFunction(function(image) {
+                self.image = image;
+                m.redraw( );
+            });
+        },
+
+        view: function(vnode) {
+            var self = this;
+            return m("div", { "class": "card", "style": "width: 20rem;" }, [
+                m("img", { "class": "card-img-top", "src": self.image, "alt": self.name + " logo", "style": "background: black;" }),
+                m("div", { "class": "card-body" }, [
+                    m("h4", { "class": "card-title" }, self.name),
+                    m("p", { "class": "card-text" }, self.description),
+                    m("a", { "class": "btn btn-primary", "href": "/service/" + self.id + "/list", oncreate: m.route.link }, "Select")
+                ])
+            ]);
+        }
     },
 
     animeCard: function (id, name, service) {

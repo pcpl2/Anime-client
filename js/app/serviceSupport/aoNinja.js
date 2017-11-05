@@ -1,4 +1,6 @@
 this.AONinja = {
+    currentServiceData: null,
+    
     ///Anime List
     animeList: [],
     animeListFiltered: [],
@@ -21,9 +23,14 @@ this.AONinja = {
             let logo = $(parseHtml(res)).find(".navbar-header").find(".logo").find("img").attr('src')
 
             // todo: move id, name and other metadata to the service object itself (AONinja)
+            currentServiceData = { api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo };
             ServiceSupport.list.push({ api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo })
             console.log("A-O.ninja data loaded")
         })
+    },
+
+    getImageFunction: function(returnCallback) {
+        returnCallback(currentServiceData.image);
     },
 
     updateAnimeList: function () {
