@@ -2,7 +2,7 @@ var episodeListBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, m("span", ServiceSupport.currentService.name)),
+            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, m("span", ServiceSupport.getServiceFunction().currentServiceData.name)),
             m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.getServiceFunction().currentAnime.title))
         ]
     }
@@ -19,7 +19,8 @@ var episodeListBody = {
         return m(".episodeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%; margin-bootom:1%" },
             //TODO add anime image and description
             ServiceSupport.getServiceFunction().episodeList.map(function (episode) {
-                return m("div", { "class": "col-md-4" }, [PageCard.episodeCard(episode.id,
+                return m("div", { "class": "col-md-4" }, [
+                    PageCard.episodeCard(episode.id,
                     episode.title,
                     ServiceSupport.getServiceFunction().currentAnime.id,
                     ServiceSupport.currentService.id)]);

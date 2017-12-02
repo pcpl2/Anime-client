@@ -1,6 +1,6 @@
 this.AONinja = {
     currentServiceData: null,
-    
+
     ///Anime List
     animeList: [],
     animeListFiltered: [],
@@ -23,14 +23,13 @@ this.AONinja = {
             let logo = $(parseHtml(res)).find(".navbar-header").find(".logo").find("img").attr('src')
 
             // todo: move id, name and other metadata to the service object itself (AONinja)
-            currentServiceData = { api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo };
-            ServiceSupport.list.push({ api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo })
-            console.log("A-O.ninja data loaded")
+            AONinja.currentServiceData = { api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo };
+            ServiceSupport.list.push({ api: AONinja, id: "aoninja" })
         })
     },
 
     getImageFunction: function(returnCallback) {
-        returnCallback(currentServiceData.image);
+        returnCallback(AONinja.currentServiceData.image);
     },
 
     updateAnimeList: function () {
@@ -63,8 +62,6 @@ this.AONinja = {
             }).get();
 
             AONinja.animeListFiltered = AONinja.animeList;
-
-            console.log("A-O.ninja anime list data loaded")
         })
     },
 
@@ -85,14 +82,7 @@ this.AONinja = {
         }
     },
 
-    clearCurrentAnime: function () {
-        this.currentAnime = null;
-
-        this.episodeList = [];
-        this.currentEpisodeId = "";
-    },
-
-    updateCurrentAnimeData: function () {
+    updateCurrentAnimeData() {
         return m.request({
             method: "GET",
             url: AONinja.currentAnime.url,
@@ -129,29 +119,37 @@ this.AONinja = {
     },
 
     setCurrentEpisode: function (id) {
-        if (AONinja.currentEpisodeId == id) {
+        var self = this;
+        if (self.currentEpisodeId == id) {
             return true;
         }
 
-        let episode = _.find(AONinja.episodeList, function (episode) { return episode.id == id; });
+        let episode = _.find(self.episodeList, function (episode) { return episode.id == id; });
 
         if (episode) {
-            AONinja.currentEpisodeId = episode.id;
-            AONinja.currentEpisodeTitle = episode.title;
-            AONinja.updateCurrentEpisodeData();
+            self.currentEpisodeId = episode.id;
+            self.currentEpisodeTitle = episode.title;
+            self.updateCurrentEpisodeData();
             return true;
         } else {
             return false;
         }
     },
 
-    clearCurrentEpisode: function () {
-        AONinja.currentEpisodeId = "";
-        AONinja.currentEpisodeTitle = "";
-        AONinja.currentEpisodePlaysers = [];
+    clearCurrentAnime: function () {
+        this.currentAnime = null;
+
+        this.episodeList = [];
+        this.clearCurrentEpisode();
     },
 
-    updateCurrentEpisodeData: function () {
+    clearCurrentEpisode: function () {
+        this.currentEpisodeId = "";
+        this.currentEpisodeTitle = "";
+        this.currentEpisodePlaysers = [];
+    },
+
+    updateCurrentEpisodeData () {
         return m.request({
             method: "GET",
             url: AONinja.currentAnime.url + "/" + AONinja.currentEpisodeId,
@@ -192,6 +190,6 @@ this.AONinja = {
     },
 
     clearSearchAnime: function () {
-        AONinja.animeListFiltered = AONinja.animeList;
+        this.animeListFiltered = this.animeList;
     }
 };

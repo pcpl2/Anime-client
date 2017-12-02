@@ -20,8 +20,8 @@ this.PageCard = {
 
         view: function(vnode) {
             var self = this;
-            return m("div", { "class": "card", "style": "width: 20rem;" }, [
-                m("img", { "class": "card-img-top", "src": self.image, "alt": self.name + " logo", "style": "background: black;" }),
+            return m("div", { "class": "card", "style": "width: 20rem; height: 15rem; margin: 3%;" }, [
+                m("img", { "class": "card-img-top", "src": self.image, "alt": self.name + " logo", "style": "background: black; height: 25%;" }),
                 m("div", { "class": "card-body" }, [
                     m("h4", { "class": "card-title" }, self.name),
                     m("p", { "class": "card-text" }, self.description),

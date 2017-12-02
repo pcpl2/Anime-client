@@ -16,7 +16,7 @@ this.ServiceSupport = {
             return true;
         }
 
-        var service = _.find(this.list, function (service) { return service.id = id; });
+        var service = _.find(this.list, function (service) { return service.id == id; });
         if (service) {
             this.currentService = service;
             service.api.updateAnimeList();

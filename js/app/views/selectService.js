@@ -12,7 +12,7 @@ var selectServiceHeader = {
 
 var selectServiceList = {
     view: function () {
-        return m(".serviceList",
+        return m(".serviceList", { class: "row col-md-12" }, 
             ServiceSupport.list.map(function (service) {
                 return m("div", m(PageCard.serviceCard, { service: service }));
             }));

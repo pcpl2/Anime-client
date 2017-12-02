@@ -2,7 +2,7 @@ var animeListBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.currentService.name))
+            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.currentService.api.currentServiceData.name))
         ]
     }
 };
