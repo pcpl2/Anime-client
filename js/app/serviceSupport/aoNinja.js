@@ -23,7 +23,7 @@ this.AONinja = {
             let logo = $(parseHtml(res)).find(".navbar-header").find(".logo").find("img").attr('src')
 
             // todo: move id, name and other metadata to the service object itself (AONinja)
-            AONinja.currentServiceData = { api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", image: logo };
+            AONinja.currentServiceData = { api: AONinja, id: "aoninja", name: "A-O.NINJA", description: "", lang: "PL", image: logo };
             ServiceSupport.list.push({ api: AONinja, id: "aoninja" })
         })
     },
@@ -165,7 +165,9 @@ this.AONinja = {
                 let obj = {
                     id: this.innerHTML.replace(/\s/g, '').toLowerCase() + i,
                     url: JSON.parse(CryptoJS.DES.decrypt(this.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
+                    lang: "PL",
                     name: this.innerHTML.trim(),
+                    desc: "-"
                 }
 
                 console.log(obj)

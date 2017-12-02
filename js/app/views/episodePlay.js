@@ -86,10 +86,10 @@ var episodePlayBody = {
                 //Players button
                 m("div", { "class": "row", "style": "margin-top: 2%" }, [
                     m("div", { "class": "col wrapper text-center" }, [
-                        m("div", { "class": "btn-group", "role": "group" }, [
+                        m("div", { "class": "col-md-12" }, [
                             ServiceSupport.getServiceFunction().currentEpisodePlaysers.map(function (player) {
                                 return m("button", {
-                                    "class": ["btn btn-secondary", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
+                                    "class": ["btn btn-secondary col-md-3", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
                                         if (episodePlayBody.currentPlayerId != "") {
                                             episodePlayBody.clearPlayer();
@@ -98,7 +98,11 @@ var episodePlayBody = {
                                         episodePlayBody.initPlayer();
                                     }
                                 }, [
+                                        m("span", {class: "lang-sm", "lang": player.lang.toLowerCase()}),
+                                        " ",
                                         player.name,
+                                        player.desc != "-" ? [m("br"), player.desc] : "",
+                                        m("br"),
                                         VideoServiceSupport.checkSupportPlayerById(player.id) ?
                                             m("span", { "class": "badge badge-success" }, "Supported")
                                             :
