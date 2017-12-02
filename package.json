@@ -22,7 +22,7 @@
     "nwjs-builder-phoenix": "^1.14.6"
   },
   "build": {
-    "nwVersion": "0.25.4",
+    "nwVersion": "0.26.6",
     "ffmpegIntegration": true,
     "targets": [
       "zip"

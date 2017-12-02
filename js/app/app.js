@@ -1,4 +1,4 @@
-var m = require("mithril");
+const m = require("mithril");
 
 const AutoUpdater = require("nw-autoupdater"),
     updater = new AutoUpdater(require("./package.json"), {
@@ -14,16 +14,16 @@ m.route(document.getElementById("application"), "", {
 
 async function update() {
     try {
-        // Download/unpack update if any available
         const rManifest = await updater.readRemoteManifest();
         const needsUpdate = await updater.checkNewVersion(rManifest);
+
         if (!needsUpdate) {
             return;
         }
         if (!confirm("New release is available. Do you want to upgrade?")) {
             return;
         }
-        // Subscribe for progress events
+
         updater.on("download", (downloadSize, totalSize) => {
             console.log("download progress", Math.floor(downloadSize / totalSize * 100), "%");
         });

@@ -5,7 +5,7 @@
             "type": "nwjs",
             "request": "launch",
             "name": "Launch NWjs",
-            "nwjsVersion": "any",
+            "nwjsVersion": "0.26.6",
             "webRoot": "${workspaceRoot}"
         },
         {
