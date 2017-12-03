@@ -28,41 +28,56 @@ this.AONinja = {
         })
     },
 
-    getImageFunction: function(returnCallback) {
+    getImageFunction: function (returnCallback) {
         returnCallback(AONinja.currentServiceData.image);
     },
 
     updateAnimeList: function () {
-        return m.request({
-            method: "GET",
-            url: "https://a-o.ninja/anime",
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            let animeListHtml = $(parseHtml(res)).find(".list-item").find("td").find("a");
+        let animeListJson = cacheJS.get({
+            serviceID: AONinja.currentServiceData.id,
+            type: 'Json'
+        });
 
-            AONinja.animeList = animeListHtml.map(function () {
-                let title = this.innerHTML;
-                let emailProtect = this.querySelector('.__cf_email__');
+        if (animeListJson == null) {
 
-                if (emailProtect) {
-                    emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
-                    title = this.innerHTML;
-                }
+            m.request({
+                method: "GET",
+                url: "https://a-o.ninja/anime",
+                headers: {
+                    "Accept": "text/html"
+                },
+                deserialize: function (value) { return value },
+            }).then(function (res) {
+                let animeListHtml = $(parseHtml(res)).find(".list-item").find("td").find("a");
 
-                let obj = {
-                    id: this.getAttribute("href").split("/").pop(),
-                    url: this.getAttribute("href"),
-                    title: title
-                };
+                AONinja.animeList = animeListHtml.map(function () {
+                    let title = this.innerHTML;
+                    let emailProtect = this.querySelector('.__cf_email__');
 
-                return obj;
-            }).get();
+                    if (emailProtect) {
+                        emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
+                        title = this.innerHTML;
+                    }
 
+                    let obj = {
+                        id: this.getAttribute("href").split("/").pop(),
+                        url: this.getAttribute("href"),
+                        title: title
+                    };
+
+                    return obj;
+                }).get();
+
+                cacheJS.set({ serviceID: AONinja.currentServiceData.id, type: 'Json' }, JSON.stringify(AONinja.animeList), 86400);
+
+                AONinja.animeListFiltered = AONinja.animeList;
+                m.redraw();
+            });
+        } else {
+            AONinja.animeList = JSON.parse(animeListJson);
             AONinja.animeListFiltered = AONinja.animeList;
-        })
+            m.redraw();
+        }
     },
 
     setCurrentAnime: function (id) {
@@ -149,7 +164,7 @@ this.AONinja = {
         this.currentEpisodePlaysers = [];
     },
 
-    updateCurrentEpisodeData () {
+    updateCurrentEpisodeData() {
         return m.request({
             method: "GET",
             url: AONinja.currentAnime.url + "/" + AONinja.currentEpisodeId,
