@@ -5,6 +5,7 @@ this.ServiceSupport = {
     updateServiceList: function () {
         this.clearServicesList();
         AONinja.register();
+        AnimeZone.register();
     },
 
     getServiceFunction: function () {

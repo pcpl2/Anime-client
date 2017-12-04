@@ -7,6 +7,7 @@
     "width": 1024,
     "height": 768
   },
+  "node-remote": "*://*/*",
   "author": "pcpl2",
   "webkit": {
     "plugin": false,
@@ -16,7 +17,8 @@
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
     "mithril": "^1.1.4",
-    "nw-autoupdater": "^1.1.4"
+    "nw-autoupdater": "^1.1.4",
+    "phantom": "^4.0.11"
   },
   "devDependencies": {
     "nwjs-builder-phoenix": "^1.14.6"
