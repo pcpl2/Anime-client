@@ -16,6 +16,7 @@ this.VideoServiceSupport = {
         TunePk.register();
         Mp4UploadCom.register();
         DriveGoogleCom.register();
+        vkCom.register();
     },
 
     clearVideoServicesList: function () {
