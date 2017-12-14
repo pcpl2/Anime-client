@@ -101,7 +101,7 @@ var episodePlayBody = {
                                         m("span", {class: "lang-sm", "lang": player.lang.toLowerCase()}),
                                         " ",
                                         player.name,
-                                        player.desc != "-" ? [m("br"), player.desc] : "",
+                                        /*player.desc != "-" ?*/ [m("br"), player.desc] /*: ""*/,
                                         m("br"),
                                         VideoServiceSupport.checkSupportPlayerById(player.id) ?
                                             m("span", { "class": "badge badge-success" }, "Supported")

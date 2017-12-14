@@ -98,11 +98,13 @@ this.AnimeZone = {
 
                 urls.splice(0, 1);
                 self.runRequest(urls);
-            })
+            }).catch(function (e) {
+                ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+            });
         } else {
             AnimeZone.animeList = JSON.parse(animeListJson);
             AnimeZone.animeListFiltered = AnimeZone.animeList;
-            m.redraw();
+            AnimeZone.setListState();
         }
     },
 
@@ -154,11 +156,11 @@ this.AnimeZone = {
     completeRequest() {
         var self = this;
         self.animeList = _.sortBy(self.animeList, function (obj) { return obj.title; });
-        
+
         cacheJS.set({ serviceID: AnimeZone.currentServiceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
 
         self.animeListFiltered = self.animeList;
-        m.redraw();
+        AnimeZone.setListState();
     },
 
     clearCurrentAnime: function () {
@@ -278,7 +280,7 @@ this.AnimeZone = {
 
             i++;
         });
-        return 0;
+        //return 0;
     },
 
     addPlayerToList(playerAllInfo) {
@@ -332,7 +334,7 @@ this.AnimeZone = {
                 }
 
                 AnimeZone.currentEpisodePlaysers.push(playerObj);
-                console.log("added");
+                //console.log("added");
                 console.log(playerObj);
                 m.redraw();
 
@@ -360,10 +362,19 @@ this.AnimeZone = {
 
     searchAnime: function (text) {
         AnimeZone.animeListFiltered = _.filter(AnimeZone.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+        AnimeZone.setListState();
     },
 
     clearSearchAnime: function () {
         this.animeListFiltered = this.animeList;
-    }
+    },
 
+    setListState() {
+        if(this.animeListFiltered.length > 0) {
+            ServiceSupport.currentServiceStatus = ServiceStatus.LOADED;
+        } else {
+            ServiceSupport.currentServiceStatus = ServiceStatus.EMPTY;
+        }
+        m.redraw();
+    }
 }

@@ -1,6 +1,14 @@
+var ServiceStatus = {
+    LOADED: 10,
+    LOADING: 11,
+    EMPTY: 12,
+    ERROR: 13
+}
+
 this.ServiceSupport = {
     list: [],
     currentService: null,
+    currentServiceStatus: ServiceStatus.EMPTY,
 
     updateServiceList: function () {
         this.clearServicesList();
@@ -20,6 +28,7 @@ this.ServiceSupport = {
         var service = _.find(this.list, function (service) { return service.id == id; });
         if (service) {
             this.currentService = service;
+            this.currentServiceStatus = ServiceStatus.LOADING;
             service.api.updateAnimeList();
             return true;
         } else {

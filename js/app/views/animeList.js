@@ -18,20 +18,34 @@ var animeListHeader = {
 
 var animeListBody = {
     view: function () {
-        return m(".animeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%;" },
-            ServiceSupport.getServiceFunction().animeListFiltered.map(function (anime) {
-                return m("div", { "class": "col-md-4" }, [
-                    PageCard.animeCard(anime.id,
-                        anime.title,
-                        ServiceSupport.currentService.id)
-                ]);
-            }));
+        return m("div", [
+            //Loading
+            m("div", { class: "loader",  style: ["margin: auto; position: relative; margin-top:10%; display:", ServiceSupport.currentServiceStatus === ServiceStatus.LOADING ? " block" : " none"].join("") }, ""),
+            //Loaded
+            m("div", { style: ["display:", ServiceSupport.currentServiceStatus === ServiceStatus.LOADED ? " block" : " none"].join("") },
+                m(".animeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%;" },
+                    ServiceSupport.getServiceFunction().animeListFiltered.map(function (anime) {
+                        return m("div", { "class": "col-md-4" }, [
+                            PageCard.animeCard(anime.id,
+                                anime.title,
+                                ServiceSupport.currentService.id)
+                        ]);
+                    }))),
+            //Empty
+            m("div", { style: ["display:", ServiceSupport.currentServiceStatus === ServiceStatus.EMPTY ? " block" : " none"].join("") }, [
+                m("h2", { style: "margin: auto; text-align: center; margin-top:10%;" }, "The anime list is empty.")
+            ]),
+            //Error
+            m("div", { style: ["display:", ServiceSupport.currentServiceStatus === ServiceStatus.ERROR ? " block" : " none"].join("") }, [
+                m("h2", { style: "margin: auto; text-align: center; margin-top:10%;" }, "An error occurred while loading the anime list.")
+            ])
+        ])
     }
 };
 
 this.AnimeList = {
     oninit: function (vnode) {
-        console.log(vnode.attrs);
+        //console.log(vnode.attrs);
         if (!vnode.attrs.sid) {
             m.route.set("/");
         }

@@ -71,12 +71,14 @@ this.AONinja = {
                 cacheJS.set({ serviceID: AONinja.currentServiceData.id, type: 'Json' }, JSON.stringify(AONinja.animeList), 86400);
 
                 AONinja.animeListFiltered = AONinja.animeList;
-                m.redraw();
+                AONinja.setListState();
+            }).catch(function(e) {
+                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
             });
         } else {
             AONinja.animeList = JSON.parse(animeListJson);
             AONinja.animeListFiltered = AONinja.animeList;
-            m.redraw();
+            AONinja.setListState();
         }
     },
 
@@ -204,9 +206,19 @@ this.AONinja = {
 
     searchAnime: function (text) {
         AONinja.animeListFiltered = _.filter(AONinja.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+        AONinja.setListState();
     },
 
     clearSearchAnime: function () {
         this.animeListFiltered = this.animeList;
+    },
+
+    setListState() {
+        if(this.animeListFiltered.length > 0) {
+            ServiceSupport.currentServiceStatus = ServiceStatus.LOADED;
+        } else {
+            ServiceSupport.currentServiceStatus = ServiceStatus.EMPTY;
+        }
+        m.redraw();
     }
 };

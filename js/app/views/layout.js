@@ -11,7 +11,7 @@ layout = function (breadcrumb, header, content) {
         m(Navbar),
         m("div", { "class": "container" }, [
             m("nav", {"class": "breadcrumb"}, [breadcrumb]),
-            m("div", { "class": "card fancy", "style": "margin-top:1%" }, [
+            m("div", { "class": "card fancy", "style": "margin-top:1%; min-height: 50%;" }, [
                 m("div", { "class": "card-header" }, [header]),
                 m("div", { "class": "card-block" }, [content])
             ])
