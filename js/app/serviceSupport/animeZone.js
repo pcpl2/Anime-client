@@ -193,7 +193,7 @@ this.AnimeZone = {
         }
     },
 
-    updateCurrentAnimeData() {
+    async updateCurrentAnimeData() {
         var self = this;
         return m.request({
             method: "GET",
@@ -248,6 +248,7 @@ this.AnimeZone = {
         var episodeUrl = "http://www.animezone.pl" + episode.url;
 
         const instance = await phantom.create();
+        
         const page = await instance.createPage();
         const status = await page.open(episodeUrl);
         const pageContent = await page.property('content');
@@ -280,7 +281,6 @@ this.AnimeZone = {
 
             i++;
         });
-        //return 0;
     },
 
     addPlayerToList(playerAllInfo) {
