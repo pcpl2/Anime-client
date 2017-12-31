@@ -17,6 +17,7 @@ this.VideoServiceSupport = {
         Mp4UploadCom.register();
         DriveGoogleCom.register();
         vkCom.register();
+        estreamTo.register();
     },
 
     clearVideoServicesList: function () {
