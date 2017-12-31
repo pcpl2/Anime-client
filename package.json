@@ -33,6 +33,7 @@
     "excludes": [
       "docs/*",
       "package-lock.json"
+    ]
   },
   "scripts": {
     "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
