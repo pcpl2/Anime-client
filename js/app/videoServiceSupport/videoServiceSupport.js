@@ -30,6 +30,8 @@ this.VideoServiceSupport = {
 
         if(service != null) {
             service.api.getVideoUrl(url, returnFunction)
+        } else {
+            returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
         }
     },
 

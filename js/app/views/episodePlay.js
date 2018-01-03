@@ -27,25 +27,40 @@ var episodePlayBody = {
 
         $("#custom-player").remove();
         $("#iframe-player").remove();
+        $("#player-error").remove();
     },
-    initPlayer: function () {
+    initPlayer() {
+        var self = this;
+        $("#player-error").remove();
+        $("#video-player").append("<div id='player-loader'> <div class='loader' style='margin: auto; position: relative; margin-top:10%;'></div></div>");
         if (!episodePlayBody.currentPlayerId.includes("google")) {
-            $("#video-player").append("<video id='custom-player' class='video-js' style='width: 100%;height: 100%;'></video>");
-
-            episodePlayBody.video = videojs('custom-player', {
-                controls: true,
-                autoplay: false
-            }, function () {
-                VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
-                    if (status === VideoDecoderErrorCodes.Sucess) {
+            VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+                $("#player-loader").remove();
+                $("#video-player").append("<video id='custom-player' class='video-js' style='width: 100%;height: 100%;'></video>");
+                if (status === VideoDecoderErrorCodes.Sucess) {
+                    episodePlayBody.video = videojs('custom-player', {
+                        controls: true,
+                        autoplay: false,
+                        preload: "auto"
+                    }, function () {
                         episodePlayBody.video.src(url);
-                    }
-                });
+                    });
+                } else {
+                    self.clearPlayer();
+                    self.showPlayerError();
+                }
             });
         } else {
+            $("#player-loader").remove();
             let playerUrl = ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId);
             $("#video-player").append("<iframe id='iframe-player' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + playerUrl + "' ></iframe>");
         }
+    },
+    showPlayerError() {
+        $("#video-player").append("<div id='player-error' class='alert alert-danger' role='alert'>" + 
+        "<h4 class='alert-heading'>Load video error</h4>" +
+        "<p>An error occurred while loading the video or no longer exists on the selected host. Please choose another host.</p>" +
+        "</div>");
     },
     view: function () {
         return m(".episodePlay", { "class": "col-md-12", "style": "margin-top: 1%; margin-bootom: 1%" },
@@ -115,7 +130,7 @@ var episodePlayBody = {
 
                 //Player
                 m("div", { "class": "row", "style": "margin-top: 2%;margin-bottom: 2%;" }, [
-                    m("div", { "id": "video-player", "class": "col wrapper", "style": ["width: 100%;height: 65%;", episodePlayBody.currentPlayerId === "" ? "display: none;" : ""].join(" ") })
+                    m("div", { "id": "video-player", "class": "col wrapper", "style": "width: 100%;height: 65%;"/*["width: 100%;height: 65%;", episodePlayBody.currentPlayerId === "" ? "display: none;" : ""].join(" ")*/ })
                 ]),
 
             ]
@@ -125,7 +140,6 @@ var episodePlayBody = {
 
 this.EpisodePlay = {
     oninit: function (vnode) {
-        console.log(vnode.attrs);
         if (!vnode.attrs.sid) {
             m.route.set("/");
         }
@@ -166,5 +180,8 @@ this.EpisodePlay = {
     },
     view: function () {
         return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody));
-    }
+    },
+    onbeforeremove: function(vnode) {
+        ServiceSupport.getServiceFunction().clearCurrentEpisode();
+    },
 }
