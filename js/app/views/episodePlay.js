@@ -36,7 +36,7 @@ var episodePlayBody = {
         if (!episodePlayBody.currentPlayerId.includes("google")) {
             VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
                 $("#player-loader").remove();
-                $("#video-player").append("<video id='custom-player' class='video-js' style='width: 100%;height: 100%;'></video>");
+                $("#video-player").append("<video id='custom-player' class='video-js vjs-big-play-centered' style='width: 100%;height: 100%;'></video>");
                 if (status === VideoDecoderErrorCodes.Sucess) {
                     episodePlayBody.video = videojs('custom-player', {
                         controls: true,
