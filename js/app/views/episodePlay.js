@@ -1,3 +1,7 @@
+require("select2");
+const videojs = require("video.js");
+require("videojs-resolution-switcher");
+
 var episodePlayBreadcrumb = {
     view: function () {
         return [
@@ -37,14 +41,30 @@ var episodePlayBody = {
             VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
                 $("#player-loader").remove();
                 $("#video-player").append("<video id='custom-player' class='video-js vjs-big-play-centered' style='width: 100%;height: 100%;'></video>");
+
+                let player = $("#custom-player");
+
                 if (status === VideoDecoderErrorCodes.Sucess) {
-                    episodePlayBody.video = videojs('custom-player', {
+                    self.video = videojs(player[0], {
                         controls: true,
                         autoplay: false,
-                        preload: "auto"
+                        preload: "auto",
+                        plugins: {
+                            videoJsResolutionSwitcher: {
+                                default: 'high',
+                                dynamicLabel: true
+                            }
+                        }
                     }, function () {
-                        episodePlayBody.video.src(url);
+                        self.video.updateSrc([
+                            { type: "video/mp4", src: url, label: 'default' }
+                        ])
+                        self.video.on('resolutionchange', function () {
+                            console.info('Source changed to %s', player.src())
+                        })
                     });
+
+
                 } else {
                     self.clearPlayer();
                     self.showPlayerError();
@@ -57,10 +77,10 @@ var episodePlayBody = {
         }
     },
     showPlayerError() {
-        $("#video-player").append("<div id='player-error' class='alert alert-danger' role='alert'>" + 
-        "<h4 class='alert-heading'>Load video error</h4>" +
-        "<p>An error occurred while loading the video or no longer exists on the selected host. Please choose another host.</p>" +
-        "</div>");
+        $("#video-player").append("<div id='player-error' class='alert alert-danger' role='alert'>" +
+            "<h4 class='alert-heading'>Load video error</h4>" +
+            "<p>An error occurred while loading the video or no longer exists on the selected host. Please choose another host.</p>" +
+            "</div>");
     },
     view: function () {
         return m(".episodePlay", { "class": "col-md-12", "style": "margin-top: 1%; margin-bootom: 1%" },
@@ -113,10 +133,10 @@ var episodePlayBody = {
                                         episodePlayBody.initPlayer();
                                     }
                                 }, [
-                                        m("span", {class: "lang-sm", "lang": player.lang.toLowerCase()}),
+                                        m("span", { class: "lang-sm", "lang": player.lang.toLowerCase() }),
                                         " ",
                                         player.name,
-                                        /*player.desc != "-" ?*/ [m("br"), player.desc] /*: ""*/,
+                                        /*player.desc != "-" ?*/[m("br"), player.desc] /*: ""*/,
                                         m("br"),
                                         VideoServiceSupport.checkSupportPlayerById(player.id) ?
                                             m("span", { "class": "badge badge-success" }, "Supported")
@@ -181,7 +201,7 @@ this.EpisodePlay = {
     view: function () {
         return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody));
     },
-    onbeforeremove: function(vnode) {
+    onbeforeremove: function (vnode) {
         ServiceSupport.getServiceFunction().clearCurrentEpisode();
     },
 }

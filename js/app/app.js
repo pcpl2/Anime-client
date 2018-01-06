@@ -1,3 +1,4 @@
+const $ = require("jquery");
 const m = require("mithril");
 
 const AutoUpdater = require("nw-autoupdater"),

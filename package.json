@@ -2,6 +2,7 @@
   "name": "anime-client",
   "version": "0.0.2",
   "main": "index.html",
+  "chromium-args": "--mixed-context",
   "window": {
     "toolbar": true,
     "width": 1024,
@@ -16,9 +17,13 @@
   },
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
+    "jquery": "^3.2.1",
     "mithril": "^1.1.4",
     "nw-autoupdater": "^1.1.4",
-    "phantom": "^4.0.11"
+    "phantom": "^4.0.11",
+    "select2": "4.0.3",
+    "video.js": "^6.4.0",
+    "videojs-resolution-switcher": "^0.4.2"
   },
   "devDependencies": {
     "nwjs-builder-phoenix": "^1.14.6"
