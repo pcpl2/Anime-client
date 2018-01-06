@@ -11,6 +11,7 @@ var animeListHeader = {
     view: function () {
         return m("div", {}, [
             m("label", { "class": "col-form-label col-md-2" }, "Select anime"),
+            m("label", { "class": "col-form-label col-md-4" }, "Showing " + ServiceSupport.getServiceFunction().animeListFiltered.length.toLocaleString() + " of " + ServiceSupport.getServiceFunction().animeList.length.toLocaleString() + " anime"),
             m("input", { "class": "form-control col-md-4 pull-right", "oninput": m.withAttr("value", ServiceSupport.getServiceFunction().searchAnime), "placeholder": "Search" })
         ]);
     }
@@ -20,7 +21,7 @@ var animeListBody = {
     view: function () {
         return m("div", [
             //Loading
-            m("div", { class: "loader",  style: ["margin: auto; position: relative; margin-top:10%; display:", ServiceSupport.currentServiceStatus === ServiceStatus.LOADING ? " block" : " none"].join("") }, ""),
+            m("div", { class: "loader", style: ["margin: auto; position: relative; margin-top:10%; display:", ServiceSupport.currentServiceStatus === ServiceStatus.LOADING ? " block" : " none"].join("") }, ""),
             //Loaded
             m("div", { style: ["display:", ServiceSupport.currentServiceStatus === ServiceStatus.LOADED ? " block" : " none"].join("") },
                 m(".animeList", { "class": "col-md-12 card-group", "style": "margin-top: 1%;" },
