@@ -189,6 +189,7 @@ this.AONinja = {
 
     updateCurrentEpisodeData() {
         const self = this;
+        self.currentEpisodePlaysers = [];
         const url = self.currentAnime.url + "/" + self.currentEpisodeId;
 
         request({ url: url, headers: self.headers }, (error, response, body) => {
