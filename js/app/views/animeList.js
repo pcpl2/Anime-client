@@ -11,7 +11,7 @@ var animeListHeader = {
     view: function () {
         return m("div", {}, [
             m("label", { "class": "col-form-label col-md-2" }, "Select anime"),
-            m("label", { "class": "col-form-label col-md-4" }, "Showing " + ServiceSupport.getServiceFunction().animeListFiltered.length.toLocaleString() + " of " + ServiceSupport.getServiceFunction().animeList.length.toLocaleString() + " anime"),
+            m("label", { "class": "col-form-label col-md-4", style: ["display:", ServiceSupport.currentServiceStatus != ServiceStatus.LOADED ? " none": ""].join("") }, "Showing " + ServiceSupport.getServiceFunction().animeListFiltered.length.toLocaleString() + " of " + ServiceSupport.getServiceFunction().animeList.length.toLocaleString() + " anime"),
             m("input", { "class": "form-control col-md-4 pull-right", "oninput": m.withAttr("value", ServiceSupport.getServiceFunction().searchAnime), "placeholder": "Search" })
         ]);
     }
