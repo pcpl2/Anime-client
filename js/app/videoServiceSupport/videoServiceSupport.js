@@ -18,6 +18,7 @@ this.VideoServiceSupport = {
         DriveGoogleCom.register();
         vkCom.register();
         estreamTo.register();
+        dailymotionCom.register();
     },
 
     clearVideoServicesList: function () {
