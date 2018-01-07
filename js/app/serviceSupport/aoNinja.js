@@ -148,7 +148,6 @@ this.AONinja = {
                 });
                 self.episodeList = episodeList.reverse();
 
-                console.log("A-O.ninja episode list data loaded");
                 m.redraw();
             } else {
                 //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
