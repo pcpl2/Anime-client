@@ -4,6 +4,11 @@ const phantom = require('phantom');
 this.AnimeZone = {
     currentServiceData: null,
 
+    headers: {
+        'Accept': 'text/html',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3165.0 Safari/537.36'
+    },
+
     ///Anime List
     animeList: [],
     animeListFiltered: [],
@@ -59,47 +64,46 @@ this.AnimeZone = {
         });
 
         if (animeListJson == null) {
-            m.request({
-                method: "GET",
-                url: "http://www.animezone.pl/anime/lista",
-                headers: {
-                    "Accept": "text/html"
-                },
-                deserialize: function (value) { return value },
-            }).then(function (res) {
-                let parsedHtml = $(parseHtml(res));
-                let pagination = parsedHtml.find(".pagination");
-                var urls = parsedHtml.find(".anime-list").find("div").find("a").map(function () {
-                    return "http://www.animezone.pl" + this.getAttribute("href");
-                });
+            request({ url: "http://www.animezone.pl/anime/lista", headers: self.headers }, (error, response, body) => {
+                if (!error && response.statusCode == 200) {
+                    const parsedHtml = $(parseHtml(body));
 
-                if (pagination.length > 0 && !(urls[0].includes("?page="))) {
-                    let pagesLi = pagination.find("li");
-                    let pagesNumber = parseInt(pagesLi[(pagesLi.length - 2)].innerText);
-                    for (var i = 1; i <= pagesNumber; i++) {
-                        urls.push(urls[0] + "?page=" + i);
-                    }
+                    var urls = [];
+
+                    _.each(parsedHtml.find(".anime-list").find("div").find("a"), (urlObject) => {
+                        const fullUrl = "http://www.animezone.pl" + urlObject.getAttribute("href");
+                        if (fullUrl != "http://www.animezone.pl/anime/lista") {
+                            urls.push(fullUrl);
+                        }
+                    });
+
+                    const titleObjectList = self.processHtml(parsedHtml, urls);
+
+                    self.animeList = self.animeList.concat(titleObjectList);
+
+                    request({ url: "http://www.animezone.pl/anime/filmy", headers: self.headers }, (error, response, body) => {
+                        if (!error && response.statusCode == 200) {
+                            const parsedHtml = $(parseHtml(body));
+
+                            _.each(parsedHtml.find(".anime-list").find("div").find("a"), (urlObject) => {
+                                const fullUrl = "http://www.animezone.pl" + urlObject.getAttribute("href");
+                                if (fullUrl != "http://www.animezone.pl/anime/filmy") {
+                                    urls.push(fullUrl);
+                                }
+                            });
+
+                            const titleObjectList = self.processHtml(parsedHtml, urls);
+
+                            self.animeList = self.animeList.concat(titleObjectList);
+
+                            self.runRequest(urls);
+                        } else {
+                            //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+                        }
+                    });
+                } else {
+                    //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
                 }
-
-                let animeToAdd = parsedHtml.find(".categories-newest").find(".categories").find(".description").map(function () {
-                    let title = this.childNodes[1].childNodes[1].innerHTML;
-                    let shortUrl = this.childNodes[1].childNodes[1].getAttribute("href");
-                    let fullUrl = "http://www.animezone.pl" + shortUrl;
-
-                    let obj = {
-                        id: shortUrl.split("/").pop(),
-                        url: fullUrl,
-                        title: title
-                    };
-                    return obj;
-                }).get();
-
-                self.animeList = self.animeList.concat(animeToAdd);
-
-                urls.splice(0, 1);
-                self.runRequest(urls);
-            }).catch(function (e) {
-                ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
             });
         } else {
             AnimeZone.animeList = JSON.parse(animeListJson);
@@ -110,51 +114,71 @@ this.AnimeZone = {
 
     runRequest(urls) {
         var self = this;
-        m.request({
-            method: "GET",
-            url: urls[0],
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            let parsedHtml = $(parseHtml(res));
-            let pagination = parsedHtml.find(".pagination");
+        console.log(urls[0] + " start");
+        request({ url: urls[0], headers: self.headers }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                const parsedHtml = $(parseHtml(body));
 
-            if (pagination.length > 0 && !(urls[0].includes("?page="))) {
-                let pagesLi = pagination.find("li");
-                let pagesNumber = parseInt(pagesLi[(pagesLi.length - 2)].innerText);
-                for (var i = 1; i <= pagesNumber; i++) {
+                const titleObjectList = self.processHtml(parsedHtml, urls);
+
+                self.animeList = self.animeList.concat(titleObjectList);
+
+                console.log(urls[0] + " ok");
+                if (urls.length > 1) {
+                    urls.splice(0, 1);
+
+                    //simple anty ddos aniezone
+                    setTimeout(() => {
+                        self.runRequest(urls);
+                    }, 500);
+                } else {
+                    self.completeRequest();
+                }
+
+            } else {
+                console.error(error);
+                console.log("retry " + urls[0])
+                self.runRequest(urls);
+                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+            }
+
+        });
+    },
+
+    processHtml(parsedHtml, urls) {
+        const pagination = parsedHtml.find(".pagination");
+
+        if (pagination.length > 0 && !(urls[0].includes("?page="))) {
+            let pagesLi = pagination.find("li");
+            let pagesNumber = parseInt(pagesLi[(pagesLi.length - 2)].innerText);
+            for (var i = 1; i <= pagesNumber; i++) {
+                if (i != 1) {
                     urls.push(urls[0] + "?page=" + i);
                 }
             }
+        }
 
-            let animeToAdd = parsedHtml.find(".categories-newest").find(".categories").find(".description").map(function () {
-                let title = this.childNodes[1].childNodes[1].innerHTML;
-                let shortUrl = this.childNodes[1].childNodes[1].getAttribute("href");
-                let fullUrl = "http://www.animezone.pl" + shortUrl;
+        var titleObjectList = [];
 
-                let obj = {
-                    id: shortUrl.split("/").pop(),
-                    url: fullUrl,
-                    title: title
-                };
-                return obj;
-            }).get();
+        _.each(parsedHtml.find(".categories-newest").find(".categories").find(".description"), (item, indexItem) => {
+            const title = item.childNodes[1].childNodes[1].innerHTML;
+            const shortUrl = item.childNodes[1].childNodes[1].getAttribute("href");
+            const fullUrl = "http://www.animezone.pl" + shortUrl;
 
-            self.animeList = self.animeList.concat(animeToAdd);
+            const obj = {
+                id: shortUrl.split("/").pop(),
+                url: fullUrl,
+                title: title
+            };
 
-            if (urls.length > 1) {
-                urls.splice(0, 1);
-                self.runRequest(urls);
-            } else {
-                self.completeRequest();
-            }
-        })
+            titleObjectList.push(obj);
+        });
+        return titleObjectList;
     },
 
     completeRequest() {
         var self = this;
+
         self.animeList = _.sortBy(self.animeList, function (obj) { return obj.title; });
 
         cacheJS.set({ serviceID: AnimeZone.currentServiceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
@@ -195,32 +219,33 @@ this.AnimeZone = {
 
     async updateCurrentAnimeData() {
         var self = this;
-        return m.request({
-            method: "GET",
-            url: self.currentAnime.url,
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            let episodeListHtml = $(parseHtml(res)).find(".episodes").find("tbody").find("tr");
+        request({ url: self.currentAnime.url, headers: self.headers }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                const listHtml = $(parseHtml(body)).find(".episodes").find("tbody").find("tr");
 
-            self.episodeList = episodeListHtml.map(function () {
-                let title = this.children[0].innerText + " - " + this.children[1].innerText;
-                let tmpUrl = this.children[4].children[0].getAttribute("href");
-                let url = "/" + tmpUrl.split("/").splice(1, 3).join("/");
+                var episodeList = [];
 
-                let obj = {
-                    id: url.split("/").pop(),
-                    url: url,
-                    title: title
-                };
+                _.each(listHtml, (item, indexItem) => {
+                    const title = item.children[0].innerText + " - " + item.children[1].innerText;
+                    const tmpUrl = item.children[4].children[0].getAttribute("href");
+                    const url = "/" + tmpUrl.split("/").splice(1, 3).join("/");
 
-                return obj;
-            }).get();
+                    const obj = {
+                        id: url.split("/").pop(),
+                        url: url,
+                        title: title
+                    };
 
-            self.episodeList = self.episodeList.reverse();
-        })
+                    console.log(obj);
+                    episodeList.push(obj);
+                });
+                self.episodeList = episodeList.reverse();
+
+                m.redraw();
+            } else {
+                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+            }
+        });
     },
 
     setCurrentEpisode: function (id) {
@@ -241,6 +266,46 @@ this.AnimeZone = {
             return false;
         }
     },
+/*
+    updateCurrentEpisodeDataNew() {
+        var self = this;
+        const episode = _.find(self.episodeList, function (episode) { return episode.id == self.currentEpisodeId; });
+        const episodeUrl = "http://www.animezone.pl" + episode.url;
+        const regexCookieDecoder = /_SESS=([^;]+)/;
+
+        request({ url: episodeUrl, headers: self.headers }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                console.log(response.headers['set-cookie']);
+
+                var cookieObj = _.find(response.headers['set-cookie'], (obj) => { return obj.includes("_SESS"); });
+                var cookie = regexCookieDecoder.exec(cookieObj)[1];
+
+                let listHtml = $(parseHtml(body)).find("table.episode").find("tbody").children();
+
+                _.each(listHtml, (item, indexItem) => {
+                    const dataForUrlPost = {
+                        url: episodeUrl,
+                        cookie: cookie,
+                        data: item.children[3].children[0].attributes[1].nodeValue
+                    }
+
+                    const playerAllInfo = {
+                        id: item.children[0].innerHTML.replace(/\s/g, '').toLowerCase() + indexItem,
+                        url: dataForUrlPost,
+                        lang: item.children[2].children[0].getAttribute('class').split(" ")[1],
+                        name: item.children[0].innerText.trim(),
+                        desc: item.children[1].innerHTML.trim()
+                    };
+
+                    self.addPlayerToList(playerAllInfo);
+                });
+
+            } else {
+                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+            }
+        });
+
+    },*/
 
     async updateCurrentEpisodeData() {
         var self = this;
@@ -248,7 +313,7 @@ this.AnimeZone = {
         var episodeUrl = "http://www.animezone.pl" + episode.url;
 
         const instance = await phantom.create();
-        
+
         const page = await instance.createPage();
         const status = await page.open(episodeUrl);
         const pageContent = await page.property('content');
@@ -277,11 +342,35 @@ this.AnimeZone = {
                 desc: this.children[1].innerHTML.trim()
             };
 
-            self.addPlayerToList(playerAllInfo);
+            self.addPlayerToListNew(playerAllInfo);
 
             i++;
         });
     },
+/*
+    addPlayerToListNew(playerAllInfo) {
+        const self = this;
+        const headers = {
+            'Connection': 'keep-alive',
+            'Cache-Control': 'max-age=0',
+            'Referer': playerAllInfo.url.url,
+            'Cookie': "_SESS=" + playerAllInfo.url.cookie,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength("data="+playerAllInfo.url.data),
+            'User-Agent': self.headers['User-Agent']
+        }
+
+        request.post({ url: playerAllInfo.url.url, headers: headers, form: { data: playerAllInfo.url.data } }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                console.log(body);
+
+            } else {
+                console.error(error);
+            }
+
+        });
+
+    },*/
 
     addPlayerToList(playerAllInfo) {
         let parser = document.createElement("a");
@@ -370,7 +459,7 @@ this.AnimeZone = {
     },
 
     setListState() {
-        if(this.animeListFiltered.length > 0) {
+        if (this.animeListFiltered.length > 0) {
             ServiceSupport.currentServiceStatus = ServiceStatus.LOADED;
         } else {
             ServiceSupport.currentServiceStatus = ServiceStatus.EMPTY;
