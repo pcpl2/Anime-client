@@ -144,9 +144,9 @@ this.AONinja = {
                     };
 
                     console.log(obj);
-                    self.episodeList.push(obj);
+                    episodeList.push(obj);
                 });
-                self.episodeList = self.episodeList.reverse();
+                self.episodeList = episodeList.reverse();
 
                 console.log("A-O.ninja episode list data loaded");
                 m.redraw();
