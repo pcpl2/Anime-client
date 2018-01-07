@@ -22,6 +22,7 @@
     "mithril": "^1.1.4",
     "nw-autoupdater": "^1.1.4",
     "phantom": "^4.0.11",
+    "request": "^2.83.0",
     "select2": "4.0.3",
     "video.js": "^6.4.0",
     "videojs-resolution-switcher": "^0.4.2"
@@ -37,6 +38,7 @@
     ],
     "outputPattern": "${NAME}-${VERSION}-${PLATFORM}-${ARCH}",
     "excludes": [
+      "anime-client.code-workspace",
       "docs/*",
       "package-lock.json"
     ]
