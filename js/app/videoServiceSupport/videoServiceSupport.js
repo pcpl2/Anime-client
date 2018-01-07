@@ -5,6 +5,8 @@ var VideoDecoderErrorCodes = {
     OTHER_ERROR: 53
 }
 
+const ValidateVideoUrlRegex = /(?:http|ftp|https):\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])/igm;
+
 this.VideoServiceSupport = {
     list: [],
 

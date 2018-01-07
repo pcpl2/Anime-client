@@ -1,14 +1,21 @@
 this.dailymotionCom = {
     domain: "dailymotion.com",
 
+    headers: {
+        'Accept': 'text/html',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3165.0 Safari/537.36'
+    },
+
     register: function () {
         return VideoServiceSupport.list.push({ api: dailymotionCom, id: "dailymotion", domain: this.domain });
     },
 
     getVideoUrl: function (url, returnFunction) {
-        const regexValidateVideoUrl = /(?:http|ftp|https):\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])/igm;
+        var self = this;
+
         const regexValidDailymotion = /(?:https?:\/\/)?(?:(?:www|touch)\.)?(dailymotion)\.[a-z]{2,3}\/(?:(embed|swf|#)\/)?video\/([^/?_]+)/igm;
         const regexGetConfig = /(?:var config )= \{?({.+\}\})\;/igm;
+
         //check domain
         if (getDomainName(url) != this.domain) {
             returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
@@ -56,7 +63,7 @@ this.dailymotionCom = {
 
                 const videoObject = _.find(qualities[maxQuality], (obj) => { return obj.type == "video/mp4"});
 
-                if(new RegExp(regexValidateVideoUrl).test(videoObject.url)) {
+                if(new RegExp(ValidateVideoUrlRegex).test(videoObject.url)) {
                     returnFunction(videoObject.url, VideoDecoderErrorCodes.Sucess, true);
                 } else {
                     returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
