@@ -1,60 +1,65 @@
 this.Mp4UploadCom = {
     domain : "mp4upload.com",
 
+    headers: {
+        'Accept': 'text/html',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3165.0 Safari/537.36'
+    },
+
     register: function () {
         return VideoServiceSupport.list.push({ api: Mp4UploadCom, id: "mp4upload", domain: this.domain });
     },
 
     getVideoUrl: function (url, returnFunction) {
         var self = this;
-        const regexDataDecoder1 = /return p}(.+)\)/igm;
-        const regexDataDecoder2 = /\'(.+)\'\,/igm;
-        const regexDataDecoder3 = /src:"(.+)+"/igm;
-        const regexValidateUrl = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/igm
+
+        const regexDataDecoder = /return p}(?:\('(.*)\'\,)([1-9]+),([1-9]+),(?:\'(.*)\'\.split)/igm;
+        const regexGetVideoAndPoster = /(?:var videoposter\=\\\'(.*)\\\'\;).*(?:src:"(.+)+")/igm;
+
         //check domain
         if (getDomainName(url) != this.domain) {
             returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
             return;
         }
-    
-        m.request({
-            method: "GET",
-            url: url,
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            let videoUrl = $(parseHtml(res)).find("script").map(function() {
-                if(this.innerHTML.search("eval") != -1) {
 
-                    let tmp = regexDataDecoder1.exec(this.innerHTML)[1].slice(1);
-                    let tmp1 = tmp.slice(0, tmp.length - 12);
+        request({ url: url, headers: self.headers }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                const listHtml = $(parseHtml(body)).find("script");
+                var validEncodedData = undefined;
 
-                    let arg1 = regexDataDecoder2.exec(tmp1)[1];
-                    
-                    let tmp2 = tmp1.slice(arg1.length + 3).split(",");
+                _.each(listHtml, (htmlObject, htmlIndex) => {
+                    if (htmlObject.innerHTML.trim().replace(/\s/g, '').search("eval") != -1) {
+                        validEncodedData = htmlObject.innerHTML;
+                    }
+                });
 
-                    let arg2 = tmp2[0];
-                    let arg3 = tmp2[1];
-                    let arg4 = tmp2[2].slice(1, tmp2[2].length - 1).split("|");
-
-                    let decodedString = self.decodeString(arg1, arg2, arg3, arg4); 
-
-                    let url = regexDataDecoder3.exec(decodedString)[1];
-
-                    return url;
+                if (validEncodedData == undefined) {
+                    returnFunction("", VideoDecoderErrorCodes.OTHER_ERROR);
                 }
-            }).get()[0];
-    
-            if(new RegExp(regexValidateUrl).test(videoUrl)) {
-                returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
+
+                const encodedData = regexDataDecoder.exec(validEncodedData);
+                const arg1 = encodedData[1];
+                const arg2 = encodedData[2];
+                const arg3 = encodedData[3];
+                const arg4 = encodedData[4].split("|");
+
+                const decodedData = self.decodeString(arg1, arg2, arg3, arg4); 
+
+                const urlsRegex = regexGetVideoAndPoster.exec(decodedData);
+
+                const poster = urlsRegex[1];
+                let url = urlsRegex[2];
+
+
+                if(new RegExp(ValidateVideoUrlRegex).test(url)) {
+                    returnFunction(url, VideoDecoderErrorCodes.Sucess, true);
+                } else {
+                    returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
+                }
             } else {
                 returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
             }
-        }).catch(function(e) {
-            returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-        })
+        });
     },
 
     decodeString(p, a, c, k) {
