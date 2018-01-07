@@ -63,7 +63,3 @@ async function update() {
 }
 
 update();
-
-VideoServiceSupport.getVideoUrl("https://www.mp4upload.com/embed-rw0r6lft8s27.html", (url, status, customPlayer) => {
-    console.log(url);
-})
