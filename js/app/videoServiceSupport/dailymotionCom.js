@@ -42,7 +42,7 @@ this.dailymotionCom = {
 
                 const parsedConfgiJson = JSON.parse(validConfigJson);
 
-                console.log(parsedConfgiJson);
+                //console.log(parsedConfgiJson);
 
                 const posters = parsedConfgiJson.metadata.posters;
                 const qualities = parsedConfgiJson.metadata.qualities;

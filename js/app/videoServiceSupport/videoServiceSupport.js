@@ -10,6 +10,8 @@ const ValidateVideoUrlRegex = /(?:http|ftp|https):\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.
 this.VideoServiceSupport = {
     list: [],
 
+    serviceWithHiddenLinks: [],
+
     updateVideoServiceList: function () {
         this.clearVideoServicesList();
         VidFileNet.register();
@@ -21,30 +23,60 @@ this.VideoServiceSupport = {
         vkCom.register();
         estreamTo.register();
         dailymotionCom.register();
+
+        //Hiden video service link
+
+        gamedorUsermdNet.register();
     },
 
     clearVideoServicesList: function () {
         this.list = [];
     },
 
-    getVideoUrl: function(url, returnFunction) {
-        let domain = getDomainName(url);
-        let service = _.find(this.list, function(obj) { return obj.domain == domain });
+    getVideoUrl: function (serviceObj, returnFunction) {
+        this.getServiceUrl(serviceObj, (serviceUrl) => {
+            if (serviceUrl.length > 0) {
+                const domain = getDomainName(serviceUrl);
+                const service = _.find(this.list, (obj) => {
+                    if (obj.domains != undefined) {
+                        const foundDomain = _.find(obj.domains, (stringDomain) => { return stringDomain == domain });
+                        return foundDomain == domain;
+                    } else {
+                        return obj.domain == domain;
+                    }
+                });
 
-        if(service != null) {
-            service.api.getVideoUrl(url, returnFunction)
-        } else {
-            returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
-        }
+                if (service != null) {
+                    service.api.getVideoUrl(serviceUrl, returnFunction)
+                } else {
+                    returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
+                }
+            } else {
+                returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
+            }
+
+        })
     },
 
-    checkSupportPlayerById: function(id) {    
-        let supported = _.find(this.list, function(obj) { return id.includes(obj.id); });
-    
-        if(supported == undefined) {
+    checkSupportPlayerById: function (id) {
+        const supported = _.find(this.list, function (obj) { return id.includes(obj.id); });
+
+        if (supported == undefined) {
             return false;
         } else {
             return true;
         }
+    },
+
+    getServiceUrl: function (serviceObj, retFunction) {
+        const domain = getDomainName(serviceObj.url);
+        const serviceGetter = _.find(this.serviceWithHiddenLinks, function (obj) { return obj.domain == domain });
+
+        if (serviceGetter == undefined) {
+            retFunction(serviceObj.url);
+        } else {
+            serviceGetter.api.getServiceLink(serviceObj, retFunction)
+        }
+
     }
 }

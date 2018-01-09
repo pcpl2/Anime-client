@@ -201,9 +201,10 @@ this.AONinja = {
                         url: JSON.parse(CryptoJS.DES.decrypt(item.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
                         lang: "PL",
                         name: item.innerHTML.trim(),
-                        desc: "-"
+                        desc: "-",
+                        referer: url
                     }
-    
+
                     console.log(obj)
                     self.currentEpisodePlaysers.push(obj);
                 });
@@ -214,10 +215,10 @@ this.AONinja = {
         });
     },
 
-    getPlayerUrlById: function (id) {
+    getServiceUrlObjById: function (id) {
         let player = _.find(this.currentEpisodePlaysers, function (player) { return player.id == id; });
         if (player) {
-            return player.url;
+            return { url: player.url, referer: player.referer };
         } else {
             return false;
         }

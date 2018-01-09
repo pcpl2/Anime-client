@@ -38,7 +38,7 @@ var episodePlayBody = {
         $("#player-error").remove();
         $("#video-player").append("<div id='player-loader'> <div class='loader' style='margin: auto; position: relative; margin-top:10%;'></div></div>");
         if (!episodePlayBody.currentPlayerId.includes("google")) {
-            VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+            VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
                 $("#player-loader").remove();
                 $("#video-player").append("<video id='custom-player' class='video-js vjs-big-play-centered' style='width: 100%;height: 100%;'></video>");
 
@@ -72,8 +72,8 @@ var episodePlayBody = {
             });
         } else {
             $("#player-loader").remove();
-            let playerUrl = ServiceSupport.getServiceFunction().getPlayerUrlById(episodePlayBody.currentPlayerId);
-            $("#video-player").append("<iframe id='iframe-player' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + playerUrl + "' ></iframe>");
+            let serviceObj = ServiceSupport.getServiceFunction().getServiceUrlObjById(episodePlayBody.currentPlayerId);
+            $("#video-player").append("<iframe id='iframe-player' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + serviceObj.url + "' ></iframe>");
         }
     },
     showPlayerError() {

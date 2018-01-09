@@ -339,10 +339,11 @@ this.AnimeZone = {
                 url: dataForUrlPost,
                 lang: this.children[2].children[0].getAttribute('class').split(" ")[1],
                 name: this.children[0].innerText.trim(),
-                desc: this.children[1].innerHTML.trim()
+                desc: this.children[1].innerHTML.trim(),
+                referer: episodeUrl
             };
 
-            self.addPlayerToListNew(playerAllInfo);
+            self.addPlayerToList(playerAllInfo);
 
             i++;
         });
@@ -408,7 +409,8 @@ this.AnimeZone = {
                     url: "",
                     lang: playerAllInfo.lang,
                     name: playerAllInfo.name,
-                    desc: playerAllInfo.desc
+                    desc: playerAllInfo.desc,
+                    referer: playerAllInfo.referer
                 }
 
                 if (a.length > 0) {
@@ -440,10 +442,10 @@ this.AnimeZone = {
         req.end();
     },
 
-    getPlayerUrlById: function (id) {
+    getServiceUrlObjById: function (id) {
         let player = _.find(this.currentEpisodePlaysers, function (player) { return player.id == id; });
         if (player) {
-            return player.url;
+            return { url: player.url, referer: player.referer };
         } else {
             return false;
         }
