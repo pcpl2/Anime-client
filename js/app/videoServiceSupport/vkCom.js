@@ -82,28 +82,33 @@ this.vkCom = {
             if (!error && response.statusCode == 200) {
                 const videoHtml = $(parseHtml(body)).find("video")[0];
 
-                const sourceHtml = $(videoHtml).find("source");
+                if (videoHtml != null) {
+                    const sourceHtml = $(videoHtml).find("source");
 
-                var poster = "";
-                if (videoHtml.attributes.poster != undefined) {
-                    poster = videoHtml.attributes.poster.nodeValue;
-                }
+                    var poster = "";
+                    if (videoHtml.attributes.poster != undefined) {
+                        poster = videoHtml.attributes.poster.nodeValue;
+                    }
 
-                var videoObjs = [];
+                    var videoObjs = [];
 
-                _.each(sourceHtml, (sourceValue) => {
-                    let vidUrl = sourceValue.src;
-                    let res = getQualityData.exec(vidUrl);
-                    videoObjs.push({ url: vidUrl, quality: res, qualityLabel: res + "p" })
-                });
+                    _.each(sourceHtml, (sourceValue) => {
+                        let vidUrl = sourceValue.src;
+                        let res = getQualityData.exec(vidUrl);
+                        videoObjs.push({ url: vidUrl, quality: res, qualityLabel: res + "p" })
+                    });
 
-                const videoObject = videoObjs[0];
+                    const videoObject = videoObjs[0];
 
-                if(new RegExp(ValidateVideoUrlRegex).test(videoObject.url)) {
-                    returnFunction(videoObject.url, VideoDecoderErrorCodes.Sucess, true);
+                    if (new RegExp(ValidateVideoUrlRegex).test(videoObject.url)) {
+                        returnFunction(videoObject.url, VideoDecoderErrorCodes.Sucess, true);
+                    } else {
+                        returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
+                    }
                 } else {
                     returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
                 }
+
             } else {
                 returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
             }
