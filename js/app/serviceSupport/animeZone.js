@@ -1,4 +1,3 @@
-const http = require('http');
 const phantom = require('phantom');
 
 this.AnimeZone = {
@@ -21,23 +20,16 @@ this.AnimeZone = {
 
     register: function () {
         var self = this;
-        return m.request({
-            method: "GET",
-            url: "http://animezone.pl/",
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            //const getImageFromCss = /[:,\s]\s*url\s*\(\s*(?:'(\S*?)'|"(\S*?)"|((?:\\\s|\\\)|\\\"|\\\'|\S)*?))\s*\)/igm;
 
-            //console.log($(parseHtml(res)).find(".logo")[0].css( "background" ));
-
-            //let logo = getImageFromCss.exec($(parseHtml(res)).find(".logo").css( "background" ));
-
-            self.currentServiceData = { api: self, id: "animezone", name: "AnimeZone.pl", description: "", lang: "PL", image: "http://www.animezone.pl/resources/images/sprites.png" };
-            ServiceSupport.list.push({ api: self, id: "animezone" })
-        })
+        request({ url: "http://www.animezone.pl", headers: self.headers }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                self.currentServiceData = { api: self, id: "animezone", name: "AnimeZone.pl", description: "", lang: "PL", image: "http://www.animezone.pl/resources/images/sprites.png" };
+                ServiceSupport.list.push({ api: self, id: "animezone" });
+                m.redraw();
+            } else {
+                console.error(error);
+            }
+        });
     },
 
     getImageFunction: function (returnCallback) {
@@ -59,7 +51,7 @@ this.AnimeZone = {
     updateAnimeList: function () {
         var self = this;
         let animeListJson = cacheJS.get({
-            serviceID: AnimeZone.currentServiceData.id,
+            serviceID: self.currentServiceData.id,
             type: 'Json'
         });
 
@@ -106,9 +98,9 @@ this.AnimeZone = {
                 }
             });
         } else {
-            AnimeZone.animeList = JSON.parse(animeListJson);
-            AnimeZone.animeListFiltered = AnimeZone.animeList;
-            AnimeZone.setListState();
+            self.animeList = JSON.parse(animeListJson);
+            self.animeListFiltered = self.animeList;
+            self.setListState();
         }
     },
 
@@ -179,12 +171,12 @@ this.AnimeZone = {
     completeRequest() {
         var self = this;
 
-        self.animeList = _.sortBy(self.animeList, function (obj) { return obj.title; });
+        self.animeList = _.sortBy(self.animeList, (obj) => { return obj.title; });
 
-        cacheJS.set({ serviceID: AnimeZone.currentServiceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
+        cacheJS.set({ serviceID: self.currentServiceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
 
         self.animeListFiltered = self.animeList;
-        AnimeZone.setListState();
+        self.setListState();
     },
 
     clearCurrentAnime: function () {
@@ -249,12 +241,12 @@ this.AnimeZone = {
     },
 
     setCurrentEpisode: function (id) {
-        var self = this;
+        const self = this;
         if (self.currentEpisodeId == id) {
             return true;
         }
 
-        let episode = _.find(self.episodeList, function (episode) { return episode.id == id; });
+        const episode = _.find(self.episodeList, (episode) => { return episode.id == id; });
 
         if (episode) {
             self.currentEpisodeId = episode.id;
@@ -309,7 +301,7 @@ this.AnimeZone = {
 
     async updateCurrentEpisodeData() {
         var self = this;
-        var episode = _.find(self.episodeList, function (episode) { return episode.id == self.currentEpisodeId; });
+        var episode = _.find(self.episodeList, (episode) => { return episode.id == self.currentEpisodeId; });
         var episodeUrl = "http://www.animezone.pl" + episode.url;
 
         const instance = await phantom.create();
@@ -319,8 +311,8 @@ this.AnimeZone = {
         const pageContent = await page.property('content');
         const pageCookies = await page.cookies();
 
-        var cookieObj = _.find(pageCookies, function (obj) { return obj.name == "_SESS"; });
-        var cookie = cookieObj.value;
+        const cookieObj = _.find(pageCookies, (obj) => { return obj.name == "_SESS"; });
+        const cookie = cookieObj.value;
 
         let playersListHtml = $(parseHtml(pageContent)).find("table.episode").find("tbody").children();
 
@@ -335,7 +327,7 @@ this.AnimeZone = {
             }
 
             var playerAllInfo = {
-                id: this.children[0].innerHTML.replace(/\s/g, '').toLowerCase() + i,
+                id: this.children[0].innerText.replace(/\s/g, '').toLowerCase() + i,
                 url: dataForUrlPost,
                 lang: this.children[2].children[0].getAttribute('class').split(" ")[1],
                 name: this.children[0].innerText.trim(),
@@ -343,68 +335,31 @@ this.AnimeZone = {
                 referer: episodeUrl
             };
 
-            self.addPlayerToList(playerAllInfo);
+            self.addPlayerToListNew(playerAllInfo);
 
             i++;
         });
     },
-/*
+
     addPlayerToListNew(playerAllInfo) {
         const self = this;
+        const content = "data=" + playerAllInfo.url.data
         const headers = {
             'Connection': 'keep-alive',
             'Cache-Control': 'max-age=0',
             'Referer': playerAllInfo.url.url,
             'Cookie': "_SESS=" + playerAllInfo.url.cookie,
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength("data="+playerAllInfo.url.data),
+            'Content-Length': Buffer.byteLength(content),
             'User-Agent': self.headers['User-Agent']
         }
 
-        request.post({ url: playerAllInfo.url.url, headers: headers, form: { data: playerAllInfo.url.data } }, (error, response, body) => {
+        request.post({ url: playerAllInfo.url.url, headers: headers, form: content }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
-                console.log(body);
-
-            } else {
-                console.error(error);
-            }
-
-        });
-
-    },*/
-
-    addPlayerToList(playerAllInfo) {
-        let parser = document.createElement("a");
-        parser.href = playerAllInfo.url.url;
-
-        var host = parser.hostname;
-        var path = parser.pathname;
-
-        var data = "data=" + playerAllInfo.url.data
-
-        var options = {
-            host: host,
-            path: path,
-            port: 80,
-            method: 'POST',
-            headers: {
-                'Connection': 'keep-alive',
-                'Cache-Control': 'max-age=0',
-                'Referer': playerAllInfo.url.url,
-                'Cookie': "_SESS=" + playerAllInfo.url.cookie,
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': Buffer.byteLength(data),
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36'
-            }
-        };
-
-        var req = http.request(options, function (res) {
-            res.setEncoding('utf8');
-            res.on('data', function (chunk) {
-                let obj = $(parseHtml(chunk));
-                let a = obj.find("html > body > a");
-                let iframe = obj.find("html > body > iframe");
-                let playerObj = {
+                const obj = $(parseHtml(body));
+                const a = obj.find("html > body > a");
+                const iframe = obj.find("html > body > iframe");
+                var playerObj = {
                     id: playerAllInfo.id,
                     url: "",
                     lang: playerAllInfo.lang,
@@ -412,38 +367,29 @@ this.AnimeZone = {
                     desc: playerAllInfo.desc,
                     referer: playerAllInfo.referer
                 }
+                var url = "";
 
                 if (a.length > 0) {
-                    //console.log(a[0].href);
-                    var url = a[0].href.replace("chrome-extension:", "http:");
+                    url = a[0].href.replace("chrome-extension:", "http:");
                     playerObj.url = url;
 
                 } else if (iframe.length > 0) {
-                    //console.log(iframe[0].src);
-                    var url = iframe[0].src.replace("chrome-extension:", "http:");
+                    url = iframe[0].src.replace("chrome-extension:", "http:");
                     playerObj.url = url;
                 }
 
-                AnimeZone.currentEpisodePlaysers.push(playerObj);
-                //console.log("added");
+                self.currentEpisodePlaysers.push(playerObj);
                 console.log(playerObj);
                 m.redraw();
 
-            });
+            } else {
+                console.error(error);
+            }
         });
-        req.write(data);
-
-        req.on('error', function (err) {
-            console.debug('message: ' + err.message);
-            console.debug('name: ' + err.name);
-            console.debug('stack: ' + err.stack);
-        });
-
-        req.end();
     },
 
     getServiceUrlObjById: function (id) {
-        let player = _.find(this.currentEpisodePlaysers, function (player) { return player.id == id; });
+        const player = _.find(this.currentEpisodePlaysers, (player) => { return player.id == id; });
         if (player) {
             return { url: player.url, referer: player.referer };
         } else {
@@ -452,7 +398,7 @@ this.AnimeZone = {
     },
 
     searchAnime: function (text) {
-        AnimeZone.animeListFiltered = _.filter(AnimeZone.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+        AnimeZone.animeListFiltered = _.filter(AnimeZone.animeList, (obj) => { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
         AnimeZone.setListState();
     },
 
