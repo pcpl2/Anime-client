@@ -1,4 +1,5 @@
 const phantom = require('phantom');
+const cookie = require('cookie');
 
 this.AnimeZone = {
     currentServiceData: null,
@@ -348,7 +349,7 @@ this.AnimeZone = {
             'Connection': 'keep-alive',
             'Cache-Control': 'max-age=0',
             'Referer': playerAllInfo.url.url,
-            'Cookie': "_SESS=" + playerAllInfo.url.cookie,
+            'Cookie': cookie.serialize('_SESS', playerAllInfo.url.cookie),
             'Content-Type': 'application/x-www-form-urlencoded',
             'Content-Length': Buffer.byteLength(content),
             'User-Agent': self.headers['User-Agent']
