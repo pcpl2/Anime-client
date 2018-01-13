@@ -99,7 +99,7 @@ var episodePlayBody = {
                     ]),
 
                     m("div", { "class": "col align-self-center" }, [
-                        m("select", { "id": "js-select-episode" }, [
+                        m("select", { "id": "js-select-episode", style: "width: 100%" }, [
                             ServiceSupport.getServiceFunction().episodeList.map(function (episode) {
                                 return m("option", { "value": episode.id }, episode.title);
                             })
@@ -191,7 +191,7 @@ this.EpisodePlay = {
 
         $('#js-select-episode').on("select2:select", function (event) {
             let value = $(event.currentTarget).find("option:selected").val();
-            let epId = parseInt(value, 10);
+            let epId = value;
             console.log(epId);
             episodePlayBody.clearPlayer();
             ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
