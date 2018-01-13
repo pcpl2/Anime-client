@@ -18,6 +18,7 @@
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
     "bootstrap": "^4.0.0-beta.3",
+    "bootstrap-material-design": "^4.0.0-beta.4",
     "cookie": "^0.3.1",
     "jquery": "^3.2.1",
     "mithril": "^1.1.4",

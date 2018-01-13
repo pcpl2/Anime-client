@@ -28,7 +28,7 @@ this.PageCard = {
                     m("span", {class: "badge badge-primary pull-right"}, m("span", {class: "lang-sm", "lang": self.lang.toLowerCase()})),
                     m("h4", { "class": "card-title" }, self.name),
                     m("p", { "class": "card-text" }, self.description),
-                    m("a", { "class": "btn btn-primary", "href": "/service/" + self.id + "/list", oncreate: m.route.link }, "Select")
+                    m("a", { "class": "btn btn-raised btn-primary", "href": "/service/" + self.id + "/list", oncreate: m.route.link }, "Select")
                 ])
             ]);
         }
@@ -44,7 +44,7 @@ this.PageCard = {
 
     episodeCard: function (id, name, anime, service) {
         return m("button", {
-            "class": "btn btn-dark btn-lg btn-block",
+            "class": "btn btn-raised btn-info btn-lg btn-block",
             "style": "min-height: 180px; margin-top:1%; margin-bootom:1%; white-space: normal;",
             "onclick": function () { m.route.set("/service/" + service + "/anime/" + anime + "/episode/" + id); }
         }, name);

@@ -89,7 +89,7 @@ var episodePlayBody = {
                 m("div", { "class": "row" }, [
                     m("div", { "class": "col align-self-start" }, [
                         m("button", {
-                            "class": ["btn btn-primary pull-left", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
+                            "class": ["btn btn-raised btn-info pull-left", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
                                 let epId = parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) - 1;
                                 episodePlayBody.clearPlayer();
                                 ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
@@ -108,7 +108,7 @@ var episodePlayBody = {
 
                     m("div", { "class": "col align-self-end" }, [
                         m("button", {
-                            "class": ["btn btn-primary pull-right", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
+                            "class": ["btn btn-raised btn-info pull-right", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
                                 let epId = parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) + 1;
                                 episodePlayBody.clearPlayer();
                                 ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
@@ -124,7 +124,7 @@ var episodePlayBody = {
                         m("div", { "class": "col-md-12" }, [
                             ServiceSupport.getServiceFunction().currentEpisodePlaysers.map(function (player) {
                                 return m("button", {
-                                    "class": ["btn btn-secondary col-md-3", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
+                                    "class": ["btn btn-raised btn-info col-md-3", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
                                         if (episodePlayBody.currentPlayerId != "") {
                                             episodePlayBody.clearPlayer();
