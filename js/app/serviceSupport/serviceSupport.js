@@ -14,6 +14,7 @@ this.ServiceSupport = {
         this.clearServicesList();
         AONinja.register();
         AnimeZone.register();
+        GogoanimeIo.register();
     },
 
     getServiceFunction: function () {
