@@ -19,3 +19,8 @@
 .hidden {
     visibility: hidden;
 }
+
+.flag-shadow {
+    box-shadow: inset 1px 1px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 4%;
+  }

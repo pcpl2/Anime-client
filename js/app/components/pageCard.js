@@ -25,7 +25,7 @@ this.PageCard = {
             return m("div", { "class": "card", "style": "width: 20rem; height: 15rem; margin: 3%;" }, [
                 m("img", { "class": "card-img-top", "src": self.image, "alt": self.name + " logo", "style": "background: black; height: 25%;" }),
                 m("div", { "class": "card-body" }, [
-                    m("span", {class: "badge badge-primary pull-right"}, m("span", {class: "lang-sm", "lang": self.lang.toLowerCase()})),
+                    m("span", {class: "lang-sm flag-shadow pull-right", "lang": self.lang.toLowerCase()}),
                     m("h4", { "class": "card-title" }, self.name),
                     m("p", { "class": "card-text" }, self.description),
                     m("a", { "class": "btn btn-raised btn-primary", "href": "/service/" + self.id + "/list", oncreate: m.route.link }, "Select")
