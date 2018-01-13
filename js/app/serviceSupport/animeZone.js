@@ -327,10 +327,15 @@ this.AnimeZone = {
                 data: this.children[3].children[0].attributes[1].nodeValue
             }
 
+            var lang = this.children[2].children[0].getAttribute('class').split(" ")[1];
+            if(lang.toLowerCase() == "jp") {
+                lang = "ja";
+            }
+
             var playerAllInfo = {
                 id: this.children[0].innerText.replace(/\s/g, '').toLowerCase() + i,
                 url: dataForUrlPost,
-                lang: this.children[2].children[0].getAttribute('class').split(" ")[1],
+                lang: lang,
                 name: this.children[0].innerText.trim(),
                 desc: this.children[1].innerHTML.trim(),
                 referer: episodeUrl
