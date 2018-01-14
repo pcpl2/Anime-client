@@ -9,9 +9,9 @@ this.PageCard = {
         oninit: function(vnode) {
             var self = this;
 
-            self.name = vnode.attrs.service.api.currentServiceData.name;
-            self.description = vnode.attrs.service.api.currentServiceData.description;
-            self.lang = vnode.attrs.service.api.currentServiceData.lang;
+            self.name = vnode.attrs.service.api.serviceData.name;
+            self.description = vnode.attrs.service.api.serviceData.description;
+            self.lang = vnode.attrs.service.api.serviceData.lang;
             self.id = vnode.attrs.service.id;
 
             vnode.attrs.service.api.getImageFunction(function(image) {

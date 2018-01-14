@@ -2,7 +2,7 @@ var animeListBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.currentService.api.currentServiceData.name))
+            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.currentService.api.serviceData.name))
         ]
     }
 };
@@ -12,7 +12,7 @@ var animeListHeader = {
         return m("div", {}, [
             m("label", { "class": "col-form-label col-md-2" }, "Select anime"),
             m("label", { "class": "col-form-label col-md-4", style: ["display:", ServiceSupport.currentServiceStatus != ServiceStatus.LOADED ? " none": ""].join("") }, "Showing " + ServiceSupport.getServiceFunction().animeListFiltered.length.toLocaleString() + " of " + ServiceSupport.getServiceFunction().animeList.length.toLocaleString() + " anime"),
-            m("input", { "class": "form-control col-md-4 pull-right", "oninput": m.withAttr("value", ServiceSupport.getServiceFunction().searchAnime), "placeholder": "Search" })
+            m("input", { "class": "form-control col-md-4 pull-right", "oninput": m.withAttr("value", (val) => {ServiceSupport.getServiceFunction().searchAnime(val)}), "placeholder": "Search" })
         ]);
     }
 };

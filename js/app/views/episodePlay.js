@@ -6,16 +6,16 @@ var episodePlayBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().currentServiceData.name),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/anime/" + ServiceSupport.getServiceFunction().currentAnime.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().currentAnime.title),
-            m("span", { "class": "breadcrumb-item active" }, ServiceSupport.getServiceFunction().currentEpisodeTitle)
+            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().serviceData.name),
+            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/anime/" + ServiceSupport.getServiceFunction().selectedAnime.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().selectedAnime.title),
+            m("span", { "class": "breadcrumb-item active" }, ServiceSupport.getServiceFunction().selectedEpisode.title)
         ]
     }
 };
 
 var episodePlayHeader = {
     view: function () {
-        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().currentEpisodeTitle);
+        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().selectedEpisode.title);
     }
 };
 
@@ -89,11 +89,11 @@ var episodePlayBody = {
                 m("div", { "class": "row" }, [
                     m("div", { "class": "col align-self-start" }, [
                         m("button", {
-                            "class": ["btn btn-raised btn-info pull-left", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
-                                let epId = parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) - 1;
+                            "class": ["btn btn-raised btn-info pull-left", parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
+                                let epId = parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) - 1;
                                 episodePlayBody.clearPlayer();
                                 ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
-                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
+                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
                             }
                         }, "Previous episode")
                     ]),
@@ -108,11 +108,11 @@ var episodePlayBody = {
 
                     m("div", { "class": "col align-self-end" }, [
                         m("button", {
-                            "class": ["btn btn-raised btn-info pull-right", parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
-                                let epId = parseInt(ServiceSupport.getServiceFunction().currentEpisodeId) + 1;
+                            "class": ["btn btn-raised btn-info pull-right", parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
+                                let epId = parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) + 1;
                                 episodePlayBody.clearPlayer();
                                 ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
-                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
+                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
                             }
                         }, "Next episode")
                     ]),
@@ -122,7 +122,7 @@ var episodePlayBody = {
                 m("div", { "class": "row", "style": "margin-top: 2%" }, [
                     m("div", { "class": "col wrapper text-center" }, [
                         m("div", { "class": "col-md-12" }, [
-                            ServiceSupport.getServiceFunction().currentEpisodePlaysers.map(function (player) {
+                            ServiceSupport.getServiceFunction().selectedEpisode.players.map(function (player) {
                                 return m("button", {
                                     "class": ["btn btn-raised btn-info col-md-3", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
@@ -187,11 +187,10 @@ this.EpisodePlay = {
     oncreate: function () {
         $('#js-select-episode').select2();
 
-        $('#js-select-episode').val(ServiceSupport.getServiceFunction().currentEpisodeId).trigger('change');
+        $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
 
         $('#js-select-episode').on("select2:select", function (event) {
-            let value = $(event.currentTarget).find("option:selected").val();
-            let epId = value;
+            let epId = $(event.currentTarget).find("option:selected").val();
             console.log(epId);
             episodePlayBody.clearPlayer();
             ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
