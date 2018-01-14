@@ -89,11 +89,13 @@ var episodePlayBody = {
                 m("div", { "class": "row" }, [
                     m("div", { "class": "col align-self-start" }, [
                         m("button", {
-                            "class": ["btn btn-raised btn-info pull-left", parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
-                                let epId = parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) - 1;
-                                episodePlayBody.clearPlayer();
-                                ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
-                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+                            "class": ["btn btn-raised btn-info pull-left", parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
+                                if (parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) > 1) {
+                                    let epId = ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() - 1;
+                                    episodePlayBody.clearPlayer();
+                                    ServiceSupport.getServiceFunction().setCurrentEpisode(ServiceSupport.getServiceFunction().episodeList[epId].id);
+                                    $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+                                }
                             }
                         }, "Previous episode")
                     ]),
@@ -108,11 +110,13 @@ var episodePlayBody = {
 
                     m("div", { "class": "col align-self-end" }, [
                         m("button", {
-                            "class": ["btn btn-raised btn-info pull-right", parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
-                                let epId = parseInt(ServiceSupport.getServiceFunction().selectedEpisode.id) + 1;
-                                episodePlayBody.clearPlayer();
-                                ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
-                                $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+                            "class": ["btn btn-raised btn-info pull-right", parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
+                                if (parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) < ServiceSupport.getServiceFunction().episodeList.length) {
+                                    let epId = ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1;
+                                    episodePlayBody.clearPlayer();
+                                    ServiceSupport.getServiceFunction().setCurrentEpisode(ServiceSupport.getServiceFunction().episodeList[epId].id);
+                                    $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+                                }
                             }
                         }, "Next episode")
                     ]),

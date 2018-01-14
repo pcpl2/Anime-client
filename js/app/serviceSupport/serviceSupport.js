@@ -111,11 +111,23 @@ class serviceSupportImpl {
         }
     }
 
+    getCurrentEpisodeIndex() {
+        const self = this;
+
+        if (self.selectedEpisode == null) {
+            console.error("episode is not setted.")
+        }
+
+        return _.indexOf(self.episodeList, _.find(self.episodeList, (ep) => {
+            return ep.id == self.selectedEpisode.id;
+        }));
+    }
+
     updateCurrentEpisodeData() {
         console.error("Override this!");
     }
 
-    getServiceUrlObjById (urlId) {
+    getServiceUrlObjById(urlId) {
         const player = _.find(this.selectedEpisode.players, function (player) { return player.id == urlId; });
         if (player) {
             return { url: player.url, referer: player.referer };
@@ -142,7 +154,7 @@ class serviceSupportImpl {
         self.setListState();
     }
 
-    clearSearchAnime () {
+    clearSearchAnime() {
         this.animeListFiltered = this.animeList;
     }
 
