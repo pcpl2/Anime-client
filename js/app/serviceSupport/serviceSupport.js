@@ -18,6 +18,8 @@ class serviceManager {
         //GogoanimeIo.register();
 
         new aoninjaClass();
+
+        new gogoanimeioClass();
     }
 
     getApi() {
