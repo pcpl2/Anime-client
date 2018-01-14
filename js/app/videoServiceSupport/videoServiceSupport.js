@@ -59,7 +59,9 @@ this.VideoServiceSupport = {
     },
 
     checkSupportPlayerById: function (id) {
-        const supported = _.find(this.list, function (obj) { return id.includes(obj.id); });
+
+        const idNoNumbers = id.replace(/[0-9]/g, '');
+        const supported = _.find(this.list, function (obj) { return obj.id.includes(idNoNumbers); });
 
         if (supported == undefined) {
             return false;
