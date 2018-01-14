@@ -41,6 +41,7 @@
     "outputPattern": "${NAME}-${VERSION}-${PLATFORM}-${ARCH}",
     "excludes": [
       "anime-client.code-workspace",
+      "jsconfig.json",
       "docs/*",
       "package-lock.json"
     ]
