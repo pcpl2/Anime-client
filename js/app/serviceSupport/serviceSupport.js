@@ -17,7 +17,7 @@ class serviceManager {
         //AnimeZone.register();
         //GogoanimeIo.register();
 
-        const AONinja = new aoninjaClass();
+        new aoninjaClass();
     }
 
     getApi() {
@@ -29,7 +29,9 @@ class serviceManager {
             return true;
         }
 
-        var service = _.find(this.list, function (service) { return service.id == serviceId; });
+        var service = _.find(this.list, (service) => {
+            return service.id == serviceId;
+        });
         if (service) {
             this.currentService = service;
             this.currentServiceStatus = ServiceStatus.LOADING;
@@ -50,13 +52,12 @@ class serviceManager {
 }
 
 class serviceSupportImpl {
-    constructor(domain, serviceData, headers) {
+    constructor(domain, serviceData) {
         this.serviceData = serviceData;
 
         this.serviceStatus = ServiceStatus.LOADING;
 
         this.domain = domain;
-        this.headers = headers;
 
         this.animeList = [];
         this.animeListFiltered = [];
@@ -81,7 +82,9 @@ class serviceSupportImpl {
             return true;
         }
 
-        const anime = _.find(this.animeList, function (anime) { return anime.id == animeId; });
+        const anime = _.find(this.animeList, (anime) => {
+            return anime.id == animeId;
+        });
         if (anime) {
             this.selectedAnime = { id: anime.id, title: anime.title, url: anime.url, img: anime.img, desc: anime.desc }
 
@@ -102,7 +105,9 @@ class serviceSupportImpl {
             return true;
         }
 
-        const episode = _.find(this.episodeList, function (episode) { return episode.id == episodeId; });
+        const episode = _.find(this.episodeList, (episode) => {
+            return episode.id == episodeId;
+        });
 
         if (episode) {
             this.selectedEpisode = { id: episode.id, title: episode.title, url: episode.url }
@@ -130,7 +135,9 @@ class serviceSupportImpl {
     }
 
     getServiceUrlObjById(urlId) {
-        const player = _.find(this.selectedEpisode.players, function (player) { return player.id == urlId; });
+        const player = _.find(this.selectedEpisode.players, (player) => {
+            return player.id == urlId;
+        });
         if (player) {
             return { url: player.url, referer: player.referer };
         } else {
@@ -152,7 +159,9 @@ class serviceSupportImpl {
 
     searchAnime(text) {
         const self = this;
-        self.animeListFiltered = _.filter(self.animeList, function (obj) { return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase()); });
+        self.animeListFiltered = _.filter(self.animeList, (obj) => {
+            return text.trim().length == 0 ? true : obj.title.toLowerCase().includes(text.trim().toLowerCase());
+        });
         self.setListState();
     }
 

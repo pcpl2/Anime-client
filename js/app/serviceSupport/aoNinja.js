@@ -1,18 +1,12 @@
-//class aoninja extends supportSer
 class aoninjaClass extends serviceSupportImpl {
     constructor() {
-        const headers = {
-            'Accept': 'text/html',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3165.0 Safari/537.36'
-        };
-
-        super("a-o.ninja", { }, headers);
+        super("a-o.ninja", {});
         const self = this;
 
-        request({ url: "https://a-o.ninja", headers: headers }, (error, response, body) => {
+        request({ url: "https://a-o.ninja", headers: app.defaultHeaders }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
 
-                const logo = $(parseHtml(body)).find(".navbar-header").find(".logo").find("img").attr('src')
+                const logo = $(parseHtml(body)).find(".navbar-header > .logo > img").attr('src')
                 const currentServiceData = { api: self, id: "aoninja", name: "A-O.NINJA", description: "", lang: "PL", image: logo };
                 sm.list.push({ api: self, id: "aoninja" });
 
@@ -39,7 +33,7 @@ class aoninjaClass extends serviceSupportImpl {
             var completeRequests = 0;
             var titleObjectList = [];
 
-            completeCallback = () => {
+            const completeCallback = () => {
                 const sorted = _.sortBy(titleObjectList, 'title');
 
                 self.animeList = sorted;
@@ -47,13 +41,13 @@ class aoninjaClass extends serviceSupportImpl {
                 cacheJS.set({ serviceID: self.serviceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
 
                 self.animeListFiltered = self.animeList;
-                self.setAnimeListStateOnFirstLoaded();
+                self.setListState();
             }
 
             _.each(urls, (url, indexUrl) => {
-                request({ url: url, headers: self.headers }, (error, response, body) => {
+                request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
                     if (!error && response.statusCode == 200) {
-                        const listHtml = $(parseHtml(body)).find(".list-item").find("td").find("a");
+                        const listHtml = $(parseHtml(body)).find(".list-item > td > a");;
 
                         _.each(listHtml, (item, indexItem) => {
                             let title = item.innerHTML;
@@ -95,7 +89,7 @@ class aoninjaClass extends serviceSupportImpl {
     updateCurrentAnimeData() {
         const self = this;
 
-        request({ url: self.currentAnime.url, headers: self.headers }, (error, response, body) => {
+        request({ url: self.currentAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
                 const listHtml = $(parseHtml(body)).find(".lista_odc_tytul_pozycja").find("a");
 
@@ -116,7 +110,6 @@ class aoninjaClass extends serviceSupportImpl {
                         title: title
                     };
 
-                    console.log(obj);
                     episodeList.push(obj);
                 });
                 self.episodeList = episodeList.reverse();
@@ -131,9 +124,9 @@ class aoninjaClass extends serviceSupportImpl {
     updateCurrentAnimeData() {
         const self = this;
 
-        request({ url: self.selectedAnime.url, headers: self.headers }, (error, response, body) => {
+        request({ url: self.selectedAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
-                const listHtml = $(parseHtml(body)).find(".lista_odc_tytul_pozycja").find("a");
+                const listHtml = $(parseHtml(body)).find(".lista_odc_tytul_pozycja > a");
 
                 var episodeList = [];
 
@@ -153,7 +146,6 @@ class aoninjaClass extends serviceSupportImpl {
                         players: []
                     };
 
-                    console.log(obj);
                     episodeList.push(obj);
                 });
                 self.episodeList = episodeList.reverse();
@@ -172,9 +164,9 @@ class aoninjaClass extends serviceSupportImpl {
         }
 
         const url = self.selectedEpisode.url;
-        request({ url: url, headers: self.headers }, (error, response, body) => {
+        request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
-                const listHtml = $(parseHtml(body)).find("#video-player-control").find("div");
+                const listHtml = $(parseHtml(body)).find("#video-player-control > div");
 
                 _.each(listHtml, (item, indexItem) => {
                     const obj = {

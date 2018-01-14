@@ -31,7 +31,6 @@ var episodeListBody = {
 
 this.EpisodeList = {
     oninit: function (vnode) {
-        console.log(vnode.attrs);
         if (!vnode.attrs.sid) {
             m.route.set("/");
         }
