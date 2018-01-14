@@ -1,16 +1,14 @@
 class aoninjaClass extends serviceSupportImpl {
     constructor() {
-        super("a-o.ninja", {});
+        super("https://a-o.ninja", {});
         const self = this;
 
-        request({ url: "https://a-o.ninja", headers: app.defaultHeaders }, (error, response, body) => {
+        request({ url: self.domain, headers: app.defaultHeaders }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
 
                 const logo = $(parseHtml(body)).find(".navbar-header > .logo > img").attr('src')
-                const currentServiceData = { api: self, id: "aoninja", name: "A-O.NINJA", description: "", lang: "PL", image: logo };
+                self.serviceData = { api: self, id: "aoninja", name: "A-O.NINJA", description: "", lang: "PL", image: logo };
                 sm.list.push({ api: self, id: "aoninja" });
-
-                self.serviceData = currentServiceData;
 
                 m.redraw();
 
@@ -170,7 +168,7 @@ class aoninjaClass extends serviceSupportImpl {
 
                 _.each(listHtml, (item, indexItem) => {
                     const obj = {
-                        id: item.innerHTML.replace(/\s/g, '').toLowerCase() + indexItem,
+                        id: item.innerHTML.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
                         url: JSON.parse(CryptoJS.DES.decrypt(item.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
                         lang: "PL",
                         name: item.innerHTML.trim(),
