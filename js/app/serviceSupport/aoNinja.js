@@ -6,7 +6,7 @@ class aoninjaClass extends serviceSupportImpl {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3165.0 Safari/537.36'
         };
 
-        super("a-o.ninja", {}, headers);
+        super("a-o.ninja", { }, headers);
         const self = this;
 
         request({ url: "https://a-o.ninja", headers: headers }, (error, response, body) => {
@@ -14,7 +14,7 @@ class aoninjaClass extends serviceSupportImpl {
 
                 const logo = $(parseHtml(body)).find(".navbar-header").find(".logo").find("img").attr('src')
                 const currentServiceData = { api: self, id: "aoninja", name: "A-O.NINJA", description: "", lang: "PL", image: logo };
-                ServiceSupport.list.push({ api: self, id: "aoninja" });
+                sm.list.push({ api: self, id: "aoninja" });
 
                 self.serviceData = currentServiceData;
 

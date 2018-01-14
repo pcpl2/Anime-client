@@ -5,30 +5,31 @@ var ServiceStatus = {
     ERROR: 13
 }
 
-this.ServiceSupport = {
-    list: [],
-    currentService: null,
-    currentServiceStatus: ServiceStatus.EMPTY,
+class serviceManager {
+    constructor() {
+        this.list = [];
+        this.currentService = null;
+    }
 
-    updateServiceList: function () {
+    updateServiceList() {
         this.clearServicesList();
         //AONinja.register();
         //AnimeZone.register();
         //GogoanimeIo.register();
 
         const AONinja = new aoninjaClass();
-    },
+    }
 
-    getServiceFunction: function () {
+    getApi() {
         return this.currentService.api;
-    },
+    }
 
-    setCurrentService: function (id) {
-        if (this.currentService != null && this.currentService.id == id) {
+    setCurrentService(serviceId) {
+        if (this.currentService != null && this.currentService.id == serviceId) {
             return true;
         }
 
-        var service = _.find(this.list, function (service) { return service.id == id; });
+        var service = _.find(this.list, function (service) { return service.id == serviceId; });
         if (service) {
             this.currentService = service;
             this.currentServiceStatus = ServiceStatus.LOADING;
@@ -37,21 +38,22 @@ this.ServiceSupport = {
         } else {
             return false;
         }
-    },
+    }
 
-    clearCurrentService: function () {
+    clearCurrentService() {
         this.currentService = null;
-    },
+    }
 
-    clearServicesList: function () {
+    clearServicesList() {
         this.list = [];
     }
-};
-
+}
 
 class serviceSupportImpl {
     constructor(domain, serviceData, headers) {
         this.serviceData = serviceData;
+
+        this.serviceStatus = ServiceStatus.LOADING;
 
         this.domain = domain;
         this.headers = headers;
@@ -161,9 +163,9 @@ class serviceSupportImpl {
     //TODO change or remove 
     setListState() {
         if (this.animeListFiltered.length > 0) {
-            ServiceSupport.currentServiceStatus = ServiceStatus.LOADED;
+            this.serviceStatus = ServiceStatus.LOADED;
         } else {
-            ServiceSupport.currentServiceStatus = ServiceStatus.EMPTY;
+            this.serviceStatus = ServiceStatus.EMPTY;
         }
         m.redraw();
     }

@@ -6,16 +6,16 @@ var episodePlayBreadcrumb = {
     view: function () {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().serviceData.name),
-            m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/anime/" + ServiceSupport.getServiceFunction().selectedAnime.id + "/list", oncreate: m.route.link }, ServiceSupport.getServiceFunction().selectedAnime.title),
-            m("span", { "class": "breadcrumb-item active" }, ServiceSupport.getServiceFunction().selectedEpisode.title)
+            m("a", { "class": "breadcrumb-item", href: "/service/" + sm.getApi().serviceData.id + "/list", oncreate: m.route.link }, sm.getApi().serviceData.name),
+            m("a", { "class": "breadcrumb-item", href: "/service/" + sm.getApi().serviceData.id + "/anime/" + sm.getApi().selectedAnime.id + "/list", oncreate: m.route.link }, sm.getApi().selectedAnime.title),
+            m("span", { "class": "breadcrumb-item active" }, sm.getApi().selectedEpisode.title)
         ]
     }
 };
 
 var episodePlayHeader = {
     view: function () {
-        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().selectedEpisode.title);
+        return m("label", { "class": "col-form-label col-md-12" }, sm.getApi().selectedEpisode.title);
     }
 };
 
@@ -38,7 +38,7 @@ var episodePlayBody = {
         $("#player-error").remove();
         $("#video-player").append("<div id='player-loader'> <div class='loader' style='margin: auto; position: relative; margin-top:10%;'></div></div>");
         if (!episodePlayBody.currentPlayerId.includes("google")) {
-            VideoServiceSupport.getVideoUrl(ServiceSupport.getServiceFunction().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+            VideoServiceSupport.getVideoUrl(sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
                 $("#player-loader").remove();
                 $("#video-player").append("<video id='custom-player' class='video-js vjs-big-play-centered' style='width: 100%;height: 100%;'></video>");
 
@@ -60,7 +60,7 @@ var episodePlayBody = {
                             { type: "video/mp4", src: url, label: 'default' }
                         ])
                         self.video.on('resolutionchange', function () {
-                            console.info('Source changed to %s', player.src())
+                            console.info(`Source changed to ${player.src()}`)
                         })
                     });
 
@@ -72,7 +72,7 @@ var episodePlayBody = {
             });
         } else {
             $("#player-loader").remove();
-            let serviceObj = ServiceSupport.getServiceFunction().getServiceUrlObjById(episodePlayBody.currentPlayerId);
+            let serviceObj = sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId);
             $("#video-player").append("<iframe id='iframe-player' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + serviceObj.url + "' ></iframe>");
         }
     },
@@ -89,12 +89,12 @@ var episodePlayBody = {
                 m("div", { "class": "row" }, [
                     m("div", { "class": "col align-self-start" }, [
                         m("button", {
-                            "class": ["btn btn-raised btn-info pull-left", parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
-                                if (parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) > 1) {
-                                    let epId = ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() - 1;
+                            "class": ["btn btn-raised btn-info pull-left", parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) > 1 ? "" : "disabled"].join(" "), "onclick": function () {
+                                if (parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) > 1) {
+                                    let epId = sm.getApi().getCurrentEpisodeIndex() - 1;
                                     episodePlayBody.clearPlayer();
-                                    ServiceSupport.getServiceFunction().setCurrentEpisode(ServiceSupport.getServiceFunction().episodeList[epId].id);
-                                    $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+                                    sm.getApi().setCurrentEpisode(sm.getApi().episodeList[epId].id);
+                                    $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change');
                                 }
                             }
                         }, "Previous episode")
@@ -102,7 +102,7 @@ var episodePlayBody = {
 
                     m("div", { "class": "col align-self-center" }, [
                         m("select", { "id": "js-select-episode", style: "width: 100%" }, [
-                            ServiceSupport.getServiceFunction().episodeList.map(function (episode) {
+                            sm.getApi().episodeList.map(function (episode) {
                                 return m("option", { "value": episode.id }, episode.title);
                             })
                         ])
@@ -110,12 +110,12 @@ var episodePlayBody = {
 
                     m("div", { "class": "col align-self-end" }, [
                         m("button", {
-                            "class": ["btn btn-raised btn-info pull-right", parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) < ServiceSupport.getServiceFunction().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
-                                if (parseInt((ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1)) < ServiceSupport.getServiceFunction().episodeList.length) {
-                                    let epId = ServiceSupport.getServiceFunction().getCurrentEpisodeIndex() + 1;
+                            "class": ["btn btn-raised btn-info pull-right", parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) < sm.getApi().episodeList.length ? "" : "disabled"].join(" "), "onclick": function () {
+                                if (parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) < sm.getApi().episodeList.length) {
+                                    let epId = sm.getApi().getCurrentEpisodeIndex() + 1;
                                     episodePlayBody.clearPlayer();
-                                    ServiceSupport.getServiceFunction().setCurrentEpisode(ServiceSupport.getServiceFunction().episodeList[epId].id);
-                                    $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+                                    sm.getApi().setCurrentEpisode(sm.getApi().episodeList[epId].id);
+                                    $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change');
                                 }
                             }
                         }, "Next episode")
@@ -126,7 +126,7 @@ var episodePlayBody = {
                 m("div", { "class": "row", "style": "margin-top: 2%" }, [
                     m("div", { "class": "col wrapper text-center" }, [
                         m("div", { "class": "col-md-12" }, [
-                            ServiceSupport.getServiceFunction().selectedEpisode.players.map(function (player) {
+                            sm.getApi().selectedEpisode.players.map(function (player) {
                                 return m("button", {
                                     "class": ["btn btn-raised btn-info col-md-3", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
@@ -176,28 +176,28 @@ this.EpisodePlay = {
             m.route.set("/");
         }
 
-        if (!ServiceSupport.setCurrentService(vnode.attrs.sid)) {
+        if (!sm.setCurrentService(vnode.attrs.sid)) {
             m.route.set("/");
         }
 
-        if (!ServiceSupport.getServiceFunction().setCurrentAnime(vnode.attrs.aid)) {
+        if (!sm.getApi().setCurrentAnime(vnode.attrs.aid)) {
             m.route.set("/");
         }
 
-        if (!ServiceSupport.getServiceFunction().setCurrentEpisode(vnode.attrs.eid)) {
+        if (!sm.getApi().setCurrentEpisode(vnode.attrs.eid)) {
             m.route.set("/");
         }
     },
     oncreate: function () {
         $('#js-select-episode').select2();
 
-        $('#js-select-episode').val(ServiceSupport.getServiceFunction().selectedEpisode.id).trigger('change');
+        $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change');
 
         $('#js-select-episode').on("select2:select", function (event) {
             let epId = $(event.currentTarget).find("option:selected").val();
             console.log(epId);
             episodePlayBody.clearPlayer();
-            ServiceSupport.getServiceFunction().setCurrentEpisode(epId);
+            sm.getApi().setCurrentEpisode(epId);
         });
 
     },
@@ -205,6 +205,6 @@ this.EpisodePlay = {
         return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody));
     },
     onbeforeremove: function (vnode) {
-        ServiceSupport.getServiceFunction().clearCurrentEpisode();
+        sm.getApi().clearCurrentEpisode();
     },
 }

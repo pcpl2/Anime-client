@@ -13,16 +13,16 @@ var selectServiceHeader = {
 var selectServiceList = {
     view: function () {
         return m(".serviceList", { class: "row col-md-12" },
-            ServiceSupport.list.map(function (service) {
-                return m("div", {class: "col-sm-5"}, m(PageCard.serviceCard, { service: service }));
+            sm.list.map(function (service) {
+                return m("div", { class: "col-sm-5" }, m(PageCard.serviceCard, { service: service }));
             }));
     }
 };
 
 this.SelectService = {
     oninit: function (vnode) {
-        ServiceSupport.clearCurrentService();
-        ServiceSupport.updateServiceList();
+        sm.clearCurrentService();
+        sm.updateServiceList();
 
         VideoServiceSupport.updateVideoServiceList();
     },
