@@ -83,9 +83,10 @@ class serviceSupportImpl {
         if (this.selectedAnime != null && this.selectedAnime.id == animeId) {
             return true;
         }
+        const animeIdEncoded = encodeURI(animeId).toLowerCase();
 
         const anime = _.find(this.animeList, (anime) => {
-            return anime.id == animeId;
+            return anime.id == animeIdEncoded;
         });
         if (anime) {
             this.selectedAnime = { id: anime.id, title: anime.title, url: anime.url, img: anime.img, desc: anime.desc }
