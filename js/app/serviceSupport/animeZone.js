@@ -341,7 +341,7 @@ this.AnimeZone = {
             }
 
             var playerAllInfo = {
-                id: this.children[0].innerText.replace(/\s/g, '').toLowerCase() + i,
+                id: this.children[0].innerText.replace(/\s/g, '').toLowerCase() + "_" + i,
                 url: dataForUrlPost,
                 lang: lang,
                 name: this.children[0].innerText.trim(),

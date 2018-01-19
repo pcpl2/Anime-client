@@ -253,7 +253,7 @@ this.GogoanimeIo = {
                             const name = regexClearType.exec(item.children[0].innerHTML)[1];
 
                             const obj = {
-                                id: name.replace(/\s/g, '').toLowerCase() + indexItem,
+                                id: name.replace(/\s/g, '').toLowerCase()  + "_" + indexItem,
                                 url: videoUrl,
                                 lang: "EN",
                                 name: name,

@@ -205,7 +205,7 @@ this.AONinja = {
 
                 _.each(listHtml, (item, indexItem) => {
                     let obj = {
-                        id: item.innerHTML.replace(/\s/g, '').toLowerCase() + indexItem,
+                        id: item.innerHTML.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
                         url: JSON.parse(CryptoJS.DES.decrypt(item.getAttribute('data-hash'), "s05z9Gpd=syG^7{", { format: d }).toString(CryptoJS.enc.Utf8)),
                         lang: "PL",
                         name: item.innerHTML.trim(),
