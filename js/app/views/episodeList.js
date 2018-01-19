@@ -3,14 +3,14 @@ var episodeListBreadcrumb = {
         return [
             m("a", { "class": "breadcrumb-item", href: "/", oncreate: m.route.link }, "SelectService"),
             m("a", { "class": "breadcrumb-item", href: "/service/" + ServiceSupport.currentService.id + "/list", oncreate: m.route.link }, m("span", ServiceSupport.getServiceFunction().currentServiceData.name)),
-            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.getServiceFunction().currentAnime.title))
+            m("span", { "class": "breadcrumb-item active" }, m("span", ServiceSupport.getServiceFunction().getCurrentAnimeTitle()))
         ]
     }
 };
 
 var episodeListHeader = {
     view: function () {
-        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().currentAnime.title + " -> select episode");
+        return m("label", { "class": "col-form-label col-md-12" }, ServiceSupport.getServiceFunction().getCurrentAnimeTitle() + " -> select episode");
     }
 };
 
@@ -45,7 +45,7 @@ this.EpisodeList = {
         }
 
         if (!ServiceSupport.getServiceFunction().setCurrentAnime(vnode.attrs.aid)) {
-            m.route.set("/");
+            m.route.set("/service/" + ServiceSupport.currentService.id + "/list");
         }
 
     },

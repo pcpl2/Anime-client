@@ -177,11 +177,11 @@ this.EpisodePlay = {
         }
 
         if (!ServiceSupport.getServiceFunction().setCurrentAnime(vnode.attrs.aid)) {
-            m.route.set("/");
+            m.route.set("/service/" + ServiceSupport.currentService.id + "/list");
         }
 
         if (!ServiceSupport.getServiceFunction().setCurrentEpisode(vnode.attrs.eid)) {
-            m.route.set("/");
+            m.route.set("/service/" + ServiceSupport.currentService.id + "/anime/" + ServiceSupport.getServiceFunction().currentAnime.id + "/list");
         }
     },
     oncreate: function () {

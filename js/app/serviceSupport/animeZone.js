@@ -210,6 +210,14 @@ this.AnimeZone = {
         }
     },
 
+    getCurrentAnimeTitle: function() {
+        if(AnimeZone.currentAnime) {
+            return AnimeZone.currentAnime.title;
+        } else {
+            return "";
+        }
+    },
+
     async updateCurrentAnimeData() {
         var self = this;
         request({ url: self.currentAnime.url, headers: self.headers }, (error, response, body) => {

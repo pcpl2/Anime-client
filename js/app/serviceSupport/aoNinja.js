@@ -119,6 +119,14 @@ this.AONinja = {
         }
     },
 
+    getCurrentAnimeTitle: function() {
+        if(AONinja.currentAnime) {
+            return AONinja.currentAnime.title;
+        } else {
+            return "";
+        }
+    },
+
     updateCurrentAnimeData() {
         const self = this;
 

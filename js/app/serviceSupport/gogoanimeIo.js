@@ -158,6 +158,14 @@ this.GogoanimeIo = {
         }
     },
 
+    getCurrentAnimeTitle: function() {
+        if(GogoanimeIo.currentAnime) {
+            return GogoanimeIo.currentAnime.title;
+        } else {
+            return "";
+        }
+    },
+
     updateCurrentAnimeData() {
         const self = this;
 
