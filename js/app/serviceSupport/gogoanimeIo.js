@@ -147,7 +147,9 @@ this.GogoanimeIo = {
             return true;
         }
 
-        var anime = _.find(this.animeList, function (anime) { return anime.id == id; });
+        const encodedAnimeId = encodeURI(id).toLowerCase();
+
+        var anime = _.find(this.animeList, function (anime) { return anime.id == encodedAnimeId; });
         if (anime) {
             this.currentAnime = { id: anime.id, title: anime.title, url: anime.url, img: anime.img, desc: anime.desc }
 
