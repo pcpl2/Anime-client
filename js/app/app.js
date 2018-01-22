@@ -7,6 +7,20 @@ const AutoUpdater = require("nw-autoupdater"),
         strategy: "ScriptSwap"
     });
 
+const sm = new serviceManager();
+
+class App {
+    constructor() {
+        this.defaultHeaders = {
+            'Accept': 'text/html',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3165.0 Safari/537.36',
+            'Cache-Control': 'no-cache'
+        }
+    }
+}
+
+const app = new App();
+
 m.route(document.getElementById("application"), "", {
     "/service/:sid/list": AnimeList,
     "/service/:sid/anime/:aid/list": EpisodeList,
