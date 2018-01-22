@@ -179,13 +179,13 @@ this.EpisodePlay = {
         if (!sm.setCurrentService(vnode.attrs.sid)) {
             m.route.set("/");
         }
-
+      
         if (!sm.getApi().setCurrentAnime(vnode.attrs.aid)) {
-            m.route.set("/");
+            m.route.set("/service/" + sm.getApi().serviceData.id + "/list");
         }
 
         if (!sm.getApi().setCurrentEpisode(vnode.attrs.eid)) {
-            m.route.set("/");
+             m.route.set("/service/" + sm.getApi().serviceData.id + "/anime/" + sm.getApi().selectedAnime.id + "/list");
         }
     },
     oncreate: function () {

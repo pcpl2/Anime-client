@@ -104,6 +104,14 @@ class gogoanimeioClass extends serviceSupportImpl {
         });
     }
 
+    getCurrentAnimeTitle: function() {
+        if(GogoanimeIo.currentAnime) {
+            return GogoanimeIo.currentAnime.title;
+        } else {
+            return "";
+        }
+    },
+
     updateCurrentAnimeData() {
         const self = this;
 
@@ -177,6 +185,7 @@ class gogoanimeioClass extends serviceSupportImpl {
                             const name = regexClearType.exec(item.children[0].innerHTML)[1];
 
                             const obj = {
+                                id: name.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
                                 id: name.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
                                 url: videoUrl,
                                 lang: "EN",

@@ -44,7 +44,7 @@ this.EpisodeList = {
         }
 
         if (!sm.getApi().setCurrentAnime(vnode.attrs.aid)) {
-            m.route.set("/");
+            m.route.set("/service/" + sm.getApi().serviceData.id + "/list");
         }
 
     },

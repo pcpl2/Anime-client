@@ -163,14 +163,14 @@ class animezoneClass extends serviceSupportImpl {
         cacheJS.set({ serviceID: self.serviceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
 
         self.animeListFiltered = self.animeList;
-        self.setListState();
+      self.setListState();
     }
 
     updateCurrentAnimeData() {
         const self = this;
         self.updateCurrentAnimeDataAsync();
     }
-
+  
     async updateCurrentAnimeDataAsync() {
         const self = this;
         request({ url: self.selectedAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
@@ -202,12 +202,6 @@ class animezoneClass extends serviceSupportImpl {
             }
         });
     }
-
-    /*
-    updateCurrentEpisodeData() {
-        const self = this;
-        self.updateCurrentEpisodeDataAsync();
-    }*/
 
     updateCurrentEpisodeData() {
         const self = this;
@@ -248,7 +242,6 @@ class animezoneClass extends serviceSupportImpl {
 
             });
         });
-
     }
 
     addPlayerToListNew(playerAllInfo) {

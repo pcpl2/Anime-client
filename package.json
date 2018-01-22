@@ -1,6 +1,6 @@
 {
   "name": "anime-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.html",
   "chromium-args": "--mixed-context",
   "window": {
