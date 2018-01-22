@@ -103,15 +103,7 @@ class gogoanimeioClass extends serviceSupportImpl {
             }
         });
     }
-
-    getCurrentAnimeTitle: function() {
-        if(GogoanimeIo.currentAnime) {
-            return GogoanimeIo.currentAnime.title;
-        } else {
-            return "";
-        }
-    },
-
+    
     updateCurrentAnimeData() {
         const self = this;
 

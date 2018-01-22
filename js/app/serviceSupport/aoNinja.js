@@ -84,14 +84,6 @@ class aoninjaClass extends serviceSupportImpl {
         }
     }
 
-    getCurrentAnimeTitle: function() {
-        if(AONinja.currentAnime) {
-            return AONinja.currentAnime.title;
-        } else {
-            return "";
-        }
-    },
-
     updateCurrentAnimeData() {
         const self = this;
 
@@ -165,7 +157,7 @@ class aoninjaClass extends serviceSupportImpl {
 
     updateCurrentEpisodeData() {
         const self = this;
-        if(self.selectedEpisode != null) {
+        if (self.selectedEpisode != null) {
             self.selectedEpisode.players = [];
         }
 
