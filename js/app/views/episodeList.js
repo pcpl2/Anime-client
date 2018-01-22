@@ -50,8 +50,8 @@ this.EpisodeList = {
     },
     view: function () {
         return layout(m(episodeListBreadcrumb), m(episodeListHeader), m(episodeListBody));
-    }/*,
+    },
     onbeforeremove: function(vnode) {
-        ServiceSupport.getServiceFunction().clearCurrentAnime();
-    },*/
+        sm.getApi().clearCurrentEpisode();
+    },
 }

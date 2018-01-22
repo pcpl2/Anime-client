@@ -13,12 +13,9 @@ class serviceManager {
 
     updateServiceList() {
         this.clearServicesList();
-        //AONinja.register();
-        //AnimeZone.register();
-        //GogoanimeIo.register();
 
         new aoninjaClass();
-
+        new animezoneClass();
         new gogoanimeioClass();
     }
 
@@ -113,7 +110,7 @@ class serviceSupportImpl {
         });
 
         if (episode) {
-            this.selectedEpisode = { id: episode.id, title: episode.title, url: episode.url }
+            this.selectedEpisode = { id: episode.id, title: episode.title, url: episode.url, players: [] }
             this.updateCurrentEpisodeData();
             return true;
         } else {
