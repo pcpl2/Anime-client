@@ -17,23 +17,23 @@
   },
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
-    "bootstrap": "^4.0.0-beta.3",
+    "bootstrap": "^4.0.0",
     "bootstrap-material-design": "^4.0.0-beta.4",
     "cookie": "^0.3.1",
-    "jquery": "^3.2.1",
-    "mithril": "^1.1.4",
+    "jquery": "^3.3.1",
+    "mithril": "^1.1.6",
     "nw-autoupdater": "^1.1.4",
     "phantom": "^4.0.12",
     "request": "^2.83.0",
     "select2": "4.0.3",
-    "video.js": "^6.4.0",
+    "video.js": "^6.6.0",
     "videojs-resolution-switcher": "^0.4.2"
   },
   "devDependencies": {
     "nwjs-builder-phoenix": "^1.14.6"
   },
   "build": {
-    "nwVersion": "0.26.6",
+    "nwVersion": "0.27.5",
     "ffmpegIntegration": true,
     "targets": [
       "zip"
