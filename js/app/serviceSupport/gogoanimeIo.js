@@ -178,7 +178,6 @@ class gogoanimeioClass extends serviceSupportImpl {
 
                             const obj = {
                                 id: name.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
-                                id: name.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
                                 url: videoUrl,
                                 lang: "EN",
                                 name: name,
