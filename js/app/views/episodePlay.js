@@ -130,11 +130,13 @@ var episodePlayBody = {
                                 return m("button", {
                                     "class": ["btn btn-raised btn-info col-md-3", episodePlayBody.currentPlayerId === player.id ? "active" : ""].join(" "), "id": player.id,
                                     "onclick": function () {
-                                        if (episodePlayBody.currentPlayerId != "") {
-                                            episodePlayBody.clearPlayer();
+                                        if(episodePlayBody.currentPlayerId != player.id) {
+                                            if (episodePlayBody.currentPlayerId != "") {
+                                                episodePlayBody.clearPlayer();
+                                            }
+                                            episodePlayBody.currentPlayerId = player.id;
+                                            episodePlayBody.initPlayer();
                                         }
-                                        episodePlayBody.currentPlayerId = player.id;
-                                        episodePlayBody.initPlayer();
                                     }
                                 }, [
                                         m("span", { class: "lang-sm", "lang": player.lang.toLowerCase() }),
