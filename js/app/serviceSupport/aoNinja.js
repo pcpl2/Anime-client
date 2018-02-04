@@ -167,9 +167,12 @@ class aoninjaClass extends serviceSupportImpl {
                 const listHtml = $(parseHtml(body)).find("#video-player-control > div");
 
                 _.each(listHtml, (item, indexItem) => {
+                    const playerUrl = decryptPassword(item.getAttribute('data-hash'));
+
+                    const splitedDomainPlayer = getDomainName(playerUrl).split(".")
                     const obj = {
-                        id: item.innerHTML.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
-                        url:  decryptPassword(item.getAttribute('data-hash')),
+                        id: splitedDomainPlayer[splitedDomainPlayer.length - 2].toLowerCase() + "_" + indexItem,
+                        url: playerUrl,
                         lang: "PL",
                         name: item.innerHTML.trim(),
                         desc: "-",

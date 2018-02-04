@@ -230,7 +230,8 @@ class animezoneClass extends serviceSupportImpl {
                 }
 
                 var playerAllInfo = {
-                    id: item.children[0].innerText.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
+                    id: "",
+                    playercount: indexItem,
                     url: dataForUrlPost,
                     lang: lang,
                     name: item.children[0].innerText.trim(),
@@ -282,6 +283,9 @@ class animezoneClass extends serviceSupportImpl {
                     url = iframe[0].src.replace("chrome-extension:", "http:");
                     playerObj.url = url;
                 }
+
+                const splitedDomainPlayer = getDomainName(playerObj.url).split(".")
+                playerObj.id = splitedDomainPlayer[splitedDomainPlayer.length - 2].toLowerCase() + "_" + playerAllInfo.playercount,
 
                 self.selectedEpisode.players.push(playerObj);
                 console.log(playerObj);

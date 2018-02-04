@@ -176,8 +176,9 @@ class gogoanimeioClass extends serviceSupportImpl {
 
                             const name = regexClearType.exec(item.children[0].innerHTML)[1];
 
+                            const splitedDomainPlayer = getDomainName(videoUrl).split(".")
                             const obj = {
-                                id: name.replace(/\s/g, '').toLowerCase() + "_" + indexItem,
+                                id: splitedDomainPlayer[splitedDomainPlayer.length - 2].toLowerCase() + "_" + indexItem,
                                 url: videoUrl,
                                 lang: "EN",
                                 name: name,
