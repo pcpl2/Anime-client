@@ -47,11 +47,11 @@ this.EpisodeList = {
             m.route.set("/service/" + sm.getApi().serviceData.id + "/list");
         }
 
+        sm.getApi().clearCurrentEpisode();
     },
     view: function () {
         return layout(m(episodeListBreadcrumb), m(episodeListHeader), m(episodeListBody));
     },
     onbeforeremove: function(vnode) {
-        sm.getApi().clearCurrentEpisode();
     },
 }

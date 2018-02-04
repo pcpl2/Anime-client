@@ -56,6 +56,7 @@ this.AnimeList = {
         }
 
         sm.getApi().clearSearchAnime();
+        sm.getApi().clearCurrentAnime();
     },
     view: function () {
         return layout(m(animeListBreadcrumb), m(animeListHeader), m(animeListBody));

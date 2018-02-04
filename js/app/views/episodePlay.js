@@ -197,7 +197,6 @@ this.EpisodePlay = {
 
         $('#js-select-episode').on("select2:select", function (event) {
             let epId = $(event.currentTarget).find("option:selected").val();
-            console.log(epId);
             episodePlayBody.clearPlayer();
             sm.getApi().setCurrentEpisode(epId);
         });
