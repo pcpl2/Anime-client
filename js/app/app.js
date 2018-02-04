@@ -7,8 +7,6 @@ const AutoUpdater = require("nw-autoupdater"),
         strategy: "ScriptSwap"
     });
 
-const sm = new serviceManager();
-
 class App {
     constructor() {
         this.defaultHeaders = {
@@ -20,6 +18,8 @@ class App {
 }
 
 const app = new App();
+
+const sm = new serviceManager();
 
 m.route(document.getElementById("application"), "", {
     "/service/:sid/list": AnimeList,
