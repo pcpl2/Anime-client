@@ -7,7 +7,7 @@ this.gamedorUsermdNet = {
     },
 
     register: function () {
-        return VideoServiceSupport.serviceWithHiddenLinks.push({ api: gamedorUsermdNet, id: "gamedorUsermd", domain: this.domain });
+        return VideoServiceSupport.serviceWithHiddenLinks.push({ api: gamedorUsermdNet, id: "usermd", domain: this.domain });
     },
 
 

@@ -61,10 +61,15 @@ this.VideoServiceSupport = {
     checkSupportPlayerById: function (id) {
         const regexClearFromId = /(.*)_[0-9]+/;
         const idNoNumbers = regexClearFromId.exec(id)[1].toLowerCase();
-        const supported = _.find(this.list, function (obj) { if (obj.id.includes(idNoNumbers)) { return true; } else if (idNoNumbers.includes(obj.id)) { return true; } else { return false; } });
+        var supported = _.find(this.list, function (obj) { if (obj.id.includes(idNoNumbers)) { return true; } else if (idNoNumbers.includes(obj.id)) { return true; } else { return false; } });
 
         if (supported == undefined) {
-            return false;
+            supported = _.find(this.serviceWithHiddenLinks, function (obj) { if (obj.id.includes(idNoNumbers)) { return true; } else if (idNoNumbers.includes(obj.id)) { return true; } else { return false; } });
+            if (supported == undefined) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }

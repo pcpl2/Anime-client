@@ -1,15 +1,16 @@
 this.RaptuCom = {
     domain: "raptu.com",
+    domains: ["www.raptu.com", "raptu.com"],
 
     register: function () {
-        return VideoServiceSupport.list.push({ api: RaptuCom, id: "raptu", domain: this.domain });
+        return VideoServiceSupport.list.push({ api: RaptuCom, id: "raptu", domain: this.domain, domains: this.domains });
     },
 
     getVideoUrl: function (url, returnFunction) {
         const regexSourceDecoder = /\"sources\"\: \[.+(\"\])/igm;
         const regexValidateUrl = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/igm
         //check domain
-        if (getDomainName(url) != this.domain) {
+        if (_.find(self.domains, (stringDomain) => { return getDomainName(url) == stringDomain }) == undefined) {
             returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
             return;
         }
