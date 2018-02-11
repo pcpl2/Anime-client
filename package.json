@@ -45,11 +45,16 @@
     ],
     "outputPattern": "${NAME}-${VERSION}-${PLATFORM}-${ARCH}",
     "excludes": [
+      ".vscode/*",
+      "docs/*",
       ".eslintrc.json",
+      ".gitignore",
+      ".travis.yml",
+      ".yarnclean",
       "anime-client.code-workspace",
       "jsconfig.json",
-      "docs/*",
-      "package-lock.json"
+      "package-lock.json",
+      "yarn.lock"
     ]
   },
   "scripts": {
