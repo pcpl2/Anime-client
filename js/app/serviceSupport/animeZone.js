@@ -145,7 +145,7 @@ class animezoneClass extends serviceSupportImpl {
             const fullUrl = self.domain + shortUrl;
 
             const obj = {
-                id: shortUrl.split("/").pop(),
+                id: shortUrl.split("/").pop().toLowerCase(),
                 url: fullUrl,
                 title: title
             };

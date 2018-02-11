@@ -82,7 +82,7 @@ class gogoanimeioClass extends serviceSupportImpl {
                     const htmlObj2 = $(parseHtml(item.title));
                     const htmlObj = item.children[0];
                     let obj = {
-                        id: htmlObj.getAttribute("href").split("/").pop(),
+                        id: htmlObj.getAttribute("href").split("/").pop().toLowerCase(),
                         url: self.domain + htmlObj.getAttribute("href"),
                         title: htmlObj2.find("a.bigChar")[0].innerText,
                         img: htmlObj2.find("div.thumnail_tool").find("img")[0].src,

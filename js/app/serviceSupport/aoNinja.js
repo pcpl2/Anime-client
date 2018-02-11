@@ -57,7 +57,7 @@ class aoninjaClass extends serviceSupportImpl {
                             }
 
                             let obj = {
-                                id: item.getAttribute("href").split("/").pop(),
+                                id: item.getAttribute("href").split("/").pop().toLowerCase(),
                                 url: item.getAttribute("href"),
                                 title: title
                             };
