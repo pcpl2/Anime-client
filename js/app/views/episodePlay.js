@@ -73,7 +73,7 @@ var episodePlayBody = {
         } else {
             $("#player-loader").remove();
             let serviceObj = sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId);
-            $("#video-player").append("<iframe id='iframe-player' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + serviceObj.url + "' ></iframe>");
+            $("#video-player").append("<iframe id='iframe-player' sandbox='allow-scripts' width='100%' height='100%' style='margin-bootom: 2%;width: 100%;height: 100%;' allowfullscreen='true' src='" + serviceObj.url + "' ></iframe>");
         }
     },
     showPlayerError() {
