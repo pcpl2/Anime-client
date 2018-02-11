@@ -17,6 +17,7 @@ class serviceManager {
         new aoninjaClass();
         new animezoneClass();
         new gogoanimeioClass();
+        new onanimePlClass();
     }
 
     getApi() {
