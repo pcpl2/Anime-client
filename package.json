@@ -30,6 +30,11 @@
     "videojs-resolution-switcher": "^0.4.2"
   },
   "devDependencies": {
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "nwjs-builder-phoenix": "^1.14.6"
   },
   "build": {
@@ -40,6 +45,7 @@
     ],
     "outputPattern": "${NAME}-${VERSION}-${PLATFORM}-${ARCH}",
     "excludes": [
+      ".eslintrc.json",
       "anime-client.code-workspace",
       "jsconfig.json",
       "docs/*",

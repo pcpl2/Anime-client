@@ -1,0 +1,18 @@
+{
+    "extends": "standard",
+    "globals": {
+        "m": true,
+        "ServiceStatus": true,
+        "sm": true,
+        "PageCard": true,
+        "layout": true,
+        "app": true,
+        "_": true,
+        "serviceSupportImpl": true,
+        "$": true,
+        "request": true,
+        "cacheJS": true,
+        "parseHtml": true,
+        "getDomainName": true
+    }
+}
