@@ -87,8 +87,12 @@ class VkCom extends videoSupportImpl {
           return 0
         }
 
-        const configJson = getConfig.exec(validEncodedData)[1]
-        const config = JSON.parse(configJson)
+        const configJson = getConfig.exec(validEncodedData)
+        if (configJson === null || configJson.size <= 1) {
+          returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
+          return 0
+        }
+        const config = JSON.parse(configJson[1])
 
         var videoObjs = []
 
