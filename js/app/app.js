@@ -17,9 +17,9 @@ class App {
     }
 }
 
-const app = new App();
+const app = new App()
 
-const sm = new serviceManager();
+const sm = new ServiceManager()
 
 m.route(document.getElementById("application"), "", {
     "/service/:sid/list": AnimeList,

@@ -5,7 +5,7 @@ var ServiceStatus = {
     ERROR: 13
 }
 
-class serviceManager {
+class ServiceManager {
     constructor() {
         this.list = [];
         this.currentService = null;
