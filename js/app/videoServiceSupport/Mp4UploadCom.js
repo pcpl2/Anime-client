@@ -1,12 +1,12 @@
 class Mp4UploadCom extends videoSupportImpl {
-  constructor() {
+  constructor () {
     super(['mp4upload.com'], {})
     const self = this
 
     return { api: self, id: 'mp4upload' }
   }
 
-  getVideoUrl(url, returnFunction) {
+  getVideoUrl (url, returnFunction) {
     const self = this
     if (!self.checkUrlValid(url, returnFunction)) {
       return 0
@@ -46,7 +46,7 @@ class Mp4UploadCom extends videoSupportImpl {
         if (new RegExp(self.regexValidateUrl).test(url)) {
           returnFunction(url, VideoDecoderErrorCodes.Sucess, true)
         } else {
-          console.error("invalid url")
+          console.error('invalid url')
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
         }
       } else {

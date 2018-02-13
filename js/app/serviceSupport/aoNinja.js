@@ -1,191 +1,151 @@
 class aoninjaClass extends serviceSupportImpl {
-    constructor() {
-        super("https://a-o.ninja", {});
-        const self = this;
+  constructor () {
+    super('https://a-o.ninja', {})
+    const self = this
 
-        request({ url: self.domain, headers: app.defaultHeaders }, (error, response, body) => {
-            if (!error && response.statusCode == 200) {
+    request({ url: self.domain, headers: app.defaultHeaders }, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const logo = $(parseHtml(body)).find('.navbar-header > .logo > img').attr('src')
+        self.serviceData = { api: self, id: 'aoninja', name: 'A-O.NINJA', description: '', lang: 'PL', image: logo }
+        sm.list.push({ api: self, id: 'aoninja' })
 
-                const logo = $(parseHtml(body)).find(".navbar-header > .logo > img").attr('src')
-                self.serviceData = { api: self, id: "aoninja", name: "A-O.NINJA", description: "", lang: "PL", image: logo };
-                sm.list.push({ api: self, id: "aoninja" });
+        m.redraw()
+      } else {
+        console.error(error)
+      }
+    })
+  }
 
-                m.redraw();
+  updateAnimeList () {
+    const self = this
 
-            } else {
-                console.error(error);
-            }
-        });
-    }
+    const animeListJson = cacheJS.get({
+      serviceID: this.serviceData.id,
+      type: 'Json'
+    })
 
-    updateAnimeList() {
-        const self = this;
+    if (animeListJson == null) {
+      const urls = ['https://a-o.ninja/anime', 'https://a-o.ninja/filmy']
+      var completeRequests = 0
+      var titleObjectList = []
 
-        const animeListJson = cacheJS.get({
-            serviceID: this.serviceData.id,
-            type: 'Json'
-        });
+      const completeCallback = () => {
+        const sorted = _.sortBy(titleObjectList, 'title')
 
-        if (animeListJson == null) {
-            const urls = ['https://a-o.ninja/anime', 'https://a-o.ninja/filmy'];
-            var completeRequests = 0;
-            var titleObjectList = [];
+        self.animeList = sorted
 
-            const completeCallback = () => {
-                const sorted = _.sortBy(titleObjectList, 'title');
+        cacheJS.set({ serviceID: self.serviceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400)
 
-                self.animeList = sorted;
+        self.animeListFiltered = self.animeList
+        self.setListState()
+      }
 
-                cacheJS.set({ serviceID: self.serviceData.id, type: 'Json' }, JSON.stringify(self.animeList), 86400);
-
-                self.animeListFiltered = self.animeList;
-                self.setListState();
-            }
-
-            _.each(urls, (url, indexUrl) => {
-                request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
-                    if (!error && response.statusCode == 200) {
-                        const listHtml = $(parseHtml(body)).find(".list-item > td > a");;
-
-                        _.each(listHtml, (item, indexItem) => {
-                            let title = item.innerHTML;
-                            const emailProtect = item.querySelector('.__cf_email__');
-
-                            if (emailProtect) {
-                                emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
-                                title = item.innerHTML;
-                            }
-
-                            let obj = {
-                                id: item.getAttribute("href").split("/").pop().toLowerCase(),
-                                url: item.getAttribute("href"),
-                                title: title
-                            };
-
-                            titleObjectList.push(obj);
-                        });
-
-                        completeRequests++;
-
-                        if (completeRequests == urls.length) {
-                            completeCallback();
-                        }
-
-                    } else {
-                        //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
-                    }
-
-                });
-            });
-        } else {
-            self.animeList = JSON.parse(animeListJson);
-            self.animeListFiltered = self.animeList;
-            self.setListState();
-        }
-    }
-
-    updateCurrentAnimeData() {
-        const self = this;
-
-        request({ url: self.currentAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
-            if (!error && response.statusCode == 200) {
-                const listHtml = $(parseHtml(body)).find(".lista_odc_tytul_pozycja").find("a");
-
-                var episodeList = [];
-
-                _.each(listHtml, (item, indexItem) => {
-                    let title = item.innerHTML;
-                    let emailProtect = item.querySelector('.__cf_email__');
-
-                    if (emailProtect) {
-                        emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
-                        title = item.innerHTML;
-                    }
-
-                    const obj = {
-                        id: item.getAttribute("href").split("/").pop(),
-                        url: item.getAttribute("href"),
-                        title: title
-                    };
-
-                    episodeList.push(obj);
-                });
-                self.episodeList = episodeList.reverse();
-
-                m.redraw();
-            } else {
-                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
-            }
-        });
-    }
-
-    updateCurrentAnimeData() {
-        const self = this;
-
-        request({ url: self.selectedAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
-            if (!error && response.statusCode == 200) {
-                const listHtml = $(parseHtml(body)).find(".lista_odc_tytul_pozycja > a");
-
-                var episodeList = [];
-
-                _.each(listHtml, (item, indexItem) => {
-                    let title = item.innerHTML;
-                    let emailProtect = item.querySelector('.__cf_email__');
-
-                    if (emailProtect) {
-                        emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'), 0)), emailProtect);
-                        title = item.innerHTML;
-                    }
-
-                    var obj = {
-                        id: item.getAttribute("href").split("/").pop(),
-                        url: item.getAttribute("href"),
-                        title: title,
-                        players: []
-                    };
-
-                    episodeList.push(obj);
-                });
-                self.episodeList = episodeList.reverse();
-
-                m.redraw();
-            } else {
-                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
-            }
-        });
-    }
-
-    updateCurrentEpisodeData() {
-        const self = this;
-        if (self.selectedEpisode != null) {
-            self.selectedEpisode.players = [];
-        }
-
-        const url = self.selectedEpisode.url;
+      _.each(urls, (url, indexUrl) => {
         request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
-            if (!error && response.statusCode == 200) {
-                const listHtml = $(parseHtml(body)).find("#video-player-control > div");
+          if (!error && response.statusCode === 200) {
+            const listHtml = $(parseHtml(body)).find('.list-item > td > a')
 
-                _.each(listHtml, (item, indexItem) => {
-                    const playerUrl = decryptPassword(item.getAttribute('data-hash'));
+            _.each(listHtml, (item, indexItem) => {
+              let title = item.innerHTML
+              const emailProtect = item.querySelector('.__cf_email__')
 
-                    const splitedDomainPlayer = getDomainName(playerUrl).split(".")
-                    const obj = {
-                        id: splitedDomainPlayer[splitedDomainPlayer.length - 2].toLowerCase() + "_" + indexItem,
-                        url: playerUrl,
-                        lang: "PL",
-                        name: item.innerHTML.trim(),
-                        desc: "-",
-                        referer: url
-                    }
+              if (emailProtect) {
+                emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'))), emailProtect)
+                title = item.innerHTML
+              }
 
-                    console.log(obj)
-                    self.selectedEpisode.players.push(obj);
-                });
-                m.redraw();
-            } else {
-                //ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+              let obj = {
+                id: item.getAttribute('href').split('/').pop().toLowerCase(),
+                url: item.getAttribute('href'),
+                title: title
+              }
+
+              titleObjectList.push(obj)
+            })
+
+            completeRequests++
+
+            if (completeRequests === urls.length) {
+              completeCallback()
             }
-        });
+          } else {
+            // ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+          }
+        })
+      })
+    } else {
+      self.animeList = JSON.parse(animeListJson)
+      self.animeListFiltered = self.animeList
+      self.setListState()
     }
+  }
+
+  updateCurrentAnimeData () {
+    const self = this
+
+    request({ url: self.currentAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const listHtml = $(parseHtml(body)).find('.lista_odc_tytul_pozycja').find('a')
+
+        var episodeList = []
+
+        _.each(listHtml, (item, indexItem) => {
+          let title = item.innerHTML
+          let emailProtect = item.querySelector('.__cf_email__')
+
+          if (emailProtect) {
+            emailProtect.parentNode.replaceChild(document.createTextNode(DecodeCloudflareEmailProtect(emailProtect.getAttribute('data-cfemail'))), emailProtect)
+            title = item.innerHTML
+          }
+
+          const obj = {
+            id: item.getAttribute('href').split('/').pop(),
+            url: item.getAttribute('href'),
+            title: title
+          }
+
+          episodeList.push(obj)
+        })
+        self.episodeList = episodeList.reverse()
+
+        m.redraw()
+      } else {
+        // ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+      }
+    })
+  }
+
+  updateCurrentEpisodeData () {
+    const self = this
+    if (self.selectedEpisode != null) {
+      self.selectedEpisode.players = []
+    }
+
+    const url = self.selectedEpisode.url
+    request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const listHtml = $(parseHtml(body)).find('#video-player-control > div')
+
+        _.each(listHtml, (item, indexItem) => {
+          const playerUrl = decryptPassword(item.getAttribute('data-hash'))
+
+          const splitedDomainPlayer = getDomainName(playerUrl).split('.')
+          const obj = {
+            id: splitedDomainPlayer[splitedDomainPlayer.length - 2].toLowerCase() + '_' + indexItem,
+            url: playerUrl,
+            lang: 'PL',
+            name: item.innerHTML.trim(),
+            desc: '-',
+            referer: url
+          }
+
+          console.log(obj)
+          self.selectedEpisode.players.push(obj)
+        })
+        m.redraw()
+      } else {
+        // ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
+      }
+    })
+  }
 }

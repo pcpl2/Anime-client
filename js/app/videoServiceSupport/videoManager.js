@@ -1,4 +1,4 @@
-var VideoDecoderErrorCodes = {
+const VideoDecoderErrorCodes = {
   Sucess: 50,
   INVALID_DOMAIN: 51,
   VIDEO_NOT_FOUND: 52,
@@ -6,14 +6,14 @@ var VideoDecoderErrorCodes = {
 }
 
 class VideoManager {
-  constructor() {
+  constructor () {
     this.list = []
     this.serviceWithHiddenLinks = []
 
     this.updateVideoServiceList()
   }
 
-  updateVideoServiceList() {
+  updateVideoServiceList () {
     this.clearVideoServicesList()
 
     this.list.push(new VidFileNet())
@@ -29,12 +29,12 @@ class VideoManager {
     this.serviceWithHiddenLinks.push(new GamedorUsermdNet())
   }
 
-  clearVideoServicesList() {
+  clearVideoServicesList () {
     this.list = []
     this.serviceWithHiddenLinks = []
   }
 
-  getServiceUrl(serviceObj, retFunction) {
+  getServiceUrl (serviceObj, retFunction) {
     const domain = getDomainName(serviceObj.url)
     const serviceGetter = _.find(this.serviceWithHiddenLinks, (obj) => {
       const foundDomain = _.find(obj.api.getDomains(), (stringDomain) => { return stringDomain === domain })
@@ -48,7 +48,7 @@ class VideoManager {
     }
   }
 
-  getVideoUrl(serviceObj, returnFunction) {
+  getVideoUrl (serviceObj, returnFunction) {
     this.getServiceUrl(serviceObj, (serviceUrl) => {
       if (serviceUrl.length > 0) {
         const domain = getDomainName(serviceUrl)
@@ -68,7 +68,7 @@ class VideoManager {
     })
   }
 
-  checkSupportPlayerById(id) {
+  checkSupportPlayerById (id) {
     const regexClearFromId = /(.*)_[0-9]+/
     const idNoNumbers = regexClearFromId.exec(id)[1].toLowerCase()
     var supported = _.find(this.list, function (obj) { if (obj.id.includes(idNoNumbers)) { return true } else if (idNoNumbers.includes(obj.id)) { return true } else { return false } })
