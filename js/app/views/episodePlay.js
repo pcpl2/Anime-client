@@ -38,7 +38,7 @@ var episodePlayBody = {
         $("#player-error").remove();
         $("#video-player").append("<div id='player-loader'> <div class='loader' style='margin: auto; position: relative; margin-top:10%;'></div></div>");
         if (!episodePlayBody.currentPlayerId.includes("google")) {
-            VideoServiceSupport.getVideoUrl(sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+            vm.getVideoUrl(sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
                 $("#player-loader").remove();
                 $("#video-player").append("<video id='custom-player' class='video-js vjs-big-play-centered' style='width: 100%;height: 100%;'></video>");
 
@@ -144,7 +144,7 @@ var episodePlayBody = {
                                         player.name,
                                         /*player.desc != "-" ?*/[m("br"), player.desc] /*: ""*/,
                                         m("br"),
-                                        VideoServiceSupport.checkSupportPlayerById(player.id) ?
+                                        vm.checkSupportPlayerById(player.id) ?
                                             m("span", { "class": "badge badge-success" }, "Supported")
                                             :
                                             m("span", { "class": "badge badge-danger" }, "Not supported")

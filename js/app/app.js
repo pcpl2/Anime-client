@@ -21,6 +21,9 @@ const app = new App()
 
 const sm = new ServiceManager()
 
+const vm = new VideoManager()
+vm.updateVideoServiceList()
+
 m.route(document.getElementById("application"), "", {
     "/service/:sid/list": AnimeList,
     "/service/:sid/anime/:aid/list": EpisodeList,

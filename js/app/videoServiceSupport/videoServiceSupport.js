@@ -1,89 +1,87 @@
 var VideoDecoderErrorCodes = {
-    Sucess: 50,
-    INVALID_DOMAIN: 51,
-    VIDEO_NOT_FOUND: 52,
-    OTHER_ERROR: 53
+  Sucess: 50,
+  INVALID_DOMAIN: 51,
+  VIDEO_NOT_FOUND: 52,
+  OTHER_ERROR: 53
 }
 
-const ValidateVideoUrlRegex = /(?:http|ftp|https):\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])/igm;
+class VideoManager {
+  constructor() {
+    this.list = []
+    this.serviceWithHiddenLinks = []
 
-this.VideoServiceSupport = {
-    list: [],
+    this.updateVideoServiceList()
+  }
 
-    serviceWithHiddenLinks: [],
+  updateVideoServiceList() {
+    this.clearVideoServicesList()
 
-    updateVideoServiceList: function () {
-        this.clearVideoServicesList();
-        VidFileNet.register();
-        VidLoxTv.register();
-        RaptuCom.register();
-        TunePk.register();
-        Mp4UploadCom.register();
-        DriveGoogleCom.register();
-        vkCom.register();
-        estreamTo.register();
-        dailymotionCom.register();
+    this.list.push(new VidFileNet())
+    this.list.push(new VidLoxTv())
+    this.list.push(new TunePk())
+    this.list.push(new DriveGoogleCom())
+    this.list.push(new Estream())
+    this.list.push(new Mp4UploadCom())
+    this.list.push(new DailymotionCom())
+    this.list.push(new RaptuCom())
+    this.list.push(new VkCom())
 
-        //Hiden video service link
+    this.serviceWithHiddenLinks.push(new GamedorUsermdNet())
+  }
 
-        gamedorUsermdNet.register();
-    },
+  clearVideoServicesList() {
+    this.list = []
+    this.serviceWithHiddenLinks = []
+  }
 
-    clearVideoServicesList: function () {
-        this.list = [];
-    },
+  getServiceUrl(serviceObj, retFunction) {
+    const domain = getDomainName(serviceObj.url)
+    const serviceGetter = _.find(this.serviceWithHiddenLinks, (obj) => {
+      const foundDomain = _.find(obj.api.getDomains(), (stringDomain) => { return stringDomain === domain })
+      return foundDomain === domain
+    })
 
-    getVideoUrl: function (serviceObj, returnFunction) {
-        this.getServiceUrl(serviceObj, (serviceUrl) => {
-            if (serviceUrl.length > 0) {
-                const domain = getDomainName(serviceUrl);
-                const service = _.find(this.list, (obj) => {
-                    if (obj.domains != undefined) {
-                        const foundDomain = _.find(obj.domains, (stringDomain) => { return stringDomain == domain });
-                        return foundDomain == domain;
-                    } else {
-                        return obj.domain == domain;
-                    }
-                });
-
-                if (service != null) {
-                    service.api.getVideoUrl(serviceUrl, returnFunction)
-                } else {
-                    returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
-                }
-            } else {
-                returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-            }
-
-        })
-    },
-
-    checkSupportPlayerById: function (id) {
-        const regexClearFromId = /(.*)_[0-9]+/;
-        const idNoNumbers = regexClearFromId.exec(id)[1].toLowerCase();
-        var supported = _.find(this.list, function (obj) { if (obj.id.includes(idNoNumbers)) { return true; } else if (idNoNumbers.includes(obj.id)) { return true; } else { return false; } });
-
-        if (supported == undefined) {
-            supported = _.find(this.serviceWithHiddenLinks, function (obj) { if (obj.id.includes(idNoNumbers)) { return true; } else if (idNoNumbers.includes(obj.id)) { return true; } else { return false; } });
-            if (supported == undefined) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
-        }
-    },
-
-    getServiceUrl: function (serviceObj, retFunction) {
-        const domain = getDomainName(serviceObj.url);
-        const serviceGetter = _.find(this.serviceWithHiddenLinks, function (obj) { return obj.domain == domain });
-
-        if (serviceGetter == undefined) {
-            retFunction(serviceObj.url);
-        } else {
-            serviceGetter.api.getServiceLink(serviceObj, retFunction)
-        }
-
+    if (serviceGetter === undefined) {
+      retFunction(serviceObj.url)
+    } else {
+      serviceGetter.api.getServiceLink(serviceObj, retFunction)
     }
+  }
+
+  getVideoUrl(serviceObj, returnFunction) {
+    this.getServiceUrl(serviceObj, (serviceUrl) => {
+      if (serviceUrl.length > 0) {
+        const domain = getDomainName(serviceUrl)
+        const service = _.find(this.list, (obj) => {
+          const foundDomain = _.find(obj.api.getDomains(), (stringDomain) => { return stringDomain === domain })
+          return foundDomain === domain
+        })
+
+        if (service != null) {
+          service.api.getVideoUrl(serviceUrl, returnFunction)
+        } else {
+          returnFunction('', VideoDecoderErrorCodes.INVALID_DOMAIN)
+        }
+      } else {
+        returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
+      }
+    })
+  }
+
+  checkSupportPlayerById(id) {
+    const regexClearFromId = /(.*)_[0-9]+/
+    const idNoNumbers = regexClearFromId.exec(id)[1].toLowerCase()
+    var supported = _.find(this.list, function (obj) { if (obj.id.includes(idNoNumbers)) { return true } else if (idNoNumbers.includes(obj.id)) { return true } else { return false } })
+
+    if (supported === undefined) {
+      supported = _.find(this.serviceWithHiddenLinks, function (obj) { if (obj.id.includes(idNoNumbers)) { return true } else if (idNoNumbers.includes(obj.id)) { return true } else { return false } })
+      if (supported === undefined) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return true
+    }
+  }
 }

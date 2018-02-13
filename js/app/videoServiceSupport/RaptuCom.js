@@ -1,57 +1,42 @@
-this.RaptuCom = {
-    domain: "raptu.com",
-    domains: ["www.raptu.com", "raptu.com"],
+class RaptuCom extends videoSupportImpl {
+  constructor() {
+    super(['www.raptu.com', 'raptu.com', 'rapidvideo.com'], {})
+    const self = this
 
-    register: function () {
-        return VideoServiceSupport.list.push({ api: RaptuCom, id: "raptu", domain: this.domain, domains: this.domains });
-    },
+    return { api: self, id: 'raptu' }
+  }
 
-    getVideoUrl: function (url, returnFunction) {
-        const regexSourceDecoder = /\"sources\"\: \[.+(\"\])/igm;
-        const regexValidateUrl = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/igm
-        //check domain
-        if (_.find(self.domains, (stringDomain) => { return getDomainName(url) == stringDomain }) == undefined) {
-            returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
-            return;
+  getVideoUrl(url, returnFunction) {
+    const self = this
+    if (!self.checkUrlValid(url, returnFunction)) {
+      return 0
+    }
+
+    request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const videoObj = $(parseHtml(body)).find("video")
+        const poster = videoObj.attr('poster')
+
+        var videoObjs = [];
+
+        _.each(videoObj.children(), (item, index) => {
+          if (item.getAttribute('type') === 'video/mp4' && item.getAttribute('src') != 'h') {
+            videoObjs.push({ url: item.getAttribute('src'), qualityLabel: item.getAttribute('data-res') })
+          }
+        })
+        const vidObj = videoObjs.pop()
+
+        if (new RegExp(self.regexValidateUrl).test(vidObj.url)) {
+          returnFunction(vidObj.url, VideoDecoderErrorCodes.Sucess, true);
+        } else {
+          console.error("invalid url")
+          returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
         }
 
-        m.request({
-            method: "GET",
-            url: url,
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            let videoUrl = $(parseHtml(res)).find("script").map(function () {
-                if (this.innerHTML.search("sources") != -1) {
-                    let plaintTextList = regexSourceDecoder.exec(this.innerHTML)[0].slice(11);
-                    let listOfUrls = JSON.parse(plaintTextList);
-
-                    if (listOfUrls.length > 1) {
-                        let url720p = _.find(listOfUrls, function (video) { return video.label == "720p"; });
-                        let url480p = _.find(listOfUrls, function (video) { return video.label == "480p"; });
-                        if (url720p) {
-                            return url720p.file;
-                        } else if (url480p) {
-                            return url480p.file;
-                        } else {
-                            return undefined;
-                        }
-                    } else {
-                        return listOfUrls[0];
-                    }
-                }
-            }).get()[0];
-
-            if (new RegExp(regexValidateUrl).test(videoUrl)) {
-                returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
-            } else {
-                returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-            }
-        }).catch(function (e) {
-            returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-        })
-
-    }
+      } else {
+        console.error(error)
+        returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
+      }
+    })
+  }
 }

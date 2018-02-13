@@ -1,47 +1,41 @@
-this.TunePk = {
-    domain : "tune.pk",
+class TunePk extends videoSupportImpl {
+  constructor() {
+    super(['tune.pk', 'tune.video'], {})
+    const self = this
 
-    register: function () {
-        return VideoServiceSupport.list.push({ api: TunePk, id: "tune", domain: this.domain });
-    },
+    return { api: self, id: 'tune' }
+  }
 
-    getVideoUrl: function (url, returnFunction) {
-        const regexGetVideoId = /embed_player\.php\?vid=(\d.+)/igm;
-        const regexValidateUrl = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/igm
-        //check domain
-        if (getDomainName(url) != this.domain) {
-            returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
-            return;
-        }
-    
-        var videoId = regexGetVideoId.exec(url)[1];
-        
-            let apiUrl = "https://tune.pk/api_public/playerConfigs/?api_key=777750fea4d3bd585bf47dc1873619fc&id=" + videoId + "&embed=true";
-        
-            m.request({
-                method: "GET",
-                url: apiUrl,
-                headers: {
-                    "Accept": "text/html"
-                },
-                deserialize: function (value) { return value },
-            }).then(function (res) {
-                let data = JSON.parse(res);
-        
-                if(data.code != 200) {
-                    returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-                    return;
-                }
-        
-                let videoUrl = data.data.details.player.sources[0].file
-        
-                if(new RegExp(regexValidateUrl).test(videoUrl)) {
-                    returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
-                } else {
-                    returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-                }
-            }).catch(function(e) {
-                returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-            })
+  getVideoUrl(url, returnFunction) {
+    const self = this
+    if (!self.checkUrlValid(url, returnFunction)) {
+      return 0
     }
+
+    const regexGetVideoId = /(?:\/\/|\.)tune\.(?:video|pk)\/(?:player|video|play)\/(?:[\w\.\?]+=)?(\d+)/;
+
+    const videoId = regexGetVideoId.exec(url)[1];
+
+    request({ url: `https://embed.tune.pk/play/${videoId}`, headers: app.defaultHeaders }, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const parsedHtml = $(parseHtml(body))
+        const url = parsedHtml.find("meta[itemprop='contentURL']").attr('content');
+        const poster = parsedHtml.find("meta[itemprop='thumbnailUrl']").attr('content');
+        const quality = parsedHtml.find("meta[itemprop='videoQuality']").attr('content');
+
+        if (new RegExp(self.regexValidateUrl).test(url)) {
+          returnFunction(url, VideoDecoderErrorCodes.Sucess, true);
+        } else {
+          console.error("invalid url")
+          returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
+        }
+
+        // TODO Read all players from api with m3u8
+        // "https://tune.pk/api_public/playerConfigs/?api_key=777750fea4d3bd585bf47dc1873619fc&id=" + videoId + "&embed=true";
+      } else {
+        console.error(error)
+        returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
+      }
+    })
+  }
 }

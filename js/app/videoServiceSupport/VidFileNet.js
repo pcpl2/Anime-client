@@ -1,31 +1,36 @@
-this.VidFileNet = {
-    domain : "vidfile.net",
+class VidFileNet extends videoSupportImpl {
+  constructor () {
+    super(['vidfile.net'], {})
+    const self = this
 
-    register: function () {
-        return VideoServiceSupport.list.push({ api: VidFileNet, id: "vidfile", domain: this.domain });
-    },
+    return { api: self, id: 'vidfile' }
+  }
 
-    getVideoUrl: function (url, returnFunction) {
-        //check domain
-        if (getDomainName(url) != this.domain) {
-            returnFunction("", VideoDecoderErrorCodes.INVALID_DOMAIN);
-            return;
-        }
-
-        m.request({
-            method: "GET",
-            url: url,
-            headers: {
-                "Accept": "text/html"
-            },
-            deserialize: function (value) { return value },
-        }).then(function (res) {
-            let source = $(parseHtml(res)).find('#player > source')[0];
-            let videoUrl = source.getAttribute('src');
-            returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true);
-        }).catch(function (e) {
-            returnFunction("", VideoDecoderErrorCodes.VIDEO_NOT_FOUND);
-        })
-
+  getVideoUrl (url, returnFunction) {
+    const self = this
+    if (!self.checkUrlValid(url, returnFunction)) {
+      return 0
     }
+
+    m.request({
+      method: 'GET',
+      url: url,
+      headers: {
+        'Accept': 'text/html'
+      },
+      deserialize: (value) => { return value }
+    }).then((res) => {
+      const videoUrl = $(parseHtml(res)).find('#player > source').attr('src')
+
+      if (new RegExp(self.regexValidateUrl).test(videoUrl)) {
+        returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true)
+      } else {
+        console.error('invalid url')
+        returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
+      }
+    }).catch((e) => {
+      console.error(e)
+      returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
+    })
+  }
 }
