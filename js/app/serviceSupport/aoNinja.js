@@ -83,7 +83,7 @@ class aoninjaClass extends serviceSupportImpl {
   updateCurrentAnimeData () {
     const self = this
 
-    request({ url: self.currentAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
+    request({ url: self.selectedAnime.url, headers: app.defaultHeaders }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
         const listHtml = $(parseHtml(body)).find('.lista_odc_tytul_pozycja').find('a')
 
