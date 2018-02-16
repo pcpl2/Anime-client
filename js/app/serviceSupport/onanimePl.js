@@ -113,7 +113,7 @@ class onanimePlClass extends serviceSupportImpl {
           if (indexItem !== 0) {
             const itemObj = $(item)
 
-            const epNumber = itemObj.children()[1].innerText
+            const epNumber = itemObj.find('div.tp.tbl:nth-of-type(2)').text()
             const epTitle = itemObj.find('div.tp.tbl > a').text()
             const epUrl = itemObj.find('div.tp.tbl > div.right > div > a').attr('href')
 
