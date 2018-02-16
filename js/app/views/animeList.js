@@ -11,8 +11,8 @@ const animeListHeader = {
   view: () => {
     return m('div', {}, [
       m('label', { 'class': 'col-form-label col-md-2' }, 'Select anime'),
-      m('label', { 'class': 'col-form-label col-md-4', style: ['display:', sm.getApi().serviceStatus !== ServiceStatus.LOADED ? ' none' : ''].join('') }, 'Showing ' + sm.getApi().animeListFiltered.length.toLocaleString() + ' of ' + sm.getApi().animeList.length.toLocaleString() + ' anime'),
-      m('input', { 'class': 'form-control col-md-4 pull-right', 'oninput': m.withAttr('value', (val) => { sm.getApi().searchAnime(val) }), 'placeholder': 'Search' })
+      m('label', { 'class': 'col-form-label col-md-4', style: ['display:', sm.getApi().serviceStatus !== ServiceStatus.LOADED ? ' none' : ''].join('') }, `Showing ${sm.getApi().animeListFiltered.length < 16 ? sm.getApi().animeListFiltered.length.toLocaleString() : '16'} of ${sm.getApi().animeListFiltered.length.toLocaleString()} anime`),
+      m('input', { 'class': 'form-control col-md-4 pull-right', oninput: m.withAttr('value', (val) => { sm.getApi().searchAnime(val) }), placeholder: 'Search' })
     ])
   }
 }

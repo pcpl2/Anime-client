@@ -17,6 +17,10 @@ class AnimePaginateList {
   }
 
   createElementsMap (elementsArray) {
+    this.elements = []
+    if (elementsArray.length === 0) {
+      this.elements.push([])
+    }
     _.each(elementsArray, (item, index) => {
       if (index % this.showElements === 0) {
         this.elements.push([item])
