@@ -1,4 +1,5 @@
 const $ = require('jquery')
+const _ = require('underscore')
 const m = require('mithril')
 const request = require('request')
 

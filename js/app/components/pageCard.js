@@ -37,7 +37,7 @@ this.PageCard = {
   animeCard: function (id, name, service) {
     return m('div', { 'class': 'card text-white bg-info mb-3', 'style': 'max-width: 20rem; min-height: 180px;', 'onclick': function () { m.route.set('/service/' + service + '/anime/' + id + '/list') } }, [
       m('div', { 'class': 'card-body' }, [
-        m('h4', { 'class': 'cart-title', 'style': 'text-align: center;' }, name)
+        m('h6', { 'class': 'cart-title', 'style': 'text-align: center;' }, name)
       ])
     ])
   },

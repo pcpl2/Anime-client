@@ -28,16 +28,7 @@ const animeListBody = {
       m('div', { class: 'loader', style: ['margin: auto; position: relative; margin-top:10%; display:', sm.getApi().serviceStatus === ServiceStatus.LOADING ? ' block' : ' none'].join('') }, ''),
       // Loaded
       m('div', { style: ['display:', sm.getApi().serviceStatus === ServiceStatus.LOADED ? ' block' : ' none'].join('') },
-        m('.animeList', { 'class': 'col-md-12 card-group', 'style': 'margin-top: 1%;' }, [
-          sm.getApi().animeListFiltered.map((anime) => {
-            return m('div', { 'class': 'col-md-4' }, [
-              PageCard.animeCard(anime.id,
-                anime.title,
-                sm.getApi().serviceData.id)
-            ])
-          }),
-          m('ul', {class: 'sync-pagination pagination-sm'})
-        ])),
+        m(AnimePaginateList, { elements: sm.getApi().animeListFiltered })),
       // Empty
       m('div', { style: ['display:', sm.getApi().serviceStatus === ServiceStatus.EMPTY ? ' block' : ' none'].join('') }, [
         m('h2', { style: 'margin: auto; text-align: center; margin-top:10%;' }, 'The anime list is empty.')
