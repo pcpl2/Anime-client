@@ -1,6 +1,7 @@
 {
   "name": "anime-client",
-  "version": "0.0.3",
+  "product_string": "anime-client",
+  "version": "0.0.4",
   "main": "index.html",
   "chromium-args": "--mixed-context",
   "window": {
@@ -39,7 +40,7 @@
     "nwjs-builder-phoenix": "^1.14.6"
   },
   "build": {
-    "nwVersion": "0.28.1",
+    "nwVersion": "0.28.2",
     "ffmpegIntegration": true,
     "targets": [
       "zip"
