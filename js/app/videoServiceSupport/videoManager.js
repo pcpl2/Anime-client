@@ -16,7 +16,7 @@ class VideoManager {
   updateVideoServiceList () {
     this.clearVideoServicesList()
 
-    this.list.push(new VidFileNet())
+    // this.list.push(new VidFileNet())
     this.list.push(new VidLoxTv())
     this.list.push(new TunePk())
     this.list.push(new DriveGoogleCom())
