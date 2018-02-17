@@ -16,15 +16,9 @@ var episodeListHeader = {
 
 var episodeListBody = {
   view: function () {
-    return m('.episodeList', { 'class': 'col-md-12 card-group', 'style': 'margin-top: 1%; margin-bootom:1%' },
+    return m('div',
       // TODO add anime image and description
-      sm.getApi().episodeList.map(function (episode) {
-        return m('div', { 'class': 'col-md-4' }, [
-          PageCard.episodeCard(episode.id,
-            episode.title,
-            sm.getApi().selectedAnime.id,
-            sm.getApi().serviceData.id)])
-      })
+      m(EpisodePaginateList, { elements: sm.getApi().episodeList })
     )
   }
 }

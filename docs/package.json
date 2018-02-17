@@ -1,25 +1,25 @@
 {
-    "version": "0.0.4",
+    "version": "0.0.5",
     "packages": {
       "linux64": {
-        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.4/anime-client-0.0.4-linux-x64.zip",
-        "size": 107404995
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.5/anime-client-0.0.5-linux-x64.zip",
+        "size": 107404948
       },
       "linux32": {
-        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.4/anime-client-0.0.4-linux-x86.zip",
-        "size": 111646486
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.5/anime-client-0.0.5-linux-x86.zip",
+        "size": 111646439
       },
       "win64": {
-        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.4/anime-client-0.0.4-win-x64.zip",
-        "size": 92560476
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.5/anime-client-0.0.5-win-x64.zip",
+        "size": 92560431
       },
       "win32": {
-        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.4/anime-client-0.0.4-win-x86.zip",
-        "size": 89470344
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.5/anime-client-0.0.5-win-x86.zip",
+        "size": 89470298
       },
       "mac64": {
-        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.4/anime-client-0.0.4-mac-x64.zip",
-        "size": 98016060
+        "url": "https://github.com/pcpl2/Anime-client/releases/download/0.0.5/anime-client-0.0.5-mac-x64.zip",
+        "size": 98016013
       }
     }
   }
