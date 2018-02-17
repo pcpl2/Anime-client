@@ -1,7 +1,5 @@
 require('select2')
 const videojs = require('video.js')
-require('videojs-resolution-switcher')
-require('videojs-contrib-hls')
 
 var episodePlayBreadcrumb = {
   view: function () {
@@ -56,11 +54,11 @@ var episodePlayBody = {
                 dynamicLabel: true
               }
             }
-          }, function () {
+          }, () => {
             self.video.updateSrc([
               { type: 'video/mp4', src: url, label: 'default' }
             ])
-            self.video.on('resolutionchange', function () {
+            self.video.on('resolutionchange', () => {
               console.info(`Source changed to ${player.src()}`)
             })
           })

@@ -28,7 +28,6 @@
     "select2": "4.0.3",
     "underscore": "^1.8.3",
     "video.js": "^6.6.0",
-    "videojs-contrib-hls": "^5.12.2",
     "videojs-resolution-switcher": "^0.4.2"
   },
   "devDependencies": {
