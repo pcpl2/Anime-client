@@ -4,9 +4,7 @@ const m = require('mithril')
 const request = require('request')
 
 const AutoUpdater = require('nw-autoupdater')
-const updater = new AutoUpdater(require('./package.json'), {
-  strategy: 'ScriptSwap'
-})
+const updater = new AutoUpdater(require('./package.json'), {})
 
 class App {
   constructor () {
@@ -32,8 +30,20 @@ m.route(document.getElementById('application'), '', {
   '': SelectService
 })
 
+const output = document.querySelector('#output')
+
 async function update () {
   try {
+    if (updater.isSwapRequest()) {
+      $('#application').hide()
+      $('#updater').show()
+      output.innerHTML += `\nSwapping...`
+      await updater.swap()
+      output.innerHTML += `\nDone...`
+      await updater.restart()
+      return
+    }
+
     const rManifest = await updater.readRemoteManifest()
     const needsUpdate = await updater.checkNewVersion(rManifest)
 
