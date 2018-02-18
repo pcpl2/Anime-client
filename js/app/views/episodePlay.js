@@ -1,5 +1,6 @@
 require('select2')
 const videojs = require('video.js')
+require('videojs-resolution-switcher')
 
 var episodePlayBreadcrumb = {
   view: function () {
