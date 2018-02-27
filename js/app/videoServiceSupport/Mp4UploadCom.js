@@ -44,7 +44,7 @@ class Mp4UploadCom extends videoSupportImpl {
         const url = urlsRegex[2]
 
         if (new RegExp(self.regexValidateUrl).test(url)) {
-          returnFunction(url, VideoDecoderErrorCodes.Sucess, true)
+          returnFunction({poster: poster, url: url}, VideoDecoderErrorCodes.Sucess, true)
         } else {
           console.error('invalid url')
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)

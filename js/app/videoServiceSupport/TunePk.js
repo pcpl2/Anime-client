@@ -24,7 +24,7 @@ class TunePk extends videoSupportImpl {
         const quality = parsedHtml.find("meta[itemprop='videoQuality']").attr('content')
 
         if (new RegExp(self.regexValidateUrl).test(url)) {
-          returnFunction(url, VideoDecoderErrorCodes.Sucess, true)
+          returnFunction({poster: poster, url: url}, VideoDecoderErrorCodes.Sucess, true)
         } else {
           console.error('invalid url')
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)

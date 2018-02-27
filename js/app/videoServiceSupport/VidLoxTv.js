@@ -39,10 +39,10 @@ class VidLoxTv extends videoSupportImpl {
 
       const urls = _.zip(data.sources, data.labels)
 
-      const videoUrl = urls[1][0]
+      const videoUrl = urls[0][0]
 
       if (new RegExp(self.regexValidateUrl).test(videoUrl)) {
-        returnFunction(videoUrl, VideoDecoderErrorCodes.Sucess, true)
+        returnFunction({poster: data.poster, url: videoUrl}, VideoDecoderErrorCodes.Sucess, true)
       } else {
         console.error('invalid url')
         returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)

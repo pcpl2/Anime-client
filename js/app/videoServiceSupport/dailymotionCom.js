@@ -36,26 +36,23 @@ class DailymotionCom extends videoSupportImpl {
         const parsedConfgiJson = JSON.parse(validConfigJson)
 
         const posters = parsedConfgiJson.metadata.posters
+        const poster = parsedConfgiJson.metadata.poster_url
         const qualities = parsedConfgiJson.metadata.qualities
 
         var maxQuality
 
         _.each(_.keys(qualities), (qKeyString) => {
-          if (qKeyString !== 'auto') {
-            if (maxQuality === undefined) {
+          if (maxQuality === undefined) {
+            maxQuality = parseInt(qKeyString)
+          } else {
+            if (maxQuality < parseInt(qKeyString)) {
               maxQuality = parseInt(qKeyString)
-            } else {
-              if (maxQuality < parseInt(qKeyString)) {
-                maxQuality = parseInt(qKeyString)
-              }
             }
           }
         })
 
-        const videoObject = _.find(qualities[maxQuality], (obj) => { return obj.type === 'video/mp4' })
-
-        if (new RegExp(self.regexValidateUrl).test(videoObject.url)) {
-          returnFunction(videoObject.url, VideoDecoderErrorCodes.Sucess, true)
+        if (new RegExp(self.regexValidateUrl).test(qualities[maxQuality][0].url)) {
+          returnFunction({poster: poster, url: qualities[maxQuality][0].url}, VideoDecoderErrorCodes.Sucess, true)
         } else {
           console.error('invalid url')
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)

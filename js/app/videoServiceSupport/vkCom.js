@@ -17,7 +17,8 @@ class VkCom extends videoSupportImpl {
 
     const getIdsAndHash0 = /video_ext\.php\?oid=(.*)\&id=(.*)\&hash=(.*)/
 
-    const urlCopy = url.replace(/&amp;/g, '&')
+    const urlCopy1 = url.replace(/&amp;amp;/g, '&')
+    const urlCopy = urlCopy1.replace(/&amp;/g, '&')
 
     if (checkUrl0.test(urlCopy)) {
       const parsedDomain = getIdsAndHash0.exec(urlCopy)
@@ -121,7 +122,7 @@ class VkCom extends videoSupportImpl {
         const vidObj = videoObjs.pop()
 
         if (new RegExp(self.regexValidateUrl).test(vidObj.url)) {
-          returnFunction(vidObj.url, VideoDecoderErrorCodes.Sucess, true)
+          returnFunction({poster: poster, url: vidObj.url}, VideoDecoderErrorCodes.Sucess, true)
         } else {
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
         }

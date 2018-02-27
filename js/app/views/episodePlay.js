@@ -37,7 +37,7 @@ var episodePlayBody = {
     $('#player-error').remove()
     $('#video-player').append("<div id='player-loader'> <div class='loader' style='margin: auto; position: relative; margin-top:10%;'></div></div>")
     if (!episodePlayBody.currentPlayerId.includes('google')) {
-      vm.getVideoUrl(sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
+      vm.getVideoUrl(sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (videoObj, status, customPlayer) {
         $('#player-loader').remove()
         $('#video-player').append("<div id='custom-player' style='width: 100%;height: 100%;'></video>")
 
@@ -45,10 +45,11 @@ var episodePlayBody = {
 
         if (status === VideoDecoderErrorCodes.Sucess) {
           self.video = new Clappr.Player({
-            source: url,
+            source: videoObj.url,
             parentId: '#custom-player',
             width: '100%',
             height: '100%',
+            poster: videoObj.poster,
             hlsjsConfig: {
               enableWorker: true
             }

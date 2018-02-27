@@ -27,7 +27,7 @@ class Estream extends videoSupportImpl {
         })
 
         if (new RegExp(self.regexValidateUrl).test(srcList[0].url)) {
-          returnFunction(srcList[0].url, VideoDecoderErrorCodes.Sucess, true)
+          returnFunction({poster: poster, url: srcList[0].url}, VideoDecoderErrorCodes.Sucess, true)
         } else {
           console.error('invalid url')
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)

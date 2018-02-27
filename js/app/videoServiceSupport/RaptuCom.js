@@ -12,6 +12,7 @@ class RaptuCom extends videoSupportImpl {
       return 0
     }
 
+    // TODO to fix resolution
     request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
         const videoObj = $(parseHtml(body)).find('video')
@@ -27,7 +28,7 @@ class RaptuCom extends videoSupportImpl {
         const vidObj = videoObjs.pop()
 
         if (new RegExp(self.regexValidateUrl).test(vidObj.url)) {
-          returnFunction(vidObj.url, VideoDecoderErrorCodes.Sucess, true)
+          returnFunction({poster: poster, url: vidObj.url}, VideoDecoderErrorCodes.Sucess, true)
         } else {
           console.error('invalid url')
           returnFunction('', VideoDecoderErrorCodes.VIDEO_NOT_FOUND)
