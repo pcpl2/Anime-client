@@ -1,6 +1,5 @@
 require('select2')
-const videojs = require('video.js')
-require('videojs-resolution-switcher')
+const Clappr = require('clappr')
 
 var episodePlayBreadcrumb = {
   view: function () {
@@ -25,7 +24,7 @@ var episodePlayBody = {
   clearPlayer: function () {
     episodePlayBody.currentPlayerId = ''
     if (episodePlayBody.video != null) {
-      episodePlayBody.video.dispose()
+      episodePlayBody.video.destroy()
       episodePlayBody.video = null
     }
 
@@ -40,28 +39,19 @@ var episodePlayBody = {
     if (!episodePlayBody.currentPlayerId.includes('google')) {
       vm.getVideoUrl(sm.getApi().getServiceUrlObjById(episodePlayBody.currentPlayerId), function (url, status, customPlayer) {
         $('#player-loader').remove()
-        $('#video-player').append("<video id='custom-player' class='video-js vjs-big-play-centered' style='width: 100%;height: 100%;'></video>")
+        $('#video-player').append("<div id='custom-player' style='width: 100%;height: 100%;'></video>")
 
         let player = $('#custom-player')
 
         if (status === VideoDecoderErrorCodes.Sucess) {
-          self.video = videojs(player[0], {
-            controls: true,
-            autoplay: false,
-            preload: 'auto',
-            plugins: {
-              videoJsResolutionSwitcher: {
-                default: 'high',
-                dynamicLabel: true
-              }
+          self.video = new Clappr.Player({
+            source: url,
+            parentId: '#custom-player',
+            width: '100%',
+            height: '100%',
+            hlsjsConfig: {
+              enableWorker: true
             }
-          }, () => {
-            self.video.updateSrc([
-              { type: 'video/mp4', src: url, label: 'default' }
-            ])
-            self.video.on('resolutionchange', () => {
-              console.info(`Source changed to ${player.src()}`)
-            })
           })
         } else {
           self.clearPlayer()
