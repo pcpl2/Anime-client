@@ -17,8 +17,10 @@ class VkCom extends videoSupportImpl {
 
     const getIdsAndHash0 = /video_ext\.php\?oid=(.*)\&id=(.*)\&hash=(.*)/
 
-    if (checkUrl0.test(url)) {
-      const parsedDomain = getIdsAndHash0.exec(url)
+    const urlCopy = url.replace(/&amp;/g, '&')
+
+    if (checkUrl0.test(urlCopy)) {
+      const parsedDomain = getIdsAndHash0.exec(urlCopy)
 
       const oid = parsedDomain[1]
       const id = parsedDomain[2]
@@ -26,8 +28,8 @@ class VkCom extends videoSupportImpl {
 
       const requestUrl = 'https://vk.com/video_ext.php?oid=' + oid + '&id=' + id + '&hash=' + hash
       self.getVideoLinks(requestUrl, returnFunction, self)
-    } else if (checkUrl1.test(url)) {
-      self.getIdsFromType1(url, (sucess, objectData) => {
+    } else if (checkUrl1.test(urlCopy)) {
+      self.getIdsFromType1(urlCopy, (sucess, objectData) => {
         if (sucess) {
           const oid = objectData.oid
           const id = objectData.id
