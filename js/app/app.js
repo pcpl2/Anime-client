@@ -91,3 +91,10 @@ async function update () {
 }
 
 update()
+
+nw.App.registerGlobalHotKey(new nw.Shortcut({
+  key: 'Escape',
+  active: () => {
+    nw.Window.get().leaveFullscreen()
+  }
+}))
