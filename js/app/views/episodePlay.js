@@ -1,5 +1,6 @@
 require('select2')
 const Clappr = require('clappr')
+const FLVJSPlayback = require('clappr-flvjs-playback')
 
 var episodePlayBreadcrumb = {
   view: function () {
@@ -50,6 +51,9 @@ var episodePlayBody = {
             width: '100%',
             height: '100%',
             poster: videoObj.poster,
+            plugins: [
+              FLVJSPlayback
+            ],
             hlsjsConfig: {
               enableWorker: true
             }

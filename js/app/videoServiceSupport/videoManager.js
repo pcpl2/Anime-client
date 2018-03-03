@@ -25,6 +25,7 @@ class VideoManager {
     this.list.push(new DailymotionCom())
     this.list.push(new RaptuCom())
     this.list.push(new VkCom())
+    this.list.push(new VshareIo())
 
     this.serviceWithHiddenLinks.push(new GamedorUsermdNet())
   }
