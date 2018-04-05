@@ -13,7 +13,7 @@ class Mp4UploadCom extends videoSupportImpl {
     }
 
     const regexDataDecoder = /return\ p\}(?:\('(.*)\'\,)([0-9]+),([0-9]+),(?:\'(.*)\'\.split)/
-    const regexGetVideoAndPoster = /(?:var videoposter\=\\\'(.*)\\\'\;).*(?:src:"(.+)+")/igm
+    const regexGetVideoAndPoster = /(?:"file":"(.*)","image":"(.*)","hei)/igm
 
     request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
@@ -28,6 +28,7 @@ class Mp4UploadCom extends videoSupportImpl {
 
         if (validEncodedData === undefined) {
           returnFunction('', VideoDecoderErrorCodes.OTHER_ERROR)
+          return
         }
 
         const encodedData = regexDataDecoder.exec(validEncodedData)
@@ -40,8 +41,8 @@ class Mp4UploadCom extends videoSupportImpl {
 
         const urlsRegex = regexGetVideoAndPoster.exec(decodedData)
 
-        const poster = urlsRegex[1]
-        const url = urlsRegex[2]
+        const url = urlsRegex[1]
+        const poster = urlsRegex[2]
 
         if (new RegExp(self.regexValidateUrl).test(url)) {
           returnFunction({poster: poster, url: url}, VideoDecoderErrorCodes.Sucess, true)
