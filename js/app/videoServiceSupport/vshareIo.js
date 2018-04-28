@@ -91,6 +91,7 @@ class VshareIo extends videoSupportImpl {
 
       if (validEncodedData === undefined) {
         returnFunction('', VideoDecoderErrorCodes.OTHER_ERROR)
+        return
       }
 
       const poster = regexGetPoster.exec(validEncodedData)[1]
