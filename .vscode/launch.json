@@ -5,14 +5,7 @@
             "type": "nwjs",
             "request": "launch",
             "name": "Launch NWjs",
-            "nwjsVersion": "0.28.2",
-            "webRoot": "${workspaceRoot}"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "file:///C:/Users/patry/Desktop/ao-ninja/index.html",
+            "nwjsVersion": "0.29.3",
             "webRoot": "${workspaceRoot}"
         }
     ]

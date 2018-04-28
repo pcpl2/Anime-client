@@ -18,29 +18,29 @@
   },
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.0",
     "bootstrap-material-design": "^4.1.1",
-    "clappr": "^0.2.86",
-    "clappr-flvjs-playback": "^0.0.3",
+    "clappr": "^0.2.92",
+    "clappr-flvjs-playback": "^0.0.5",
     "cookie": "^0.3.1",
     "jquery": "^3.3.1",
     "mithril": "^1.1.6",
     "nw-autoupdater": "^1.1.4",
     "phantom": "^4.0.12",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "select2": "4.0.3",
-    "underscore": "^1.8.3"
+    "underscore": "^1.9.0"
   },
   "devDependencies": {
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^6.0.0",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.1.0",
     "nwjs-builder-phoenix": "^1.14.6"
   },
   "build": {
-    "nwVersion": "0.28.2",
+    "nwVersion": "0.29.3",
     "ffmpegIntegration": true,
     "targets": [
       "zip"
