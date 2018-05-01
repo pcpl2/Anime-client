@@ -1,7 +1,7 @@
 {
   "name": "anime-client",
   "product_string": "anime-client",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "main": "index.html",
   "chromium-args": "--mixed-context",
   "window": {
