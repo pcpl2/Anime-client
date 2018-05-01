@@ -209,11 +209,11 @@ class animezoneClass extends serviceSupportImpl {
     const episode = _.find(self.episodeList, (episode) => { return episode.id === self.selectedEpisode.id })
     const episodeUrl = self.domain + episode.url
 
-    getDataAndCookie(episodeUrl, (content, cookies) => {
+    getDataAndCookieNew(episodeUrl, (content, cookies) => {
       const cookieObj = _.find(cookies, (obj) => { return obj.name === '_SESS' })
       const cookie = cookieObj.value
 
-      const listHtml = $(parseHtml(content)).find('table.episode').find('tbody').children()
+      const listHtml = $(parseHtml(content.body.innerHTML)).find('table.episode').find('tbody').children()
 
       _.each(listHtml, (item, indexItem) => {
         let dataForUrlPost = {
