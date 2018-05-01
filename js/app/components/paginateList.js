@@ -12,8 +12,8 @@ class AnimePaginateList {
     this.createElementsMap(vnode.attrs.elements)
   }
 
-  getPage (pageNumber) {
-    return this.elements[pageNumber - 1]
+  getPage () {
+    return this.elements[this.currentPage - 1]
   }
 
   createElementsMap (elementsArray) {
@@ -28,8 +28,12 @@ class AnimePaginateList {
         this.elements[this.elements.length - 1].push(item)
       }
     })
+
     this.maxPage = this.elements.length
-    this.pageNumber = 1
+
+    if (this.maxPage < this.currentPage) {
+      this.currentPage = this.maxPage
+    }
   }
 
   onbeforeupdate (vnode) {
@@ -42,41 +46,50 @@ class AnimePaginateList {
     this.maxPage = 1
   }
 
+  currentPageEdit (number, minus) {
+    if (minus) {
+      this.currentPage = this.currentPage - number
+    } else {
+      this.currentPage = this.currentPage + number
+    }
+  }
+
   generatePagesButton () {
     const buttons = []
+    const page = this.currentPage
 
-    buttons.push(m('li', { class: ['page-item', this.currentPage === 1 ? ' disabled' : ' '].join(''), onclick: () => { if (this.currentPage > 1) { this.currentPage-- } } }, [
+    buttons.push(m('li', { class: ['page-item', page === 1 ? ' disabled' : ' '].join(''), onclick: () => { if (page > 1) { this.currentPageEdit(1, true) } } }, [
       m('button', { class: 'page-link' }, 'Previous')
     ]))
 
-    if (this.currentPage > 1) {
-      if (this.currentPage > 2) {
+    if (page > 1) {
+      if (page > 2) {
         buttons.push(m('li', { class: 'page-item' }, [
-          m('button', { class: 'page-link', onclick: () => { this.currentPage = this.currentPage - 2 } }, this.currentPage - 2)
+          m('button', { class: 'page-link', onclick: () => { this.currentPageEdit(2, true) } }, page - 2)
         ]))
       }
 
       buttons.push(m('li', { class: 'page-item' }, [
-        m('button', { class: 'page-link', onclick: () => { this.currentPage = this.currentPage - 1 } }, this.currentPage - 1)
+        m('button', { class: 'page-link', onclick: () => { this.currentPageEdit(1, true) } }, page - 1)
       ]))
     }
 
     buttons.push(m('li', { class: 'page-item active' }, [
-      m('button', { class: 'page-link' }, this.currentPage)
+      m('button', { class: 'page-link' }, page)
     ]))
 
-    if (this.currentPage + 1 <= this.maxPage) {
+    if (page + 1 <= this.maxPage) {
       buttons.push(m('li', { class: 'page-item' }, [
-        m('button', { class: 'page-link', onclick: () => { this.currentPage = this.currentPage + 1 } }, this.currentPage + 1)
+        m('button', { class: 'page-link', onclick: () => { this.currentPageEdit(1, false) } }, page + 1)
       ]))
-      if (this.currentPage + 2 <= this.maxPage) {
+      if (page + 2 <= this.maxPage) {
         buttons.push(m('li', { class: 'page-item' }, [
-          m('button', { class: 'page-link', onclick: () => { this.currentPage = this.currentPage + 2 } }, this.currentPage + 2)
+          m('button', { class: 'page-link', onclick: () => { this.currentPageEdit(2, false) } }, page + 2)
         ]))
       }
     }
 
-    buttons.push(m('li', { class: ['page-item', this.currentPage === this.maxPage ? ' disabled' : ' '].join(''), onclick: () => { if (this.currentPage < this.maxPage) { this.currentPage++ } } }, [
+    buttons.push(m('li', { class: ['page-item', page === this.maxPage ? ' disabled' : ' '].join(''), onclick: () => { if (page < this.maxPage) { this.currentPageEdit(1, false) } } }, [
       m('button', { class: 'page-link' }, 'Next')
     ]))
 
@@ -91,7 +104,7 @@ class AnimePaginateList {
     return m('div', [
       this.generatePagesButton(),
       m('.animeList', { 'class': 'col-md-12 card-group', 'style': 'margin-top: 1%;' }, [
-        this.getPage(this.currentPage).map((anime) => {
+        this.getPage().map((anime) => {
           return m('div', { 'class': 'col-md-3' }, [
             PageCard.animeCard(anime.id,
               anime.title,
@@ -118,8 +131,8 @@ class EpisodePaginateList {
     this.createElementsMap(vnode.attrs.elements)
   }
 
-  getPage (pageNumber) {
-    return this.elements[pageNumber - 1]
+  getPage () {
+    return this.elements[this.currentPage - 1]
   }
 
   createElementsMap (elementsArray) {
@@ -135,7 +148,9 @@ class EpisodePaginateList {
       }
     })
     this.maxPage = this.elements.length
-    this.pageNumber = 1
+    if (this.maxPage < this.currentPage) {
+      this.currentPage = this.maxPage
+    }
   }
 
   onbeforeupdate (vnode) {
@@ -197,7 +212,7 @@ class EpisodePaginateList {
     return m('div', [
       this.generatePagesButton(),
       m('.episodeList', { 'class': 'col-md-12 card-group', 'style': 'margin-top: 1%;' }, [
-        this.getPage(this.currentPage).map((episode) => {
+        this.getPage().map((episode) => {
           return m('div', { 'class': 'col-md-3' }, [
             PageCard.episodeCard(episode.id,
               episode.title,
