@@ -176,19 +176,23 @@ class animezoneClass extends serviceSupportImpl {
         var episodeList = []
 
         _.each(listHtml, (item, indexItem) => {
-          const title = item.children[0].innerText + ' - ' + item.children[1].innerText
-          const tmpUrl = item.children[4].children[0].getAttribute('href')
-          const url = '/' + tmpUrl.split('/').splice(1, 3).join('/')
+          const htmlObj = $(item)
+          const title = htmlObj.find('td:nth-of-type(1)')[0].innerText + ' - ' + htmlObj.find('td:nth-of-type(2)')[0].innerText
+          const aTag = htmlObj.find('td:nth-of-type(5) > a')[0]
+          if (aTag !== undefined) {
+            const tmpUrl = aTag.getAttribute('href')
+            const url = '/' + tmpUrl.split('/').splice(1, 3).join('/')
 
-          var obj = {
-            id: url.split('/').pop(),
-            url: url,
-            title: title,
-            players: []
+            var obj = {
+              id: url.split('/').pop(),
+              url: url,
+              title: title,
+              players: []
+            }
+
+            console.log(obj)
+            episodeList.push(obj)
           }
-
-          console.log(obj)
-          episodeList.push(obj)
         })
         self.episodeList = episodeList.reverse()
 
