@@ -1,6 +1,6 @@
 class RaptuCom extends videoSupportImpl {
   constructor () {
-    super(['www.raptu.com', 'raptu.com', 'rapidvideo.com'], {})
+    super(['www.raptu.com', 'raptu.com', 'rapidvideo.com', 'www.rapidvideo.com'], {})
     const self = this
 
     return { api: self, id: 'raptu' }

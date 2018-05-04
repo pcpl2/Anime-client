@@ -27,6 +27,7 @@ class VideoManager {
     this.list.push(new VkCom())
     this.list.push(new VshareIo())
     this.list.push(new VidozaNet())
+    this.list.push(new CdaPL())
 
     this.serviceWithHiddenLinks.push(new GamedorUsermdNet())
   }
