@@ -12,8 +12,8 @@ class VidLoxTv extends videoSupportImpl {
       return 0
     }
 
-    const regexSourceDecoder = /sources:(.+])\,/s;
-    const regexPoserDecoder = /poster: \"(.+)", /s;
+    const regexSourceDecoder = /sources:(.+])\,/s
+    const regexPoserDecoder = /poster: \"(.+)", /s
     const regexGetFileExtension = /\.\w{3,4}($|\?)/igm
 
     m.request({

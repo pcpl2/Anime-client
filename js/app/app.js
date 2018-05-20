@@ -3,9 +3,6 @@ const _ = require('underscore')
 const m = require('mithril')
 const request = require('request')
 
-const AutoUpdater = require('nw-autoupdater')
-const updater = new AutoUpdater(require('./package.json'), {})
-
 class App {
   constructor () {
     this.defaultHeaders = {
@@ -31,70 +28,3 @@ m.route(document.getElementById('application'), '', {
 })
 
 const output = document.querySelector('#output')
-
-async function update () {
-  try {
-    if (updater.isSwapRequest()) {
-      $('#application').hide()
-      $('#updater').show()
-      output.innerHTML += `\nSwapping...`
-      await updater.swap()
-      output.innerHTML += `\nDone...`
-      await updater.restart()
-      return
-    }
-
-    const rManifest = await updater.readRemoteManifest()
-    const needsUpdate = await updater.checkNewVersion(rManifest)
-
-    if (!needsUpdate) {
-      return
-    }
-    if (!confirm('New release is available. Do you want to upgrade?')) {
-      return
-    }
-
-    const progressDownload = $('.progress-bar-update-download')
-    progressDownload.text('0%')
-    const progressInstall = $('.progress-bar-update-install')
-    progressInstall.text('0%')
-
-    updater.on('download', (downloadSize, totalSize) => {
-      let precent = Math.floor(downloadSize / totalSize * 100)
-      progressDownload.css('width', precent + '%').attr('aria-valuenow', precent)
-      progressDownload.text(precent + '%')
-      console.log('download progress', precent, '%')
-    })
-
-    updater.on('install', (installFiles, totalFiles) => {
-      let precent = Math.floor(installFiles / totalFiles * 100)
-      progressInstall.css('width', precent + '%').attr('aria-valuenow', precent)
-      progressInstall.text(precent + '%')
-      console.log('install progress', precent, '%')
-    })
-
-    let downloadBox = $('#download-update')
-    let installBox = $('#install-update')
-
-    downloadBox.css('display', 'block')
-    const updateFile = await updater.download(rManifest)
-    downloadBox.css('display', 'none')
-    installBox.css('display', 'block')
-    await updater.unpack(updateFile)
-    installBox.css('display', 'none')
-    alert(`The application will automatically restart to finish installing the update`)
-    await updater.restartToSwap()
-  } catch (e) {
-    alert('An error occurred while downloading / installing the update. The update has been canceled, another attempt will be made the next time the application is launched')
-    console.error(e)
-  }
-}
-
-update()
-
-nw.App.registerGlobalHotKey(new nw.Shortcut({
-  key: 'Escape',
-  active: () => {
-    nw.Window.get().leaveFullscreen()
-  }
-}))
