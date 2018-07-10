@@ -12,7 +12,7 @@ class VidozaNet extends videoSupportImpl {
       return 0
     }
 
-    const regexGetVideoAndPoster = /file:"(.+.mp4)",(?:.+)image: "(.+)",(?:.+)durat/s
+    const regexGetVideoAndPoster = /poster:\"(.+)\",play(?:.+)updateSrc\((.+)\)\;/gm;
 
     request({ url: url, headers: app.defaultHeaders }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
@@ -20,8 +20,8 @@ class VidozaNet extends videoSupportImpl {
         var validEncodedData
 
         _.each(listHtml, (htmlObject, htmlIndex) => {
-          if (htmlObject.innerHTML.trim().replace(/\s/g, '').search('jwplayer') !== -1) {
-            validEncodedData = htmlObject.innerHTML
+          if (htmlObject.innerHTML.trim().replace(/\s/g, '').search('videojs') !== -1) {
+            validEncodedData = htmlObject.innerHTML.trim().replace(/\s/g, '')
           }
         })
 
@@ -30,8 +30,8 @@ class VidozaNet extends videoSupportImpl {
         }
 
         const encodedData = regexGetVideoAndPoster.exec(validEncodedData)
-        const url = encodedData[1]
-        const poster = encodedData[2]
+        const url = encodedData[2]
+        const poster = encodedData[1]
 
         if (new RegExp(self.regexValidateUrl).test(url)) {
           returnFunction({poster: poster, url: url}, VideoDecoderErrorCodes.Sucess, true)

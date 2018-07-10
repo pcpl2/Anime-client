@@ -1,6 +1,6 @@
 class VidLoxTv extends videoSupportImpl {
   constructor () {
-    super(['vidlox.tv'], {})
+    super(['vidlox.tv', 'vidlox.me'], {})
     const self = this
 
     return { api: self, id: 'vidlox' }
@@ -12,8 +12,8 @@ class VidLoxTv extends videoSupportImpl {
       return 0
     }
 
-    const regexSourceDecoder = /sources:(.+])\,/s
-    const regexPoserDecoder = /poster: \"(.+)", /s
+    const regexSourceDecoder = /sources:(.+])\,/gm
+    const regexPoserDecoder = /poster: \"(.+)", /gm
     const regexGetFileExtension = /\.\w{3,4}($|\?)/igm
 
     m.request({
