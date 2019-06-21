@@ -1,6 +1,5 @@
 require('select2')
 const Clappr = require('clappr')
-const FLVJSPlayback = require('clappr-flvjs-playback')
 
 var episodePlayBreadcrumb = {
   view: function () {

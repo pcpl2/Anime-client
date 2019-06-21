@@ -62,6 +62,4 @@ typings/
 
 .yarnclean
 
-package-lock.json
-
 yarn.lock

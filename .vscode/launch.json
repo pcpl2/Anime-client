@@ -2,11 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "nwjs",
+            "name": "Launch",
+            "type": "node",
             "request": "launch",
-            "name": "Launch NWjs",
-            "nwjsVersion": "0.29.3",
-            "webRoot": "${workspaceRoot}"
-        }
+            "program": "${workspaceRoot}/js/main.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
+            "runtimeArgs": [
+                ".",
+                "--enable-logging"
+            ],
+            "env": {},
+            "console": "internalConsole",
+            "sourceMaps": false,
+            "outDir": null
+        },
     ]
 }

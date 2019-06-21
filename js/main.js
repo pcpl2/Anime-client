@@ -15,7 +15,8 @@ function createMainWindow () {
     useContentSize: true,
     frame: true,
     webPreferences: {
-      webSecurity: true
+      webSecurity: true,
+      nodeIntegration: true
     }
   })
 
@@ -24,10 +25,10 @@ function createMainWindow () {
   }
 
   window.loadURL(url.format({
-   pathname: path.join(__dirname, '../index.html'),
-   protocol: 'file',
-   slashes: true
-   }))
+    pathname: path.join(__dirname, '../index.html'),
+    protocol: 'file',
+    slashes: true
+  }))
 
   window.on('closed', () => {
     mainWindow = null
@@ -44,7 +45,11 @@ function createMainWindow () {
 }
 
 app.on('ready', () => {
-  mainWindow = createMainWindow()
+  mainWindow = createMainWindow({
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
 })
 
 app.on('window-all-closed', () => {

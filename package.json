@@ -18,24 +18,24 @@
   },
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
-    "bootstrap": "^4.1.0",
-    "bootstrap-material-design": "^4.1.1",
-    "clappr": "^0.2.92",
-    "clappr-flvjs-playback": "^0.0.5",
-    "cookie": "^0.3.1",
-    "jquery": "^3.3.1",
+    "bootstrap": "^4.3.1",
+    "bootstrap-material-design": "^4.1.2",
+    "clappr": "^0.3.5",
+    "clappr-flvjs-playback": "^1.0.0",
+    "cookie": "^0.4.0",
+    "jquery": "^3.4.1",
     "mithril": "^1.1.6",
-    "request": "^2.85.0",
-    "select2": "4.0.3",
-    "underscore": "^1.9.0"
+    "request": "^2.88.0",
+    "select2": "4.0.7",
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
-    "electron": "^2.0.4",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "electron": "^5.0.4",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0"
   },
   "scripts": {
     "start": "electron ."
