@@ -185,15 +185,15 @@ this.EpisodePlay = {
     }
   },
   oncreate: function () {
-    $('#js-select-episode').select2()
+    //$('#js-select-episode').select2()
 
-    $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change')
+   // $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change')
 
-    $('#js-select-episode').on('select2:select', function (event) {
+    /*$('#js-select-episode').on('select2:select', function (event) {
       let epId = $(event.currentTarget).find('option:selected').val()
       episodePlayBody.clearPlayer()
       sm.getApi().setCurrentEpisode(epId)
-    })
+    })*/
   },
   view: function () {
     return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody))
