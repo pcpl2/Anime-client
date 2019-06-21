@@ -1,13 +1,13 @@
 class aoninjaClass extends serviceSupportImpl {
   constructor () {
-    super('https://a-o.ninja', {})
+    super('https://anime-odcinki.pl', {})
     const self = this
 
     request({ url: self.domain, headers: app.defaultHeaders }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
         const logo = $(parseHtml(body)).find('.navbar-header > .logo > img').attr('src')
-        self.serviceData = { api: self, id: 'aoninja', name: 'A-O.NINJA', description: '', lang: 'PL', image: logo }
-        sm.list.push({ api: self, id: 'aoninja' })
+        self.serviceData = { api: self, id: 'animeodcinki', name: 'Anime Odcinki', description: '', lang: 'PL', image: logo }
+        sm.list.push({ api: self, id: 'animeodcinki' })
 
         m.redraw()
       } else {
@@ -25,7 +25,7 @@ class aoninjaClass extends serviceSupportImpl {
     })
 
     if (animeListJson == null) {
-      const urls = ['https://a-o.ninja/anime', 'https://a-o.ninja/filmy']
+      const urls = ['https://anime-odcinki.pl/anime', 'https://anime-odcinki.pl/filmy']
       var completeRequests = 0
       var titleObjectList = []
 
