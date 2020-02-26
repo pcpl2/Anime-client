@@ -6,22 +6,22 @@ this.PageCard = {
     lang: '',
     image: '',
 
-    oninit: function (vnode) {
-      var self = this
+    oninit: (vnode) => {
+      let self = this
 
       self.name = vnode.attrs.service.api.serviceData.name
       self.description = vnode.attrs.service.api.serviceData.description
       self.lang = vnode.attrs.service.api.serviceData.lang
       self.id = vnode.attrs.service.id
 
-      vnode.attrs.service.api.getImageFunction(function (image) {
+      vnode.attrs.service.api.getImageFunction((image) => {
         self.image = image
         m.redraw()
       })
     },
 
-    view: function (vnode) {
-      var self = this
+    view: (vnode) => {
+      let self = this
       return m('div', { class: 'card', 'style': 'width: 20rem; height: 15rem; margin: 3%;' }, [
         m('img', { class: 'card-img-top', 'src': self.image, 'alt': self.name + ' logo', 'style': 'background: black; height: 25%;' }),
         m('div', { class: 'card-body' }, [

@@ -1,5 +1,5 @@
 var episodeListBreadcrumb = {
-  view: function () {
+  view: () => {
     return [
       m('a', { 'class': 'breadcrumb-item', href: '/', oncreate: m.route.link }, 'SelectService'),
       m('a', { 'class': 'breadcrumb-item', href: '/service/' + sm.getApi().serviceData.id + '/list', oncreate: m.route.link }, m('span', sm.getApi().serviceData.name)),
@@ -9,13 +9,13 @@ var episodeListBreadcrumb = {
 }
 
 var episodeListHeader = {
-  view: function () {
+  view: () => {
     return m('label', { 'class': 'col-form-label col-md-12' }, sm.getApi().selectedAnime.title + ' -> select episode')
   }
 }
 
 var episodeListBody = {
-  view: function () {
+  view: () => {
     return m('div',
       // TODO add anime image and description
       m(EpisodePaginateList, { elements: sm.getApi().episodeList })
@@ -24,7 +24,7 @@ var episodeListBody = {
 }
 
 this.EpisodeList = {
-  oninit: function (vnode) {
+  oninit: (vnode) => {
     if (!vnode.attrs.sid) {
       m.route.set('/')
     }
@@ -43,9 +43,9 @@ this.EpisodeList = {
 
     sm.getApi().clearCurrentEpisode()
   },
-  view: function () {
+  view: () => {
     return layout(m(episodeListBreadcrumb), m(episodeListHeader), m(episodeListBody))
   },
-  onbeforeremove: function (vnode) {
+  onbeforeremove: (vnode) => {
   }
 }
