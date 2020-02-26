@@ -16,20 +16,22 @@
   },
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.4.1",
     "bootstrap-material-design": "^4.1.2",
-    "clappr": "^0.3.5",
-    "clappr-flvjs-playback": "^1.0.0",
+    "clappr": "^0.3.12",
+    "clappr-flvjs-playback": "^1.1.1",
     "cookie": "^0.4.0",
+    "crypto-js": "4.0.0",
+    "datatables.net-bs4": "^1.10.20",
     "jquery": "^3.4.1",
-    "mithril": "^1.1.6",
-    "popper.js": "^1.14.7",
-    "request": "^2.88.0",
+    "mithril": "^1.1.7",
+    "popper.js": "^1.16.1",
+    "request": "^2.88.2",
     "select2": "4.0.7",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.2"
   },
   "devDependencies": {
-    "electron": "^5.0.4"
+    "electron": "^5.0.13"
   },
   "scripts": {
     "start": "electron ."

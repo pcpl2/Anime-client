@@ -2,23 +2,33 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
+            "name": "Debug Main Process",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/js/main.js",
-            "stopOnEntry": false,
-            "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/js",
             "preLaunchTask": null,
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
-            "runtimeArgs": [
-                ".",
-                "--enable-logging"
-            ],
-            "env": {},
-            "console": "internalConsole",
-            "sourceMaps": false,
-            "outDir": null
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "protocol": "inspector",
+            "args" : ["."],
+            "outputCapture": "std"
         },
+        {
+          "name": "Debug Renderer Process",
+          "type": "chrome",
+          "request": "launch",
+          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+          "windows": {
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+          },
+          "runtimeArgs": [
+            "${workspaceRoot}/js/main.js",
+            "--remote-debugging-port=9222"
+          ],
+          "webRoot": "${workspaceRoot}/js"
+        }
     ]
 }
