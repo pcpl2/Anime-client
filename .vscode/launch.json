@@ -2,11 +2,33 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "nwjs",
+            "name": "Debug Main Process",
+            "type": "node",
             "request": "launch",
-            "name": "Launch NWjs",
-            "nwjsVersion": "0.29.3",
-            "webRoot": "${workspaceRoot}"
+            "program": "${workspaceRoot}/js/main.js",
+            "cwd": "${workspaceRoot}/js",
+            "preLaunchTask": null,
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "windows": {
+              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+            },
+            "protocol": "inspector",
+            "args" : ["."],
+            "outputCapture": "std"
+        },
+        {
+          "name": "Debug Renderer Process",
+          "type": "chrome",
+          "request": "launch",
+          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+          "windows": {
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+          },
+          "runtimeArgs": [
+            "${workspaceRoot}/js/main.js",
+            "--remote-debugging-port=9222"
+          ],
+          "webRoot": "${workspaceRoot}/js"
         }
     ]
 }

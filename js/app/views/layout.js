@@ -1,4 +1,4 @@
-layout = function (breadcrumb, header, content) {
+layout = (breadcrumb, header, content) => {
   return m('div', [
     m('nav', { 'class': 'breadcrumb' }, [breadcrumb]),
     m('div', { 'class': 'container' }, [

@@ -1,13 +1,19 @@
+const Core = require("crypto-js/core");
+const AES = require("crypto-js/aes")
+const HEX = require("crypto-js/enc-hex")
+const BASE64 = require("crypto-js/enc-base64")
+const UTF8 = require("crypto-js/enc-utf8")
+
 class aoninjaClass extends serviceSupportImpl {
   constructor () {
-    super('https://a-o.ninja', {})
+    super('https://anime-odcinki.pl', {})
     const self = this
 
     request({ url: self.domain, headers: app.defaultHeaders }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
         const logo = $(parseHtml(body)).find('.navbar-header > .logo > img').attr('src')
-        self.serviceData = { api: self, id: 'aoninja', name: 'A-O.NINJA', description: '', lang: 'PL', image: logo }
-        sm.list.push({ api: self, id: 'aoninja' })
+        self.serviceData = { api: self, id: 'animeodcinki', name: 'Anime Odcinki', description: '', lang: 'PL', image: logo }
+        sm.list.push({ api: self, id: 'animeodcinki' })
 
         m.redraw()
       } else {
@@ -25,7 +31,7 @@ class aoninjaClass extends serviceSupportImpl {
     })
 
     if (animeListJson == null) {
-      const urls = ['https://a-o.ninja/anime', 'https://a-o.ninja/filmy']
+      const urls = ['https://anime-odcinki.pl/anime', 'https://anime-odcinki.pl/filmy']
       var completeRequests = 0
       var titleObjectList = []
 
@@ -127,7 +133,8 @@ class aoninjaClass extends serviceSupportImpl {
         const listHtml = $(parseHtml(body)).find('#video-player-control > div')
 
         _.each(listHtml, (item, indexItem) => {
-          const playerUrl = decryptPassword(item.getAttribute('data-hash')).trim()
+          const playerUrl = self.newDecrypt(item.getAttribute('data-hash')).replace("\"", "").replace("\"", "").replace(/\\\/|\/\\/g, "/").trim()
+          console.log(playerUrl)
 
           const splitedDomainPlayer = getDomainName(playerUrl).split('.')
           const obj = {
@@ -147,5 +154,25 @@ class aoninjaClass extends serviceSupportImpl {
         // ServiceSupport.currentServiceStatus = ServiceStatus.ERROR;
       }
     })
+  }
+
+  newDecrypt (data) {
+    return AES.decrypt(data, 's05z9Gpd=syG^7{', { format: {
+      parse: (jsonData) => {
+        const parsedData = JSON.parse(jsonData)
+        let e = Core.lib.CipherParams.create({
+            ciphertext: BASE64.parse(parsedData.a)
+        })
+
+        if(parsedData.b) {
+            e.b = HEX.parse(parsedData.b)
+        }
+
+        if(parsedData.v) {
+            e.salt = HEX.parse(parsedData.v)
+        }        
+        return e
+    }
+    } }).toString(UTF8)
   }
 }

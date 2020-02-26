@@ -1,9 +1,8 @@
 require('select2')
-const Clappr = require('clappr')
-const FLVJSPlayback = require('clappr-flvjs-playback')
+const Clappr = require('clappr') 
 
 var episodePlayBreadcrumb = {
-  view: function () {
+  view: () => {
     return [
       m('a', { 'class': 'breadcrumb-item', href: '/', oncreate: m.route.link }, 'SelectService'),
       m('a', { 'class': 'breadcrumb-item', href: '/service/' + sm.getApi().serviceData.id + '/list', oncreate: m.route.link }, sm.getApi().serviceData.name),
@@ -14,7 +13,7 @@ var episodePlayBreadcrumb = {
 }
 
 var episodePlayHeader = {
-  view: function () {
+  view: () => {
     return m('label', { 'class': 'col-form-label col-md-12' }, sm.getApi().selectedEpisode.title)
   }
 }
@@ -22,7 +21,7 @@ var episodePlayHeader = {
 var episodePlayBody = {
   video: null,
   currentPlayerId: '',
-  clearPlayer: function () {
+  clearPlayer: () => {
     episodePlayBody.currentPlayerId = ''
     if (episodePlayBody.video != null) {
       episodePlayBody.video.destroy()
@@ -51,9 +50,9 @@ var episodePlayBody = {
             width: '100%',
             height: '100%',
             poster: videoObj.poster,
-            plugins: [
-              FLVJSPlayback
-            ],
+            //plugins: [
+            //  FLVJSPlayback
+          //  ],
             hlsjsConfig: {
               enableWorker: true
             }
@@ -75,7 +74,7 @@ var episodePlayBody = {
             '<p>An error occurred while loading the video or no longer exists on the selected host. Please choose another host.</p>' +
             '</div>')
   },
-  view: function () {
+  view: () => {
     return m('.episodePlay', { 'class': 'col-md-12', 'style': 'margin-top: 1%; margin-bootom: 1%' },
       [
         // Next previous episodes
@@ -83,7 +82,7 @@ var episodePlayBody = {
           m('div', { 'class': 'col align-self-start' }, [
             m('button', {
               'class': ['btn btn-raised btn-info pull-left', parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) > 1 ? '' : 'disabled'].join(' '),
-              'onclick': function () {
+              'onclick': () => {
                 if (parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) > 1) {
                   let epId = sm.getApi().getCurrentEpisodeIndex() - 1
                   episodePlayBody.clearPlayer()
@@ -105,7 +104,7 @@ var episodePlayBody = {
           m('div', { 'class': 'col align-self-end' }, [
             m('button', {
               'class': ['btn btn-raised btn-info pull-right', parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) < sm.getApi().episodeList.length ? '' : 'disabled'].join(' '),
-              'onclick': function () {
+              'onclick': () => {
                 if (parseInt((sm.getApi().getCurrentEpisodeIndex() + 1)) < sm.getApi().episodeList.length) {
                   let epId = sm.getApi().getCurrentEpisodeIndex() + 1
                   episodePlayBody.clearPlayer()
@@ -125,7 +124,7 @@ var episodePlayBody = {
                 return m('button', {
                   'class': ['btn btn-raised btn-info col-md-3', episodePlayBody.currentPlayerId === player.id ? 'active' : ''].join(' '),
                   'id': player.id,
-                  'onclick': function () {
+                  'onclick': () => {
                     if (episodePlayBody.currentPlayerId !== player.id) {
                       if (episodePlayBody.currentPlayerId !== '') {
                         episodePlayBody.clearPlayer()
@@ -160,7 +159,7 @@ var episodePlayBody = {
 }
 
 this.EpisodePlay = {
-  oninit: function (vnode) {
+  oninit: (vnode) => {
     if (!vnode.attrs.sid) {
       m.route.set('/')
     }
@@ -185,21 +184,21 @@ this.EpisodePlay = {
       m.route.set('/service/' + sm.getApi().serviceData.id + '/anime/' + sm.getApi().selectedAnime.id + '/list')
     }
   },
-  oncreate: function () {
-    $('#js-select-episode').select2()
+  oncreate: () => {
+    //$('#js-select-episode').select2()
 
-    $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change')
+   // $('#js-select-episode').val(sm.getApi().selectedEpisode.id).trigger('change')
 
-    $('#js-select-episode').on('select2:select', function (event) {
+    /*$('#js-select-episode').on('select2:select', function (event) {
       let epId = $(event.currentTarget).find('option:selected').val()
       episodePlayBody.clearPlayer()
       sm.getApi().setCurrentEpisode(epId)
-    })
+    })*/
   },
-  view: function () {
+  view: () => {
     return layout(m(episodePlayBreadcrumb), m(episodePlayHeader), m(episodePlayBody))
   },
-  onbeforeremove: function (vnode) {
+  onbeforeremove: (vnode) => {
     sm.getApi().clearCurrentEpisode()
   }
 }

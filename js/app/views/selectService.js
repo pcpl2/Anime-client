@@ -1,31 +1,31 @@
 var selectServiceBreadcrumb = {
-  view: function () {
+  view: () =>  {
     return [m('span', { 'class': 'breadcrumb-item active' }, 'SelectService')]
   }
 }
 
 var selectServiceHeader = {
-  view: function () {
+  view: () =>  {
     return m('label', { 'class': 'col-form-label col-md-2' }, 'Select service')
   }
 }
 
 var selectServiceList = {
-  view: function () {
+  view: () =>  {
     return m('.serviceList', { class: 'row col-md-12' },
-      sm.list.map(function (service) {
+      sm.list.map((service) => {
         return m('div', { class: 'col-sm-5' }, m(PageCard.serviceCard, { service: service }))
       }))
   }
 }
 
 this.SelectService = {
-  oninit: function (vnode) {
+  oninit: (vnode) => {
     sm.clearCurrentService()
     sm.updateServiceList()
   },
 
-  view: function () {
+  view: () => {
     return layout(m(selectServiceBreadcrumb), m(selectServiceHeader), m(selectServiceList))
   }
 }

@@ -1,4 +1,4 @@
-function getDataAndCookieNew (url, returnCallback) {
+/*function getDataAndCookieNew (url, returnCallback) {
   nw.Window.open(url, {show: false}, function (win) {
     // Release the 'win' object here after the new window is closed.
     win.on('closed', function () {
@@ -24,6 +24,38 @@ function getDataAndCookieNew (url, returnCallback) {
 
       // After closing the new window, close the main window.
       this.close(true)
+    })
+  })
+}*/
+
+const remote = require('electron').remote;
+const {session} = require('electron')
+const BrowserWindow = remote.BrowserWindow;
+
+function getDataAndCookieNew (url, returnCallback) {
+  var win = new BrowserWindow({
+    width: 400,
+    height: 400,
+    show: true
+  })
+
+  win.loadURL(url)
+
+  win.webContents.on('did-finish-load', (event) => {
+    console.log(event)
+    session.defaultSession.cookies.get({}, (error, cookies) => {
+      console.log(error, cookies)
+    })
+
+    win.webContents.session.cookies.get({domain: getDomainName(win.webContents.getURL())}, (error, cookies) => {
+      if (error) throw error
+      console.log(cookies)
+
+      win.webContents.executeJavaScript(`$("html")[0];`, function (result) {
+        console.log(result)
+      })
+
+      //returnCallback(null, cookies)
     })
   })
 }

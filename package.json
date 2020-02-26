@@ -2,14 +2,12 @@
   "name": "anime-client",
   "product_string": "anime-client",
   "version": "0.1.0",
-  "main": "index.html",
-  "chromium-args": "--mixed-context",
+  "main": "js/main.js",
   "window": {
     "toolbar": true,
     "width": 1024,
     "height": 768
   },
-  "node-remote": "*://*/*",
   "author": "pcpl2",
   "webkit": {
     "plugin": false,
@@ -18,48 +16,24 @@
   },
   "manifestUrl": "https://pcpl2.github.io/Anime-client/package.json",
   "dependencies": {
-    "bootstrap": "^4.1.0",
-    "bootstrap-material-design": "^4.1.1",
-    "clappr": "^0.2.92",
-    "clappr-flvjs-playback": "^0.0.5",
-    "cookie": "^0.3.1",
-    "jquery": "^3.3.1",
-    "mithril": "^1.1.6",
-    "nw-autoupdater": "^1.1.4",
-    "request": "^2.85.0",
-    "select2": "4.0.3",
-    "underscore": "^1.9.0"
+    "bootstrap": "^4.4.1",
+    "bootstrap-material-design": "^4.1.2",
+    "clappr": "^0.3.12",
+    "clappr-flvjs-playback": "^1.1.1",
+    "cookie": "^0.4.0",
+    "crypto-js": "4.0.0",
+    "datatables.net-bs4": "^1.10.20",
+    "jquery": "^3.4.1",
+    "mithril": "^1.1.7",
+    "popper.js": "^1.16.1",
+    "request": "^2.88.2",
+    "select2": "4.0.7",
+    "underscore": "^1.9.2"
   },
   "devDependencies": {
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "nwjs-builder-phoenix": "^1.14.6"
-  },
-  "build": {
-    "nwVersion": "0.29.3",
-    "ffmpegIntegration": true,
-    "targets": [
-      "zip"
-    ],
-    "outputPattern": "${NAME}-${VERSION}-${PLATFORM}-${ARCH}",
-    "excludes": [
-      ".vscode/*",
-      "docs/*",
-      ".eslintrc.json",
-      ".gitignore",
-      ".travis.yml",
-      ".yarnclean",
-      "anime-client.code-workspace",
-      "jsconfig.json",
-      "package-lock.json",
-      "yarn.lock"
-    ]
+    "electron": "^5.0.13"
   },
   "scripts": {
-    "dist": "build --tasks win-x86,win-x64,linux-x86,linux-x64,mac-x64 --mirror https://dl.nwjs.io/ .",
-    "start": "run --x86 --mirror https://dl.nwjs.io/ ."
+    "start": "electron ."
   }
 }
