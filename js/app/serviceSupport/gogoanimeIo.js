@@ -1,6 +1,6 @@
 class gogoanimeioClass extends serviceSupportImpl {
   constructor () {
-    super('https://ww4.gogoanime.io', {})
+    super('https://www4.gogoanime.io', {})
     const self = this
 
     request({ url: self.domain, headers: app.defaultHeaders }, (error, response, body) => {
@@ -112,7 +112,7 @@ class gogoanimeioClass extends serviceSupportImpl {
         const moveId = parsedBody.find('input#movie_id').val()
         const lastEpNumber = parsedBody.find('.anime_video_body > #episode_page > li:last-child > a').attr('ep_end')
 
-        const urlForApi = `https://ww4.gogoanime.io/load-list-episode?ep_start=0&ep_end=${lastEpNumber}&id=${moveId}&default_ep=0`
+        const urlForApi = `${self.domain}/load-list-episode?ep_start=0&ep_end=${lastEpNumber}&id=${moveId}&default_ep=0`
 
         request({ url: urlForApi, headers: app.defaultHeaders }, (error, response, body) => {
           if (!error && response.statusCode === 200) {

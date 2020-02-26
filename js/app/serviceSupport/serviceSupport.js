@@ -15,9 +15,9 @@ class ServiceManager {
     this.clearServicesList()
 
     new aoninjaClass()
-    new animezoneClass()
-    new gogoanimeioClass()
-    new onanimePlClass()
+   // new animezoneClass()
+  //  new gogoanimeioClass()
+  //  new onanimePlClass()
   }
 
   getApi () {
