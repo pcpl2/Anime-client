@@ -28,7 +28,7 @@
     "popper.js": "^1.16.1",
     "request": "^2.88.2",
     "select2": "4.0.7",
-    "underscore": "^1.9.2"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "electron": "^5.0.13"
